@@ -28,9 +28,9 @@ examples/
 
 **Purpose**: 專案初始化和基礎結構
 
-- [ ] T001 建立專案目錄結構 `examples/webgl-spotlight/`
-- [ ] T002 [P] 建立 WebGL 降級靜態圖片 `examples/webgl-spotlight/fallback.png`
-- [ ] T003 建立 HTML 基礎骨架與 Import Map 配置 `examples/webgl-spotlight/index.html`
+- [x] T001 建立專案目錄結構 `examples/webgl-spotlight/`
+- [x] T002 [P] 建立 WebGL 降級靜態圖片 `examples/webgl-spotlight/fallback.svg`
+- [x] T003 建立 HTML 基礎骨架與 Import Map 配置 `examples/webgl-spotlight/index.html`
 
 ---
 
@@ -40,13 +40,13 @@ examples/
 
 **⚠️ CRITICAL**: 此階段完成前，任何 User Story 都無法開始
 
-- [ ] T004 實作 WebGL 支援偵測函數 `checkWebGLSupport()` in `index.html`
-- [ ] T005 實作 WebGL 不支援時的降級處理邏輯 in `index.html`
-- [ ] T006 [P] 實作 `createRenderer()` 函數 - 建立 WebGLRenderer 並配置抗鋸齒、色調映射、陰影 in `index.html`
-- [ ] T007 [P] 實作 `createCamera()` 函數 - 建立 PerspectiveCamera (fov:40, position:7,4,1) in `index.html`
-- [ ] T008 [P] 實作 `loadTextures()` 函數 - 從 CDN 載入 3 張紋理 (disturb.jpg, colors.png, uv_grid_opengl.jpg) in `index.html`
-- [ ] T009 實作 `onWindowResize()` 函數 - 處理視窗大小變更事件 in `index.html`
-- [ ] T010 實作 `animate()` 動畫主迴圈骨架 (不含光源移動邏輯) in `index.html`
+- [x] T004 實作 WebGL 支援偵測函數 `checkWebGLSupport()` in `index.html`
+- [x] T005 實作 WebGL 不支援時的降級處理邏輯 in `index.html`
+- [x] T006 [P] 實作 `createRenderer()` 函數 - 建立 WebGLRenderer 並配置抗鋸齒、色調映射、陰影 in `index.html`
+- [x] T007 [P] 實作 `createCamera()` 函數 - 建立 PerspectiveCamera (fov:40, position:7,4,1) in `index.html`
+- [x] T008 [P] 實作 `loadTextures()` 函數 - 從 CDN 載入 3 張紋理 (disturb.jpg, colors.png, uv_grid_opengl.jpg) in `index.html`
+- [x] T009 實作 `onWindowResize()` 函數 - 處理視窗大小變更事件 in `index.html`
+- [x] T010 實作 `animate()` 動畫主迴圈骨架 (不含光源移動邏輯) in `index.html`
 
 **Checkpoint**: 基礎設施就緒 - 可以開始實作 User Story
 
@@ -60,17 +60,17 @@ examples/
 
 ### Implementation for User Story 1
 
-- [ ] T011 [P] [US1] 建立 Scene 物件並設定背景 in `index.html`
-- [ ] T012 [P] [US1] 實作 `createGroundPlane()` 函數 - 建立地面平面 (10x10, y:-1, 接收陰影) in `index.html`
-- [ ] T013 [P] [US1] 實作 `createFallbackModel()` 函數 - 建立後備球體幾何體 in `index.html`
-- [ ] T014 [US1] 實作 `loadLucyModel()` 函數 - 使用 PLYLoader 從 CDN 載入 Lucy100k.ply 模型 in `index.html`
-- [ ] T015 [US1] 為 `loadLucyModel()` 加入錯誤處理 - 載入失敗時自動使用後備球體 in `index.html`
-- [ ] T016 [US1] 實作 `createSpotLight()` 函數 - 建立聚光燈 (color:0xffffff, intensity:100, castShadow:true) in `index.html`
-- [ ] T017 [US1] 配置聚光燈陰影參數 (mapSize:1024, bias:-0.003, PCFSoftShadowMap) in `index.html`
-- [ ] T018 [US1] 實作聚光燈紋理投射 - 設定 spotLight.map 為預設紋理 (disturb.jpg) in `index.html`
-- [ ] T019 [US1] 建立 HemisphereLight 環境光 (sky:0xffffff, ground:0x8d8d8d, intensity:0.25) in `index.html`
-- [ ] T020 [US1] 實作 `animate()` 中的聚光燈環繞移動邏輯 (cos/sin, 半徑 2.5, 高度 5) in `index.html`
-- [ ] T021 [US1] 實作 `init()` 主初始化函數 - 整合所有元件建立流程 in `index.html`
+- [x] T011 [P] [US1] 建立 Scene 物件並設定背景 in `index.html`
+- [x] T012 [P] [US1] 實作 `createGroundPlane()` 函數 - 建立地面平面 (10x10, y:-1, 接收陰影) in `index.html`
+- [x] T013 [P] [US1] 實作 `createFallbackModel()` 函數 - 建立後備球體幾何體 in `index.html`
+- [x] T014 [US1] 實作 `loadLucyModel()` 函數 - 使用 PLYLoader 從 CDN 載入 Lucy100k.ply 模型 in `index.html`
+- [x] T015 [US1] 為 `loadLucyModel()` 加入錯誤處理 - 載入失敗時自動使用後備球體 in `index.html`
+- [x] T016 [US1] 實作 `createSpotLight()` 函數 - 建立聚光燈 (color:0xffffff, intensity:100, castShadow:true) in `index.html`
+- [x] T017 [US1] 配置聚光燈陰影參數 (mapSize:1024, bias:-0.003, PCFSoftShadowMap) in `index.html`
+- [x] T018 [US1] 實作聚光燈紋理投射 - 設定 spotLight.map 為預設紋理 (disturb.jpg) in `index.html`
+- [x] T019 [US1] 建立 HemisphereLight 環境光 (sky:0xffffff, ground:0x8d8d8d, intensity:0.25) in `index.html`
+- [x] T020 [US1] 實作 `animate()` 中的聚光燈環繞移動邏輯 (cos/sin, 半徑 2.5, 高度 5) in `index.html`
+- [x] T021 [US1] 實作 `init()` 主初始化函數 - 整合所有元件建立流程 in `index.html`
 
 **Checkpoint**: User Story 1 完成 - 開啟頁面即可看到動態光影效果的完整 3D 場景
 
@@ -84,11 +84,11 @@ examples/
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] 實作 `createControls()` 函數 - 建立 OrbitControls 並綁定至 camera 和 renderer.domElement in `index.html`
-- [ ] T023 [US2] 配置 OrbitControls 距離限制 (minDistance:2, maxDistance:10) in `index.html`
-- [ ] T024 [US2] 配置 OrbitControls 極角限制 (maxPolarAngle: Math.PI/2) - 防止攝影機低於地平面 in `index.html`
-- [ ] T025 [US2] 設定 OrbitControls 目標點 (target: 0,1,0) in `index.html`
-- [ ] T026 [US2] 在 `init()` 中整合 OrbitControls 建立流程 in `index.html`
+- [x] T022 [US2] 實作 `createControls()` 函數 - 建立 OrbitControls 並綁定至 camera 和 renderer.domElement in `index.html`
+- [x] T023 [US2] 配置 OrbitControls 距離限制 (minDistance:2, maxDistance:10) in `index.html`
+- [x] T024 [US2] 配置 OrbitControls 極角限制 (maxPolarAngle: Math.PI/2) - 防止攝影機低於地平面 in `index.html`
+- [x] T025 [US2] 設定 OrbitControls 目標點 (target: 0,1,0) in `index.html`
+- [x] T026 [US2] 在 `init()` 中整合 OrbitControls 建立流程 in `index.html`
 
 **Checkpoint**: User Story 2 完成 - 使用者可自由旋轉和縮放攝影機視角
 
@@ -102,15 +102,15 @@ examples/
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] 定義 GUI 參數物件 (params) - 包含所有可調整屬性的初始值 in `index.html`
-- [ ] T028 [US3] 實作 `createGUI()` 函數骨架 - 建立 lil-gui 實例 in `index.html`
-- [ ] T029 [P] [US3] 加入 GUI 顏色控制項 (color) - 使用 addColor() 並綁定 onChange 更新 spotLight.color in `index.html`
-- [ ] T030 [P] [US3] 加入 GUI 強度滑桿 (intensity: 0-500) - 綁定 onChange 更新 spotLight.intensity in `index.html`
-- [ ] T031 [P] [US3] 加入 GUI 距離滑桿 (distance: 0-20) - 綁定 onChange 更新 spotLight.distance in `index.html`
-- [ ] T032 [P] [US3] 加入 GUI 角度滑桿 (angle: 0-60°) - 綁定 onChange 更新 spotLight.angle in `index.html`
-- [ ] T033 [P] [US3] 加入 GUI 邊緣模糊滑桿 (penumbra: 0-1) - 綁定 onChange 更新 spotLight.penumbra in `index.html`
-- [ ] T034 [P] [US3] 加入 GUI 衰減滑桿 (decay: 1-2) - 綁定 onChange 更新 spotLight.decay in `index.html`
-- [ ] T035 [US3] 在 `init()` 中整合 GUI 建立流程 in `index.html`
+- [x] T027 [US3] 定義 GUI 參數物件 (params) - 包含所有可調整屬性的初始值 in `index.html`
+- [x] T028 [US3] 實作 `createGUI()` 函數骨架 - 建立 lil-gui 實例 in `index.html`
+- [x] T029 [P] [US3] 加入 GUI 顏色控制項 (color) - 使用 addColor() 並綁定 onChange 更新 spotLight.color in `index.html`
+- [x] T030 [P] [US3] 加入 GUI 強度滑桿 (intensity: 0-500) - 綁定 onChange 更新 spotLight.intensity in `index.html`
+- [x] T031 [P] [US3] 加入 GUI 距離滑桿 (distance: 0-20) - 綁定 onChange 更新 spotLight.distance in `index.html`
+- [x] T032 [P] [US3] 加入 GUI 角度滑桿 (angle: 0-60°) - 綁定 onChange 更新 spotLight.angle in `index.html`
+- [x] T033 [P] [US3] 加入 GUI 邊緣模糊滑桿 (penumbra: 0-1) - 綁定 onChange 更新 spotLight.penumbra in `index.html`
+- [x] T034 [P] [US3] 加入 GUI 衰減滑桿 (decay: 1-2) - 綁定 onChange 更新 spotLight.decay in `index.html`
+- [x] T035 [US3] 在 `init()` 中整合 GUI 建立流程 in `index.html`
 
 **Checkpoint**: User Story 3 完成 - 使用者可即時調整 6 項光源屬性
 
@@ -124,9 +124,9 @@ examples/
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] 加入 GUI 紋理下拉選單 (map) - 使用 add() 配合 textures 物件 in `index.html`
-- [ ] T037 [US4] 實作紋理切換 onChange 邏輯 - 更新 spotLight.map 屬性 in `index.html`
-- [ ] T038 [US4] 處理「無紋理」選項 - 當選擇 none 時設定 spotLight.map = null in `index.html`
+- [x] T036 [US4] 加入 GUI 紋理下拉選單 (map) - 使用 add() 配合 textures 物件 in `index.html`
+- [x] T037 [US4] 實作紋理切換 onChange 邏輯 - 更新 spotLight.map 屬性 in `index.html`
+- [x] T038 [US4] 處理「無紋理」選項 - 當選擇 none 時設定 spotLight.map = null in `index.html`
 
 **Checkpoint**: User Story 4 完成 - 使用者可切換 4 種紋理投射選項
 
@@ -140,8 +140,8 @@ examples/
 
 ### Implementation for User Story 5
 
-- [ ] T039 [P] [US5] 加入 GUI 陰影聚焦滑桿 (focus: 0-1) - 綁定 onChange 更新 spotLight.shadow.focus in `index.html`
-- [ ] T040 [P] [US5] 加入 GUI 陰影強度滑桿 (shadowIntensity: 0-1) - 綁定 onChange 更新 spotLight.shadow.intensity in `index.html`
+- [x] T039 [P] [US5] 加入 GUI 陰影聚焦滑桿 (focus: 0-1) - 綁定 onChange 更新 spotLight.shadow.focus in `index.html`
+- [x] T040 [P] [US5] 加入 GUI 陰影強度滑桿 (shadowIntensity: 0-1) - 綁定 onChange 更新 spotLight.shadow.intensity in `index.html`
 
 **Checkpoint**: User Story 5 完成 - 使用者可調整 2 項陰影參數
 
@@ -155,10 +155,10 @@ examples/
 
 ### Implementation for User Story 6
 
-- [ ] T041 [US6] 建立 SpotLightHelper 並加入場景 (初始隱藏) in `index.html`
-- [ ] T042 [US6] 建立 CameraHelper (shadowCameraHelper) 並加入場景 (初始隱藏) in `index.html`
-- [ ] T043 [US6] 加入 GUI helpers 開關控制項 - 綁定 onChange 切換兩個 helper 的 visible 屬性 in `index.html`
-- [ ] T044 [US6] 在 `animate()` 中加入 lightHelper.update() 呼叫 in `index.html`
+- [x] T041 [US6] 建立 SpotLightHelper 並加入場景 (初始隱藏) in `index.html`
+- [x] T042 [US6] 建立 CameraHelper (shadowCameraHelper) 並加入場景 (初始隱藏) in `index.html`
+- [x] T043 [US6] 加入 GUI helpers 開關控制項 - 綁定 onChange 切換兩個 helper 的 visible 屬性 in `index.html`
+- [x] T044 [US6] 在 `animate()` 中加入 lightHelper.update() 呼叫 in `index.html`
 
 **Checkpoint**: User Story 6 完成 - 使用者可切換輔助視覺化工具
 
@@ -168,13 +168,13 @@ examples/
 
 **Purpose**: 跨 User Story 的改進和完善
 
-- [ ] T045 加入 HTML info 區塊 - 顯示標題和 three.js 連結 in `index.html`
-- [ ] T046 加入 CSS 全螢幕樣式 - body margin:0, overflow:hidden in `index.html`
-- [ ] T047 加入 CSS info 區塊樣式 - 絕對定位、置中、白色文字 in `index.html`
-- [ ] T048 處理紋理載入失敗 - 個別紋理失敗不影響其他紋理 in `index.html`
-- [ ] T049 處理光源強度為 0 的邊界情況 - 確保場景只剩環境光照明 in `index.html`
-- [ ] T050 程式碼整理 - 確保程式碼結構清晰、註解完整 in `index.html`
-- [ ] T051 執行 quickstart.md 驗證 - 確認所有功能符合規格
+- [x] T045 加入 HTML info 區塊 - 顯示標題和 three.js 連結 in `index.html`
+- [x] T046 加入 CSS 全螢幕樣式 - body margin:0, overflow:hidden in `index.html`
+- [x] T047 加入 CSS info 區塊樣式 - 絕對定位、置中、白色文字 in `index.html`
+- [x] T048 處理紋理載入失敗 - 個別紋理失敗不影響其他紋理 in `index.html`
+- [x] T049 處理光源強度為 0 的邊界情況 - 確保場景只剩環境光照明 in `index.html`
+- [x] T050 程式碼整理 - 確保程式碼結構清晰、註解完整 in `index.html`
+- [x] T051 執行 quickstart.md 驗證 - 確認所有功能符合規格
 
 ---
 
