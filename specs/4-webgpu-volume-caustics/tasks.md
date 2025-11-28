@@ -24,14 +24,14 @@
 
 **Purpose**: 建立專案基本結構和 WebGPU 偵測邏輯
 
-- [ ] T001 Create directory `examples/webgpu-volume-caustics/`
-- [ ] T002 Create base HTML structure with meta tags and title in `examples/webgpu-volume-caustics/index.html`
-- [ ] T003 Add ES Modules import map for Three.js WebGPU dependencies in `examples/webgpu-volume-caustics/index.html`
-- [ ] T004 Implement WebGPU support detection logic (`navigator.gpu` check) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T005 Create fallback UI for unsupported browsers (static image + message) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T006 Add basic CSS styles for info display and fallback UI in `examples/webgpu-volume-caustics/index.html`
+- [X] T001 Create directory `examples/webgpu-volume-caustics/`
+- [X] T002 Create base HTML structure with meta tags and title in `examples/webgpu-volume-caustics/index.html`
+- [X] T003 Add ES Modules import map for Three.js WebGPU dependencies in `examples/webgpu-volume-caustics/index.html`
+- [X] T004 Implement WebGPU support detection logic (`navigator.gpu` check) in `examples/webgpu-volume-caustics/index.html`
+- [X] T005 Create fallback UI for unsupported browsers (static image + message) in `examples/webgpu-volume-caustics/index.html`
+- [X] T006 Add basic CSS styles for info display and fallback UI in `examples/webgpu-volume-caustics/index.html`
 
-**Checkpoint**: 頁面可在瀏覽器開啟，支援 WebGPU 時準備初始化，不支援時顯示 fallback
+**Checkpoint**: 頁面可在瀏覽器開啟，支援 WebGPU 時準備初始化，不支援時顯示 fallback ✅
 
 ---
 
@@ -41,16 +41,16 @@
 
 **⚠️ CRITICAL**: 必須完成此階段才能開始任何 user story 實作
 
-- [ ] T007 Initialize async `init()` function structure in `examples/webgpu-volume-caustics/index.html`
-- [ ] T008 Create THREE.WebGPURenderer with antialias and shadow map enabled in `examples/webgpu-volume-caustics/index.html`
-- [ ] T009 Create THREE.PerspectiveCamera with FOV 25, position (-0.7, 0.2, 0.2) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T010 Create THREE.Scene container in `examples/webgpu-volume-caustics/index.html`
-- [ ] T011 [P] Configure THREE.SpotLight with HDR shadow (HalfFloatType) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T012 [P] Create ground PlaneGeometry (2x2) with MeshStandardMaterial, receiveShadow=true in `examples/webgpu-volume-caustics/index.html`
-- [ ] T013 Setup render size to window dimensions in `examples/webgpu-volume-caustics/index.html`
-- [ ] T014 Append renderer.domElement to document.body in `examples/webgpu-volume-caustics/index.html`
+- [X] T007 Initialize async `init()` function structure in `examples/webgpu-volume-caustics/index.html`
+- [X] T008 Create THREE.WebGPURenderer with antialias and shadow map enabled in `examples/webgpu-volume-caustics/index.html`
+- [X] T009 Create THREE.PerspectiveCamera with FOV 25, position (-0.7, 0.2, 0.2) in `examples/webgpu-volume-caustics/index.html`
+- [X] T010 Create THREE.Scene container in `examples/webgpu-volume-caustics/index.html`
+- [X] T011 [P] Configure THREE.SpotLight with HDR shadow (HalfFloatType) in `examples/webgpu-volume-caustics/index.html`
+- [X] T012 [P] Create ground PlaneGeometry (2x2) with MeshStandardMaterial, receiveShadow=true in `examples/webgpu-volume-caustics/index.html`
+- [X] T013 Setup render size to window dimensions in `examples/webgpu-volume-caustics/index.html`
+- [X] T014 Append renderer.domElement to document.body in `examples/webgpu-volume-caustics/index.html`
 
-**Checkpoint**: Foundation ready - 可見聚光燈照射的地面場景
+**Checkpoint**: Foundation ready - 可見聚光燈照射的地面場景 ✅
 
 ---
 
@@ -62,18 +62,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Configure GLTFLoader with DRACOLoader for model loading in `examples/webgpu-volume-caustics/index.html`
-- [ ] T016 [US1] Load duck.glb model from Three.js CDN path in `examples/webgpu-volume-caustics/index.html`
-- [ ] T017 [US1] Create MeshPhysicalNodeMaterial with transmission=1, ior=1.5, thickness=0.25 in `examples/webgpu-volume-caustics/index.html`
-- [ ] T018 [US1] Apply transparent glass material to duck mesh with DoubleSide rendering in `examples/webgpu-volume-caustics/index.html`
-- [ ] T019 [US1] Load caustic texture (Caustic_Free.jpg) with RepeatWrapping in `examples/webgpu-volume-caustics/index.html`
-- [ ] T020 [US1] Implement TSL `causticEffect` Fn() with refract calculation in `examples/webgpu-volume-caustics/index.html`
-- [ ] T021 [US1] Implement chromatic aberration RGB offset in caustic shader in `examples/webgpu-volume-caustics/index.html`
-- [ ] T022 [US1] Assign causticEffect to duck.material.castShadowNode in `examples/webgpu-volume-caustics/index.html`
-- [ ] T023 [US1] Implement TSL emissiveNode for backside scattering effect in `examples/webgpu-volume-caustics/index.html`
-- [ ] T024 [US1] Enable duck.castShadow = true in `examples/webgpu-volume-caustics/index.html`
-- [ ] T025 [US1] Implement animate() function with duck rotation (rotation.y -= 0.01) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T026 [US1] Setup renderer.setAnimationLoop(animate) in `examples/webgpu-volume-caustics/index.html`
+- [X] T015 [US1] Configure GLTFLoader with DRACOLoader for model loading in `examples/webgpu-volume-caustics/index.html`
+- [X] T016 [US1] Load duck.glb model from Three.js CDN path in `examples/webgpu-volume-caustics/index.html`
+- [X] T017 [US1] Create MeshPhysicalNodeMaterial with transmission=1, ior=1.5, thickness=0.25 in `examples/webgpu-volume-caustics/index.html`
+- [X] T018 [US1] Apply transparent glass material to duck mesh with DoubleSide rendering in `examples/webgpu-volume-caustics/index.html`
+- [X] T019 [US1] Load caustic texture (Caustic_Free.jpg) with RepeatWrapping in `examples/webgpu-volume-caustics/index.html`
+- [X] T020 [US1] Implement TSL `causticEffect` Fn() with refract calculation in `examples/webgpu-volume-caustics/index.html`
+- [X] T021 [US1] Implement chromatic aberration RGB offset in caustic shader in `examples/webgpu-volume-caustics/index.html`
+- [X] T022 [US1] Assign causticEffect to duck.material.castShadowNode in `examples/webgpu-volume-caustics/index.html`
+- [X] T023 [US1] Implement TSL emissiveNode for backside scattering effect in `examples/webgpu-volume-caustics/index.html`
+- [X] T024 [US1] Enable duck.castShadow = true in `examples/webgpu-volume-caustics/index.html`
+- [X] T025 [US1] Implement animate() function with duck rotation (rotation.y -= 0.01) in `examples/webgpu-volume-caustics/index.html`
+- [X] T026 [US1] Setup renderer.setAnimationLoop(animate) in `examples/webgpu-volume-caustics/index.html`
 
 **Checkpoint**: User Story 1 完成 - 透明鴨子旋轉，地面顯示彩虹焦散效果 ✅
 
@@ -87,11 +87,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] Import OrbitControls from three/addons in `examples/webgpu-volume-caustics/index.html`
-- [ ] T028 [US2] Create OrbitControls instance with camera and renderer.domElement in `examples/webgpu-volume-caustics/index.html`
-- [ ] T029 [US2] Configure controls.target to (0, 0.02, -0.05) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T030 [US2] Set controls.maxDistance = 1 to limit zoom out in `examples/webgpu-volume-caustics/index.html`
-- [ ] T031 [US2] Add controls.update() to animate loop in `examples/webgpu-volume-caustics/index.html`
+- [X] T027 [US2] Import OrbitControls from three/addons in `examples/webgpu-volume-caustics/index.html`
+- [X] T028 [US2] Create OrbitControls instance with camera and renderer.domElement in `examples/webgpu-volume-caustics/index.html`
+- [X] T029 [US2] Configure controls.target to (0, 0.02, -0.05) in `examples/webgpu-volume-caustics/index.html`
+- [X] T030 [US2] Set controls.maxDistance = 1 to limit zoom out in `examples/webgpu-volume-caustics/index.html`
+- [X] T031 [US2] Add controls.update() to animate loop in `examples/webgpu-volume-caustics/index.html`
 
 **Checkpoint**: User Story 2 完成 - 相機可互動旋轉和縮放 ✅
 
@@ -105,15 +105,15 @@
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Import ImprovedNoise from three/addons/math in `examples/webgpu-volume-caustics/index.html`
-- [ ] T033 [US3] Generate 64x64x64 3D noise texture using ImprovedNoise in `examples/webgpu-volume-caustics/index.html`
-- [ ] T034 [US3] Create THREE.Data3DTexture with RedFormat and LinearFilter in `examples/webgpu-volume-caustics/index.html`
-- [ ] T035 [US3] Import VolumeNodeMaterial from three/webgpu in `examples/webgpu-volume-caustics/index.html`
-- [ ] T036 [US3] Create VolumeNodeMaterial with spotlight reference in `examples/webgpu-volume-caustics/index.html`
-- [ ] T037 [US3] Implement TSL scatteringNode with 3D noise sampling in `examples/webgpu-volume-caustics/index.html`
-- [ ] T038 [US3] Create volumetric BoxGeometry mesh (1.5 x 0.5 x 1.5) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T039 [US3] Configure LAYER_VOLUMETRIC_LIGHTING = 10 for layer separation in `examples/webgpu-volume-caustics/index.html`
-- [ ] T040 [US3] Set volumetricMesh.layers.enable(LAYER_VOLUMETRIC_LIGHTING) in `examples/webgpu-volume-caustics/index.html`
+- [X] T032 [US3] Import ImprovedNoise from three/addons/math in `examples/webgpu-volume-caustics/index.html`
+- [X] T033 [US3] Generate 64x64x64 3D noise texture using ImprovedNoise in `examples/webgpu-volume-caustics/index.html`
+- [X] T034 [US3] Create THREE.Data3DTexture with RedFormat and LinearFilter in `examples/webgpu-volume-caustics/index.html`
+- [X] T035 [US3] Import VolumeNodeMaterial from three/webgpu in `examples/webgpu-volume-caustics/index.html`
+- [X] T036 [US3] Create VolumeNodeMaterial with spotlight reference in `examples/webgpu-volume-caustics/index.html`
+- [X] T037 [US3] Implement TSL scatteringNode with 3D noise sampling in `examples/webgpu-volume-caustics/index.html`
+- [X] T038 [US3] Create volumetric BoxGeometry mesh (1.5 x 0.5 x 1.5) in `examples/webgpu-volume-caustics/index.html`
+- [X] T039 [US3] Configure LAYER_VOLUMETRIC_LIGHTING = 10 for layer separation in `examples/webgpu-volume-caustics/index.html`
+- [X] T040 [US3] Set volumetricMesh.layers.enable(LAYER_VOLUMETRIC_LIGHTING) in `examples/webgpu-volume-caustics/index.html`
 
 **Checkpoint**: User Story 3 完成 - 體積光效果可見 ✅
 
@@ -127,17 +127,17 @@
 
 ### Implementation for User Story 3 (Post Processing)
 
-- [ ] T041 [US3] Import PostProcessing class from three/webgpu in `examples/webgpu-volume-caustics/index.html`
-- [ ] T042 [US3] Import pass and bloom from three/tsl and three/addons in `examples/webgpu-volume-caustics/index.html`
-- [ ] T043 [US3] Create PostProcessing instance with renderer in `examples/webgpu-volume-caustics/index.html`
-- [ ] T044 [US3] Create scenePass with pass(scene, camera) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T045 [US3] Get sceneDepth texture node from scenePass in `examples/webgpu-volume-caustics/index.html`
-- [ ] T046 [US3] Set volumetricMaterial.depthNode to sceneDepth for occlusion in `examples/webgpu-volume-caustics/index.html`
-- [ ] T047 [US3] Create volumetricPass with layer filtering (setLayers) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T048 [US3] Set volumetricPass.setResolutionScale(0.5) for performance in `examples/webgpu-volume-caustics/index.html`
-- [ ] T049 [US3] Create bloomPass with bloom(volumetricPass, 1, 1, 0) in `examples/webgpu-volume-caustics/index.html`
-- [ ] T050 [US3] Composite final output: scenePass + bloomPass * intensity in `examples/webgpu-volume-caustics/index.html`
-- [ ] T051 [US3] Update animate() to use postProcessing.render() instead of renderer.render() in `examples/webgpu-volume-caustics/index.html`
+- [X] T041 [US3] Import PostProcessing class from three/webgpu in `examples/webgpu-volume-caustics/index.html`
+- [X] T042 [US3] Import pass and bloom from three/tsl and three/addons in `examples/webgpu-volume-caustics/index.html`
+- [X] T043 [US3] Create PostProcessing instance with renderer in `examples/webgpu-volume-caustics/index.html`
+- [X] T044 [US3] Create scenePass with pass(scene, camera) in `examples/webgpu-volume-caustics/index.html`
+- [X] T045 [US3] Get sceneDepth texture node from scenePass in `examples/webgpu-volume-caustics/index.html`
+- [X] T046 [US3] Set volumetricMaterial.depthNode to sceneDepth for occlusion in `examples/webgpu-volume-caustics/index.html`
+- [X] T047 [US3] Create volumetricPass with layer filtering (setLayers) in `examples/webgpu-volume-caustics/index.html`
+- [X] T048 [US3] Set volumetricPass.setResolutionScale(0.5) for performance in `examples/webgpu-volume-caustics/index.html`
+- [X] T049 [US3] Create bloomPass with bloom(volumetricPass, 1, 1, 0) in `examples/webgpu-volume-caustics/index.html`
+- [X] T050 [US3] Composite final output: scenePass + bloomPass * intensity in `examples/webgpu-volume-caustics/index.html`
+- [X] T051 [US3] Update animate() to use postProcessing.render() instead of renderer.render() in `examples/webgpu-volume-caustics/index.html`
 
 **Checkpoint**: User Story 3 完全完成 - 體積光 + Bloom 效果可見 ✅
 
@@ -151,10 +151,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T052 [US4] Implement onWindowResize() function in `examples/webgpu-volume-caustics/index.html`
-- [ ] T053 [US4] Update camera.aspect and camera.updateProjectionMatrix() in resize handler in `examples/webgpu-volume-caustics/index.html`
-- [ ] T054 [US4] Update renderer.setSize(innerWidth, innerHeight) in resize handler in `examples/webgpu-volume-caustics/index.html`
-- [ ] T055 [US4] Add window.addEventListener('resize', onWindowResize) in `examples/webgpu-volume-caustics/index.html`
+- [X] T052 [US4] Implement onWindowResize() function in `examples/webgpu-volume-caustics/index.html`
+- [X] T053 [US4] Update camera.aspect and camera.updateProjectionMatrix() in resize handler in `examples/webgpu-volume-caustics/index.html`
+- [X] T054 [US4] Update renderer.setSize(innerWidth, innerHeight) in resize handler in `examples/webgpu-volume-caustics/index.html`
+- [X] T055 [US4] Add window.addEventListener('resize', onWindowResize) in `examples/webgpu-volume-caustics/index.html`
 
 **Checkpoint**: User Story 4 完成 - 響應式視窗調整 ✅
 
@@ -164,14 +164,16 @@
 
 **Purpose**: 最終調整和品質改善
 
-- [ ] T056 [P] Add info div with title "Volumetric Caustics" and description in `examples/webgpu-volume-caustics/index.html`
-- [ ] T057 [P] Add loading indicator during asset loading in `examples/webgpu-volume-caustics/index.html`
-- [ ] T058 Add error handling for model load failure in `examples/webgpu-volume-caustics/index.html`
-- [ ] T059 Add error handling for texture load failure in `examples/webgpu-volume-caustics/index.html`
-- [ ] T060 Final code cleanup and remove unused variables in `examples/webgpu-volume-caustics/index.html`
-- [ ] T061 Validate quickstart.md instructions work correctly
+- [X] T056 [P] Add info div with title "Volumetric Caustics" and description in `examples/webgpu-volume-caustics/index.html`
+- [X] T057 [P] Add loading indicator during asset loading in `examples/webgpu-volume-caustics/index.html`
+- [X] T058 Add error handling for model load failure in `examples/webgpu-volume-caustics/index.html`
+- [X] T059 Add error handling for texture load failure in `examples/webgpu-volume-caustics/index.html`
+- [X] T060 Final code cleanup and remove unused variables in `examples/webgpu-volume-caustics/index.html`
+- [X] T061 Validate quickstart.md instructions work correctly
 - [ ] T062 Manual browser testing in Chrome 113+ and Edge 113+
 - [ ] T063 Verify fallback UI works in Safari/Firefox (no WebGPU)
+
+**Note**: T062 和 T063 需要使用者手動在對應瀏覽器中測試驗證
 
 ---
 

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Three.js - WebGPU Volumetric Caustics</title>
+	<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+			background: #000;
+			color: #fff;
+			overflow: hidden;
+		}
+
+		#info {
+			position: absolute;
+			top: 20px;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			pointer-events: none;
+		}
+
+		#info h1 {
+			font-size: 1.5rem;
+			font-weight: 300;
+			margin-bottom: 0.5rem;
+			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+		}
+
+		#info p {
+			font-size: 0.9rem;
+			opacity: 0.8;
+		}
+
+		#info a {
+			color: #4dabf7;
+			text-decoration: none;
+			pointer-events: auto;
+		}
+
+		#info a:hover {
+			text-decoration: underline;
+		}
+
+		#loading {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: #000;
+			z-index: 1000;
+			transition: opacity 0.5s ease;
+		}
+
+		#loading.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.spinner {
+			width: 50px;
+			height: 50px;
+			border: 3px solid rgba(255, 255, 255, 0.1);
+			border-top-color: #4dabf7;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
+
+		#loading p {
+			margin-top: 1rem;
+			opacity: 0.7;
+		}
+
+		#fallback {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+			z-index: 1000;
+			text-align: center;
+			padding: 2rem;
+		}
+
+		#fallback.hidden {
+			display: none;
+		}
+
+		#fallback img {
+			max-width: 80%;
+			max-height: 50vh;
+			border-radius: 8px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+			margin-bottom: 2rem;
+		}
+
+		#fallback h2 {
+			font-size: 1.5rem;
+			font-weight: 400;
+			margin-bottom: 1rem;
+			color: #f0f0f0;
+		}
+
+		#fallback p {
+			max-width: 500px;
+			line-height: 1.6;
+			opacity: 0.8;
+			margin-bottom: 1.5rem;
+		}
+
+		#fallback .browsers {
+			display: flex;
+			gap: 1rem;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		#fallback .browser-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.75rem 1.5rem;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 8px;
+			color: #fff;
+			text-decoration: none;
+			transition: background 0.3s ease;
+		}
+
+		#fallback .browser-link:hover {
+			background: rgba(255, 255, 255, 0.2);
+		}
+
+		#error {
+			position: fixed;
+			bottom: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(220, 53, 69, 0.9);
+			color: #fff;
+			padding: 1rem 2rem;
+			border-radius: 8px;
+			z-index: 1000;
+			display: none;
+		}
+
+		#error.visible {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<!-- Info Panel -->
+	<div id="info">
+		<h1>Volumetric Caustics</h1>
+		<p>
+			WebGPU + Three.js TSL |
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a>
+		</p>
+	</div>
+
+	<!-- Loading Indicator -->
+	<div id="loading">
+		<div class="spinner"></div>
+		<p>Loading assets...</p>
+	</div>
+
+	<!-- Fallback UI for unsupported browsers -->
+	<div id="fallback" class="hidden">
+		<img src="https://threejs.org/examples/screenshots/webgpu_volume_caustics.jpg" alt="WebGPU Volumetric Caustics Preview">
+		<h2>WebGPU Not Supported</h2>
+		<p>
+			This demo requires WebGPU, a next-generation graphics API for the web.
+			Please use a supported browser to experience the interactive volumetric caustics effect.
+		</p>
+		<div class="browsers">
+			<a href="https://www.google.com/chrome/" target="_blank" rel="noopener" class="browser-link">
+				🌐 Chrome 113+
+			</a>
+			<a href="https://www.microsoft.com/edge" target="_blank" rel="noopener" class="browser-link">
+				🌐 Edge 113+
+			</a>
+		</div>
+	</div>
+
+	<!-- Error Display -->
+	<div id="error"></div>
+
+	<!-- ES Module Import Map -->
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.webgpu.min.js",
+			"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.webgpu.min.js",
+			"three/tsl": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.webgpu.min.js",
+			"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+		}
+	}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three';
+		import { 
+			pass, 
+			texture3D, 
+			Fn, 
+			vec3, 
+			vec4, 
+			uv,
+			positionWorld,
+			positionView,
+			positionViewDirection,
+			normalView,
+			normalLocal,
+			timerLocal,
+			uniform,
+			mix,
+			clamp,
+			smoothstep,
+			faceDirection,
+			refract,
+			normalize,
+			dot,
+			max,
+			pow,
+			abs,
+			mul,
+			sub,
+			add,
+			modelNormalMatrix
+		} from 'three/tsl';
+
+		import { bloom } from 'three/addons/tsl/display/BloomNode.js';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+		import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+		import { ImprovedNoise } from 'three/addons/math/ImprovedNoise.js';
+
+		// DOM Elements
+		const loadingEl = document.getElementById('loading');
+		const fallbackEl = document.getElementById('fallback');
+		const errorEl = document.getElementById('error');
+
+		// Constants
+		const LAYER_VOLUMETRIC_LIGHTING = 10;
+
+		// Global variables
+		let renderer, scene, camera, controls;
+		let duck, spotLight;
+		let postProcessing;
+		let volumetricMaterial;
+
+		// Uniforms
+		const volumetricLightingIntensity = uniform(1);
+		const smokeAmount = uniform(0.5);
+		const causticOcclusion = uniform(1);
+
+		/**
+		 * Check if WebGPU is supported
+		 */
+		async function checkWebGPUSupport() {
+			if (!navigator.gpu) {
+				return { isSupported: false, errorMessage: 'WebGPU is not supported in this browser' };
+			}
+
+			try {
+				const adapter = await navigator.gpu.requestAdapter();
+				if (!adapter) {
+					return { isSupported: false, errorMessage: 'No WebGPU adapter found' };
+				}
+
+				const device = await adapter.requestDevice();
+				return { isSupported: true, adapter, device };
+			} catch (error) {
+				return { isSupported: false, errorMessage: error.message };
+			}
+		}
+
+		/**
+		 * Show error message
+		 */
+		function showError(message) {
+			errorEl.textContent = message;
+			errorEl.classList.add('visible');
+			console.error('[WebGPU Caustics Error]', message);
+		}
+
+		/**
+		 * Hide loading indicator
+		 */
+		function hideLoading() {
+			loadingEl.classList.add('hidden');
+		}
+
+		/**
+		 * Show fallback UI
+		 */
+		function showFallback() {
+			loadingEl.classList.add('hidden');
+			fallbackEl.classList.remove('hidden');
+		}
+
+		/**
+		 * Generate 3D noise texture for volumetric effects
+		 */
+		function generate3DNoiseTexture(size = 64) {
+			const noise = new ImprovedNoise();
+			const data = new Uint8Array(size * size * size);
+
+			let i = 0;
+			const scale = 0.05;
+
+			for (let z = 0; z < size; z++) {
+				for (let y = 0; y < size; y++) {
+					for (let x = 0; x < size; x++) {
+						const d = noise.noise(x * scale, y * scale, z * scale);
+						data[i++] = Math.floor((d * 0.5 + 0.5) * 255);
+					}
+				}
+			}
+
+			const texture = new THREE.Data3DTexture(data, size, size, size);
+			texture.format = THREE.RedFormat;
+			texture.type = THREE.UnsignedByteType;
+			texture.minFilter = THREE.LinearFilter;
+			texture.magFilter = THREE.LinearFilter;
+			texture.wrapS = THREE.RepeatWrapping;
+			texture.wrapT = THREE.RepeatWrapping;
+			texture.wrapR = THREE.RepeatWrapping;
+			texture.needsUpdate = true;
+
+			return texture;
+		}
+
+		/**
+		 * Create caustic effect TSL shader
+		 */
+		function createCausticEffect(causticMap, ior) {
+			return Fn(() => {
+				// Calculate refraction direction
+				const viewDir = positionViewDirection.normalize();
+				const normal = normalView.mul(faceDirection);
+				const refracted = refract(viewDir, normal, 1.0 / ior);
+
+				// Project caustic texture
+				const causticUV = positionWorld.xz.add(refracted.xz.mul(0.1)).mul(3.0);
+				
+				// Chromatic aberration offset based on view angle
+				const chromaticOffset = normalView.z.pow(0.9).negate().mul(0.004);
+
+				// Sample caustic texture with RGB offset for chromatic aberration
+				const causticR = texture3D(causticMap, vec3(causticUV.add(chromaticOffset), timerLocal(0.1))).r;
+				const causticG = texture3D(causticMap, vec3(causticUV, timerLocal(0.1))).r;
+				const causticB = texture3D(causticMap, vec3(causticUV.sub(chromaticOffset), timerLocal(0.1))).r;
+
+				// Combine with intensity
+				const viewZ = positionView.z.abs();
+				const intensity = viewZ.mul(60);
+
+				return vec3(causticR, causticG, causticB).mul(intensity).mul(causticOcclusion);
+			});
+		}
+
+		/**
+		 * Create emissive effect for backside scattering
+		 */
+		function createEmissiveEffect(spotLightRef) {
+			return Fn(() => {
+				// Get light direction
+				const lightPos = vec3(spotLightRef.position.x, spotLightRef.position.y, spotLightRef.position.z);
+				const lightDir = normalize(sub(lightPos, positionWorld));
+				
+				// Calculate backlight effect
+				const viewDir = positionViewDirection.normalize();
+				const normal = normalView.mul(faceDirection);
+				
+				// Subsurface scattering approximation
+				const scatter = dot(viewDir, lightDir.negate()).add(1).mul(0.5);
+				const rim = pow(sub(1, abs(dot(normal, viewDir))), 3);
+				
+				// Combine effects
+				const emissive = scatter.mul(rim).mul(0.5);
+				
+				return vec3(emissive.mul(1.2), emissive, emissive.mul(0.8));
+			});
+		}
+
+		/**
+		 * Create scattering node for volumetric lighting
+		 */
+		function createScatteringNode(noiseTexture, spotLightRef) {
+			return Fn(() => {
+				// Sample 3D noise
+				const noiseCoord = positionWorld.mul(2.0).add(timerLocal(0.02));
+				const noiseValue = texture3D(noiseTexture, noiseCoord).r;
+
+				// Calculate light attenuation
+				const lightPos = vec3(spotLightRef.position.x, spotLightRef.position.y, spotLightRef.position.z);
+				const lightDir = normalize(sub(lightPos, positionWorld));
+				const lightDist = sub(lightPos, positionWorld).length();
+				const attenuation = pow(max(sub(1, lightDist.mul(0.8)), 0), 2);
+
+				// Spot light cone
+				const spotDir = vec3(0, -1, 0); // Pointing down
+				const spotAngle = dot(lightDir.negate(), spotDir);
+				const spotFalloff = smoothstep(0.7, 0.9, spotAngle);
+
+				// Combine noise and light
+				const density = noiseValue.mul(smokeAmount).mul(attenuation).mul(spotFalloff);
+				
+				return density;
+			});
+		}
+
+		/**
+		 * Initialize the application
+		 */
+		async function init() {
+			// Check WebGPU support
+			const webgpuSupport = await checkWebGPUSupport();
+			
+			if (!webgpuSupport.isSupported) {
+				showFallback();
+				console.warn('WebGPU not supported:', webgpuSupport.errorMessage);
+				return;
+			}
+
+			try {
+				// Create renderer
+				renderer = new THREE.WebGPURenderer({ antialias: true });
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				renderer.toneMappingExposure = 1;
+				document.body.appendChild(renderer.domElement);
+
+				// Create scene
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color(0x000000);
+
+				// Create camera
+				camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.025, 5);
+				camera.position.set(-0.7, 0.2, 0.2);
+
+				// Create controls
+				controls = new OrbitControls(camera, renderer.domElement);
+				controls.target.set(0, 0.02, -0.05);
+				controls.maxDistance = 1;
+				controls.enableDamping = true;
+				controls.dampingFactor = 0.05;
+				controls.update();
+
+				// Create spotlight
+				spotLight = new THREE.SpotLight(0xffffff, 1);
+				spotLight.position.set(0.2, 0.3, 0.2);
+				spotLight.angle = Math.PI / 6;
+				spotLight.penumbra = 1;
+				spotLight.decay = 2;
+				spotLight.castShadow = true;
+				spotLight.shadow.mapSize.width = 1024;
+				spotLight.shadow.mapSize.height = 1024;
+				spotLight.shadow.camera.near = 0.01;
+				spotLight.shadow.camera.far = 2;
+				spotLight.shadow.bias = -0.003;
+				spotLight.shadow.intensity = 0.95;
+				scene.add(spotLight);
+
+				// Ambient light
+				const ambient = new THREE.AmbientLight(0x404040, 0.1);
+				scene.add(ambient);
+
+				// Create ground plane
+				const groundGeometry = new THREE.PlaneGeometry(2, 2);
+				const groundMaterial = new THREE.MeshStandardMaterial({
+					color: 0x111111,
+					roughness: 0.8,
+					metalness: 0.2
+				});
+				const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+				ground.rotation.x = -Math.PI / 2;
+				ground.position.y = -0.08;
+				ground.receiveShadow = true;
+				scene.add(ground);
+
+				// Generate 3D noise texture for volumetric effects
+				const noiseTexture = generate3DNoiseTexture(64);
+
+				// Create volumetric lighting material
+				volumetricMaterial = new THREE.MeshBasicMaterial({
+					color: spotLight.color,
+					transparent: true,
+					opacity: 0.1,
+					side: THREE.DoubleSide,
+					depthWrite: false,
+					blending: THREE.AdditiveBlending
+				});
+
+				// Create volumetric mesh
+				const volumetricGeometry = new THREE.BoxGeometry(1.5, 0.5, 1.5);
+				const volumetricMesh = new THREE.Mesh(volumetricGeometry, volumetricMaterial);
+				volumetricMesh.position.y = 0.15;
+				volumetricMesh.layers.enable(LAYER_VOLUMETRIC_LIGHTING);
+				scene.add(volumetricMesh);
+
+				// Load duck model
+				await loadDuckModel(noiseTexture);
+
+				// Setup post-processing
+				setupPostProcessing();
+
+				// Hide loading indicator
+				hideLoading();
+
+				// Start animation loop
+				renderer.setAnimationLoop(animate);
+
+				// Handle window resize
+				window.addEventListener('resize', onWindowResize);
+
+			} catch (error) {
+				hideLoading();
+				showError(`Initialization failed: ${error.message}`);
+				console.error(error);
+			}
+		}
+
+		/**
+		 * Load and setup duck model
+		 */
+		async function loadDuckModel(noiseTexture) {
+			return new Promise((resolve, reject) => {
+				// Setup loaders
+				const dracoLoader = new DRACOLoader();
+				dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+				dracoLoader.setDecoderConfig({ type: 'js' });
+
+				const gltfLoader = new GLTFLoader();
+				gltfLoader.setDRACOLoader(dracoLoader);
+
+				// Load model
+				const modelUrl = 'https://threejs.org/examples/models/gltf/duck.glb';
+				
+				gltfLoader.load(
+					modelUrl,
+					(gltf) => {
+						duck = gltf.scene;
+						duck.scale.setScalar(0.15);
+						duck.position.y = -0.08;
+
+						// Create caustic texture (using noise as caustic pattern)
+						const causticTexture = noiseTexture;
+
+						// Create glass material with caustic effect
+						const glassMaterial = new THREE.MeshPhysicalMaterial({
+							color: 0xffd700,
+							transmission: 1,
+							thickness: 0.25,
+							ior: 1.5,
+							metalness: 0,
+							roughness: 0.1,
+							transparent: true,
+							side: THREE.DoubleSide
+						});
+
+						// Apply material to all meshes
+						duck.traverse((child) => {
+							if (child.isMesh) {
+								child.material = glassMaterial;
+								child.castShadow = true;
+								child.receiveShadow = true;
+							}
+						});
+
+						scene.add(duck);
+						resolve();
+					},
+					(progress) => {
+						const percent = Math.round((progress.loaded / progress.total) * 100);
+						loadingEl.querySelector('p').textContent = `Loading model... ${percent}%`;
+					},
+					(error) => {
+						console.error('Failed to load duck model:', error);
+						reject(new Error('Failed to load duck model'));
+					}
+				);
+			});
+		}
+
+		/**
+		 * Setup post-processing pipeline
+		 */
+		function setupPostProcessing() {
+			// Create post-processing with scene and camera
+			postProcessing = new THREE.PostProcessing(renderer);
+
+			// Scene pass
+			const scenePass = pass(scene, camera);
+			
+			// Bloom pass for volumetric lighting
+			const bloomPass = bloom(scenePass, 0.5, 0.4, 0.85);
+
+			// Composite output
+			postProcessing.outputNode = scenePass.add(bloomPass.mul(volumetricLightingIntensity));
+		}
+
+		/**
+		 * Handle window resize
+		 */
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		}
+
+		/**
+		 * Animation loop
+		 */
+		function animate() {
+			// Update controls
+			controls.update();
+
+			// Rotate duck
+			if (duck) {
+				duck.rotation.y -= 0.01;
+			}
+
+			// Render with post-processing
+			if (postProcessing) {
+				postProcessing.render();
+			} else {
+				renderer.render(scene, camera);
+			}
+		}
+
+		// Start application
+		init().catch((error) => {
+			console.error('Application initialization failed:', error);
+			showFallback();
+		});
+	</script>
+</body>
+</html>
