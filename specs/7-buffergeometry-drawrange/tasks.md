@@ -1,199 +1,257 @@
 # Tasks: BufferGeometry DrawRange 互動式粒子網絡
 
-**Date**: 2025-11-28  
-**Branch**: `7-buffergeometry-drawrange`  
-**Plan**: [plan.md](plan.md)
+**Input**: Design documents from `/specs/7-buffergeometry-drawrange/`
+**Prerequisites**: plan.md ✅, spec.md ✅, research.md ✅, data-model.md ✅, contracts/ ✅
+
+**Tests**: 無明確測試要求，僅進行手動瀏覽器測試驗證。
+
+**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+
+## Format: `[ID] [P?] [Story?] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+
+## Path Conventions
+
+本功能使用單一 HTML 檔案結構：
+- **主要檔案**: `examples/buffergeometry-drawrange/index.html`
+- 所有 JavaScript 程式碼內嵌於 HTML 檔案中
 
 ---
 
-## 任務總覽
+## Phase 1: Setup
 
-| ID | 任務 | 優先級 | 預估時間 | 狀態 |
-|----|------|--------|----------|------|
-| T1 | 建立基礎 HTML 結構 | P1 | 15 min | ⬜ |
-| T2 | 實作場景初始化 | P1 | 20 min | ⬜ |
-| T3 | 實作粒子系統 | P1 | 30 min | ⬜ |
-| T4 | 實作連線系統 | P1 | 40 min | ⬜ |
-| T5 | 實作 GUI 控制面板 | P2 | 20 min | ⬜ |
-| T6 | 實作軌道控制與自動旋轉 | P2 | 15 min | ⬜ |
-| T7 | 實作響應式調整 | P3 | 10 min | ⬜ |
-| T8 | 效能驗證與優化 | P2 | 20 min | ⬜ |
+**Purpose**: 專案初始化與基礎結構
+
+- [ ] T001 Create directory structure in examples/buffergeometry-drawrange/
+- [ ] T002 Create base HTML5 document with meta tags in examples/buffergeometry-drawrange/index.html
+- [ ] T003 [P] Add CSS styles for full-screen canvas and info overlay in examples/buffergeometry-drawrange/index.html
+- [ ] T004 [P] Configure import map for Three.js r160 CDN dependencies in examples/buffergeometry-drawrange/index.html
 
 ---
 
-## 任務詳情
+## Phase 2: Foundational (Blocking Prerequisites)
 
-### T1: 建立基礎 HTML 結構
+**Purpose**: 核心 Three.js 場景基礎設施，必須在所有使用者故事之前完成
 
-**優先級**: P1  
-**預估時間**: 15 分鐘  
-**相依性**: 無
+**⚠️ CRITICAL**: 無法開始任何使用者故事直到此階段完成
 
-**描述**:
-建立 `examples/buffergeometry-drawrange/index.html`，包含基本 HTML 結構、CSS 樣式和 import map 設定。
+- [ ] T005 Setup global variables and constants (maxParticleCount, r, rHalf, etc.) in examples/buffergeometry-drawrange/index.html
+- [ ] T006 Implement effectController object with default values in examples/buffergeometry-drawrange/index.html
+- [ ] T007 Create PerspectiveCamera with FOV 45 and position z=1750 in examples/buffergeometry-drawrange/index.html
+- [ ] T008 Create Scene and Group container in examples/buffergeometry-drawrange/index.html
+- [ ] T009 Create WebGLRenderer with antialias and setAnimationLoop in examples/buffergeometry-drawrange/index.html
+- [ ] T010 [P] Create BoxHelper boundary visualization (800x800x800) with additive blending in examples/buffergeometry-drawrange/index.html
+- [ ] T011 [P] Setup Stats.js FPS counter in examples/buffergeometry-drawrange/index.html
 
-**驗收條件**:
-- [ ] HTML5 文件結構完整
-- [ ] 包含 container 和 info div
-- [ ] CSS 設定全螢幕黑色背景
-- [ ] import map 設定 Three.js r160 CDN 路徑
-- [ ] 檔案可在瀏覽器正常開啟
-
-**參考**: 現有範例 `interactive-raycasting-points/index.html`
+**Checkpoint**: 基礎場景架構完成 - 可以看到空的場景和邊界框
 
 ---
 
-### T2: 實作場景初始化
+## Phase 3: User Story 1 - 觀看 3D 粒子動畫 (Priority: P1) 🎯 MVP
 
-**優先級**: P1  
-**預估時間**: 20 分鐘  
-**相依性**: T1
+**Goal**: 使用者可看到數百個白色粒子在立方體邊界內隨機移動
 
-**描述**:
-實作 `init()` 函式，建立 Three.js 核心物件（Scene、Camera、Renderer、Group）以及 BoxHelper 邊界框。
+**Independent Test**: 開啟頁面後，觀察粒子是否持續在 3D 空間中移動並在邊界反彈
 
-**驗收條件**:
-- [ ] PerspectiveCamera 設定正確（FOV 45, z=1750）
-- [ ] WebGLRenderer 啟用 antialias
-- [ ] 使用 setAnimationLoop 設定動畫迴圈
-- [ ] BoxHelper 顯示 800x800x800 邊界
-- [ ] Stats 效能監測顯示
-- [ ] 場景在瀏覽器正常渲染
+### Implementation for User Story 1
 
----
+- [ ] T012 [US1] Create particlePositions Float32Array buffer (maxParticleCount × 3) in examples/buffergeometry-drawrange/index.html
+- [ ] T013 [US1] Initialize random particle positions within boundary (-rHalf to rHalf) in examples/buffergeometry-drawrange/index.html
+- [ ] T014 [US1] Create particlesData array with velocity vectors and numConnections in examples/buffergeometry-drawrange/index.html
+- [ ] T015 [US1] Create particles BufferGeometry with DynamicDrawUsage position attribute in examples/buffergeometry-drawrange/index.html
+- [ ] T016 [US1] Create PointsMaterial with white color, size 3, AdditiveBlending, sizeAttenuation false in examples/buffergeometry-drawrange/index.html
+- [ ] T017 [US1] Create pointCloud (THREE.Points) and add to group in examples/buffergeometry-drawrange/index.html
+- [ ] T018 [US1] Set particles.setDrawRange(0, particleCount) for initial render count in examples/buffergeometry-drawrange/index.html
+- [ ] T019 [US1] Implement animate() function with particle position updates in examples/buffergeometry-drawrange/index.html
+- [ ] T020 [US1] Implement boundary collision detection and velocity reversal in examples/buffergeometry-drawrange/index.html
+- [ ] T021 [US1] Set particles.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
+- [ ] T022 [US1] Implement render() function with group rotation based on time in examples/buffergeometry-drawrange/index.html
 
-### T3: 實作粒子系統
-
-**優先級**: P1  
-**預估時間**: 30 分鐘  
-**相依性**: T2
-
-**描述**:
-實作粒子位置初始化、BufferGeometry 設定、Points 物件建立，以及每幀位置更新和邊界反彈邏輯。
-
-**驗收條件**:
-- [ ] 500 個粒子在場景中顯示（預設）
-- [ ] 粒子隨機分佈在立方體邊界內
-- [ ] 粒子持續移動
-- [ ] 碰到邊界時反彈
-- [ ] 使用 DynamicDrawUsage 設定
-- [ ] 使用 setDrawRange 控制渲染數量
+**Checkpoint**: User Story 1 完成 - 粒子應持續移動、反彈，場景緩慢旋轉
 
 ---
 
-### T4: 實作連線系統
+## Phase 4: User Story 2 - 動態粒子連線效果 (Priority: P1)
 
-**優先級**: P1  
-**預估時間**: 40 分鐘  
-**相依性**: T3
+**Goal**: 距離接近的粒子自動產生連線，透明度隨距離變化
 
-**描述**:
-實作粒子間距離計算、連線頂點和顏色生成、LineSegments 物件建立，以及透明度隨距離變化的效果。
+**Independent Test**: 觀察接近的粒子之間是否出現連線，線條透明度隨距離變化
 
-**驗收條件**:
-- [ ] 距離小於 150（預設）的粒子產生連線
-- [ ] 連線透明度隨距離變化（越近越不透明）
-- [ ] 使用 vertexColors 實現每線段獨立顏色
-- [ ] 使用 AdditiveBlending 產生發光效果
-- [ ] setDrawRange 正確控制連線數量
-- [ ] 連接數量限制功能正常
+### Implementation for User Story 2
 
----
+- [ ] T023 [US2] Create positions Float32Array for line segments (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
+- [ ] T024 [P] [US2] Create colors Float32Array for line segment colors (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
+- [ ] T025 [US2] Create line geometry BufferGeometry with DynamicDrawUsage position and color attributes in examples/buffergeometry-drawrange/index.html
+- [ ] T026 [US2] Create LineBasicMaterial with vertexColors, AdditiveBlending, transparent in examples/buffergeometry-drawrange/index.html
+- [ ] T027 [US2] Create linesMesh (THREE.LineSegments) and add to group in examples/buffergeometry-drawrange/index.html
+- [ ] T028 [US2] Set line geometry.computeBoundingSphere() and setDrawRange(0, 0) in examples/buffergeometry-drawrange/index.html
+- [ ] T029 [US2] Reset all particleData.numConnections to 0 at start of each animate() frame in examples/buffergeometry-drawrange/index.html
+- [ ] T030 [US2] Implement O(n²) distance calculation loop between particles in animate() in examples/buffergeometry-drawrange/index.html
+- [ ] T031 [US2] Calculate alpha transparency based on distance (alpha = 1.0 - dist/minDistance) in examples/buffergeometry-drawrange/index.html
+- [ ] T032 [US2] Write line segment vertex positions for connected particles in examples/buffergeometry-drawrange/index.html
+- [ ] T033 [US2] Write line segment colors with calculated alpha values in examples/buffergeometry-drawrange/index.html
+- [ ] T034 [US2] Increment numConnections counters for both particles in connection in examples/buffergeometry-drawrange/index.html
+- [ ] T035 [US2] Check limitConnections and maxConnections before creating connection in examples/buffergeometry-drawrange/index.html
+- [ ] T036 [US2] Update linesMesh.geometry.setDrawRange(0, numConnected × 2) each frame in examples/buffergeometry-drawrange/index.html
+- [ ] T037 [US2] Set linesMesh.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
+- [ ] T038 [US2] Set linesMesh.geometry.attributes.color.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
 
-### T5: 實作 GUI 控制面板
-
-**優先級**: P2  
-**預估時間**: 20 分鐘  
-**相依性**: T4
-
-**描述**:
-使用 lil-gui 建立控制面板，包含所有 effectController 參數的控制項和 onChange 回呼。
-
-**驗收條件**:
-- [ ] showDots 控制粒子顯示/隱藏
-- [ ] showLines 控制連線顯示/隱藏
-- [ ] minDistance 滑桿 (10-300) 即時生效
-- [ ] limitConnections 開關正常運作
-- [ ] maxConnections 滑桿 (0-30) 正常運作
-- [ ] particleCount 滑桿 (0-1000) 即時調整粒子數
+**Checkpoint**: User Story 2 完成 - 連線應根據距離動態顯示/消失，透明度隨距離變化
 
 ---
 
-### T6: 實作軌道控制與自動旋轉
+## Phase 5: User Story 3 - GUI 控制面板互動 (Priority: P2)
 
-**優先級**: P2  
-**預估時間**: 15 分鐘  
-**相依性**: T2
+**Goal**: 使用者可透過控制面板調整視覺化參數
 
-**描述**:
-加入 OrbitControls 讓使用者能旋轉、縮放和平移視角，同時實作場景自動緩慢旋轉。
+**Independent Test**: 調整各項參數並觀察場景即時變化
 
-**驗收條件**:
-- [ ] 滑鼠左鍵拖曳可旋轉視角
-- [ ] 滾輪可縮放（1000-3000 距離限制）
-- [ ] 滑鼠右鍵拖曳可平移
-- [ ] 場景持續緩慢自動旋轉
-- [ ] 互動控制流暢無卡頓
+### Implementation for User Story 3
 
----
+- [ ] T039 [US3] Import GUI from three/addons/libs/lil-gui.module.min.js in examples/buffergeometry-drawrange/index.html
+- [ ] T040 [US3] Implement initGUI() function creating new GUI instance in examples/buffergeometry-drawrange/index.html
+- [ ] T041 [US3] Add showDots checkbox with onChange toggling pointCloud.visible in examples/buffergeometry-drawrange/index.html
+- [ ] T042 [P] [US3] Add showLines checkbox with onChange toggling linesMesh.visible in examples/buffergeometry-drawrange/index.html
+- [ ] T043 [P] [US3] Add minDistance slider (10-300) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [ ] T044 [P] [US3] Add limitConnections checkbox reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [ ] T045 [P] [US3] Add maxConnections slider (0-30, step 1) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [ ] T046 [US3] Add particleCount slider (0-1000, step 1) with onChange updating particleCount and particles.setDrawRange in examples/buffergeometry-drawrange/index.html
+- [ ] T047 [US3] Call initGUI() at beginning of init() function in examples/buffergeometry-drawrange/index.html
 
-### T7: 實作響應式調整
-
-**優先級**: P3  
-**預估時間**: 10 分鐘  
-**相依性**: T2
-
-**描述**:
-實作 `onWindowResize()` 函式，處理視窗大小變化時的攝影機和渲染器調整。
-
-**驗收條件**:
-- [ ] 視窗大小改變時場景自動調整
-- [ ] 長寬比保持正確
-- [ ] 無視覺變形或裁切
+**Checkpoint**: User Story 3 完成 - 所有 GUI 控制項應即時影響場景
 
 ---
 
-### T8: 效能驗證與優化
+## Phase 6: User Story 4 - 3D 攝影機軌道控制 (Priority: P2)
 
-**優先級**: P2  
-**預估時間**: 20 分鐘  
-**相依性**: T1-T7
+**Goal**: 使用者可透過滑鼠旋轉、縮放和平移視角
 
-**描述**:
-驗證在不同粒子數量下的效能表現，確保達到規格中定義的 FPS 目標。
+**Independent Test**: 滑鼠左鍵拖曳旋轉、滾輪縮放、右鍵平移
 
-**驗收條件**:
-- [ ] 200 粒子時達到 60 FPS
-- [ ] 500 粒子時達到 30+ FPS
-- [ ] 1000 粒子時仍可運作（可能 <30 FPS）
-- [ ] GUI 操作延遲 <16ms
-- [ ] 無記憶體洩漏
+### Implementation for User Story 4
 
----
+- [ ] T048 [US4] Import OrbitControls from three/addons/controls/OrbitControls.js in examples/buffergeometry-drawrange/index.html
+- [ ] T049 [US4] Create OrbitControls instance attached to camera and container in examples/buffergeometry-drawrange/index.html
+- [ ] T050 [US4] Set controls.minDistance = 1000 for zoom limit in examples/buffergeometry-drawrange/index.html
+- [ ] T051 [US4] Set controls.maxDistance = 3000 for zoom limit in examples/buffergeometry-drawrange/index.html
 
-## 完成檢查清單
-
-實作完成後，驗證以下規格要求：
-
-- [ ] FR-001: 最多 1000 個粒子渲染
-- [ ] FR-002: 每幀更新位置並邊界反彈
-- [ ] FR-003: 使用 BufferGeometry + DynamicDrawUsage
-- [ ] FR-004: 使用 setDrawRange 控制渲染
-- [ ] FR-005: 計算距離並繪製連線
-- [ ] FR-006: 透明度隨距離變化
-- [ ] FR-007: 顯示立方體邊界框
-- [ ] FR-008: GUI 控制面板完整
-- [ ] FR-009: OrbitControls 正常運作
-- [ ] FR-010: 視窗大小自適應
-- [ ] FR-011: AdditiveBlending 發光效果
-- [ ] FR-012: 顯示 FPS 統計
+**Checkpoint**: User Story 4 完成 - 攝影機控制應流暢運作
 
 ---
 
-## 風險與緩解
+## Phase 7: User Story 5 - 視窗大小自適應 (Priority: P3)
 
-| 風險 | 可能性 | 影響 | 緩解措施 |
-|------|--------|------|----------|
-| 1000 粒子效能不足 | 中 | 中 | 可降低預設值或限制最大值 |
-| CDN 載入失敗 | 低 | 高 | 提供備用 CDN 或錯誤訊息 |
-| 舊版瀏覽器不支援 | 低 | 中 | 顯示 WebGL 錯誤訊息 |
+**Goal**: 瀏覽器視窗大小變化時自動調整場景
+
+**Independent Test**: 調整視窗大小，確認場景自動適應且長寬比正確
+
+### Implementation for User Story 5
+
+- [ ] T052 [US5] Implement onWindowResize() function in examples/buffergeometry-drawrange/index.html
+- [ ] T053 [US5] Update camera.aspect in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [ ] T054 [US5] Call camera.updateProjectionMatrix() in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [ ] T055 [US5] Call renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [ ] T056 [US5] Add window.addEventListener('resize', onWindowResize) in init() in examples/buffergeometry-drawrange/index.html
+
+**Checkpoint**: User Story 5 完成 - 視窗調整應自動適應
+
+---
+
+## Phase 8: Polish & Cross-Cutting Concerns
+
+**Purpose**: 最終驗證與優化
+
+- [ ] T057 [P] Verify all FR requirements against spec.md checklist
+- [ ] T058 [P] Test with 200 particles for 60 FPS performance target
+- [ ] T059 [P] Test with 500 particles for 30+ FPS performance target
+- [ ] T060 [P] Test edge case: particleCount = 0
+- [ ] T061 [P] Test edge case: minDistance = 300 (maximum)
+- [ ] T062 [P] Test edge case: maxConnections = 1
+- [ ] T063 Run quickstart.md validation with local server
+- [ ] T064 Update README.md to include new example link (if applicable)
+
+---
+
+## Dependencies & Execution Order
+
+### Phase Dependencies
+
+- **Setup (Phase 1)**: No dependencies - can start immediately
+- **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
+- **User Stories (Phase 3-7)**: All depend on Foundational phase completion
+  - User Story 1 (P1): MVP - complete first
+  - User Story 2 (P1): Builds on US1 particle system
+  - User Stories 3, 4, 5 (P2/P3): Can proceed after US1+US2
+
+### User Story Dependencies
+
+- **User Story 1 (P1)**: Depends on Foundational (Phase 2) - No dependencies on other stories
+- **User Story 2 (P1)**: Depends on User Story 1 (requires particle system)
+- **User Story 3 (P2)**: Depends on User Story 1 + 2 (controls particle/line visibility)
+- **User Story 4 (P2)**: Depends on Foundational only - can run parallel to US1
+- **User Story 5 (P3)**: Depends on Foundational only - can run parallel to US1
+
+### Within Each User Story
+
+- Core implementation before dependent features
+- Buffer creation before geometry setup
+- Geometry before material
+- All components before animate() integration
+
+### Parallel Opportunities
+
+- All Setup tasks marked [P] can run in parallel (T003, T004)
+- Foundational tasks T010, T011 can run in parallel
+- US2 buffer creation T023, T024 can run in parallel
+- US3 GUI controls T042-T045 can run in parallel
+- All Polish tasks marked [P] can run in parallel
+
+---
+
+## Parallel Example: User Story 2
+
+```bash
+# Launch buffer creation in parallel:
+Task: "Create positions Float32Array for line segments"
+Task: "Create colors Float32Array for line segment colors"
+
+# After buffers complete, proceed with geometry setup
+```
+
+---
+
+## Implementation Strategy
+
+### MVP First (User Stories 1 + 2)
+
+1. Complete Phase 1: Setup (T001-T004)
+2. Complete Phase 2: Foundational (T005-T011)
+3. Complete Phase 3: User Story 1 (T012-T022)
+4. **CHECKPOINT**: 驗證粒子移動和旋轉
+5. Complete Phase 4: User Story 2 (T023-T038)
+6. **MVP COMPLETE**: 粒子網絡視覺化可用
+
+### Incremental Delivery
+
+1. Setup + Foundational → 場景基礎就緒
+2. User Story 1 → 粒子動畫可用
+3. User Story 2 → 連線效果可用 (MVP!)
+4. User Story 3 → GUI 控制可用
+5. User Story 4 → 攝影機控制可用
+6. User Story 5 → 響應式佈局可用
+7. Polish → 效能驗證和邊界測試
+
+---
+
+## Notes
+
+- [P] tasks = different code sections, no dependencies
+- [Story] label maps task to specific user story for traceability
+- Each user story should be independently verifiable via browser testing
+- Commit after each phase completion
+- All code in single file: examples/buffergeometry-drawrange/index.html
+- Total tasks: 64
+- Tasks per user story: US1=11, US2=16, US3=9, US4=4, US5=5
