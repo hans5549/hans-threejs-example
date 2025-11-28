@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Three.js - Unreal Bloom Post-processing</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="description" content="Three.js Unreal Bloom post-processing effect demonstration with animated 3D model">
+	<meta name="author" content="Three.js Example">
+	<style>
+		body {
+			margin: 0;
+			background-color: #000;
+			color: #fff;
+			font-family: Monospace;
+			font-size: 13px;
+			line-height: 24px;
+			overscroll-behavior: none;
+		}
+
+		#info {
+			position: absolute;
+			top: 0px;
+			width: 100%;
+			padding: 10px;
+			box-sizing: border-box;
+			text-align: center;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		a {
+			color: #ff0;
+			pointer-events: auto;
+		}
+
+		#container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		#error-container {
+			display: none;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			z-index: 100;
+		}
+
+		#error-container.visible {
+			display: block;
+		}
+
+		#error-message {
+			color: #ff4444;
+			margin-bottom: 20px;
+		}
+
+		#retry-button {
+			padding: 10px 20px;
+			background-color: #333;
+			color: #fff;
+			border: 1px solid #666;
+			cursor: pointer;
+			font-family: Monospace;
+		}
+
+		#retry-button:hover {
+			background-color: #444;
+		}
+
+		/* WebGL not supported fallback */
+		#webgl-fallback {
+			display: none;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			max-width: 600px;
+			padding: 20px;
+		}
+
+		#webgl-fallback.visible {
+			display: block;
+		}
+
+		#webgl-fallback h1 {
+			color: #ff4444;
+		}
+
+		#webgl-fallback p {
+			color: #ccc;
+		}
+	</style>
+</head>
+<body>
+	<div id="info">
+		<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - Unreal Bloom Post-processing<br/>
+		Primary Ion Drive model with real-time bloom effect
+	</div>
+	<div id="container"></div>
+	<div id="error-container">
+		<div id="error-message">Model loading failed. Please check your network connection.</div>
+		<button id="retry-button">Retry</button>
+	</div>
+	<div id="webgl-fallback">
+		<h1>WebGL Not Supported</h1>
+		<p>Your browser or device does not support WebGL, which is required to view this 3D experience.</p>
+		<p>Please try using a modern browser such as Chrome, Firefox, Safari, or Edge.</p>
+	</div>
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+			}
+		}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+		import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+		import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+		import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+		import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+		import Stats from 'three/addons/libs/stats.module.js';
+
+		// Global variables
+		let container, stats, gui;
+		let camera, scene, renderer, composer;
+		let controls, mixer, clock;
+		let bloomPass;
+
+		// Bloom parameters for GUI binding
+		const params = {
+			threshold: 0,
+			strength: 1,
+			radius: 0.5,
+			exposure: 1
+		};
+
+		// Check WebGL support
+		function isWebGLAvailable() {
+			try {
+				const canvas = document.createElement('canvas');
+				return !!(window.WebGLRenderingContext && 
+					(canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+			} catch (e) {
+				return false;
+			}
+		}
+
+		// Show WebGL fallback
+		function showWebGLFallback() {
+			document.getElementById('webgl-fallback').classList.add('visible');
+		}
+
+		// Initialize the application
+		function init() {
+			// Check WebGL support first
+			if (!isWebGLAvailable()) {
+				showWebGLFallback();
+				return;
+			}
+
+			container = document.getElementById('container');
+
+			// Clock for animation timing
+			clock = new THREE.Clock();
+
+			// Scene setup
+			scene = new THREE.Scene();
+
+			// Camera setup
+			camera = new THREE.PerspectiveCamera(
+				40,
+				window.innerWidth / window.innerHeight,
+				1,
+				100
+			);
+			camera.position.set(-5, 2.5, -3.5);
+
+			// Lights
+			const ambientLight = new THREE.AmbientLight(0xcccccc);
+			scene.add(ambientLight);
+
+			const pointLight = new THREE.PointLight(0xffffff, 100);
+			camera.add(pointLight);
+			scene.add(camera);
+
+			// Renderer setup
+			renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.toneMapping = THREE.ReinhardToneMapping;
+			renderer.toneMappingExposure = Math.pow(params.exposure, 4.0);
+			container.appendChild(renderer.domElement);
+
+			// Post-processing setup
+			setupPostProcessing();
+
+			// Controls setup
+			controls = new OrbitControls(camera, renderer.domElement);
+			controls.maxPolarAngle = Math.PI * 0.5;
+			controls.minDistance = 3;
+			controls.maxDistance = 8;
+
+			// Stats setup
+			stats = new Stats();
+			container.appendChild(stats.dom);
+
+			// GUI setup
+			setupGUI();
+
+			// Load model
+			loadModel();
+
+			// Event listeners
+			window.addEventListener('resize', onWindowResize);
+
+			// Retry button
+			document.getElementById('retry-button').addEventListener('click', function() {
+				document.getElementById('error-container').classList.remove('visible');
+				loadModel();
+			});
+		}
+
+		// Setup post-processing pipeline
+		function setupPostProcessing() {
+			const renderScene = new RenderPass(scene, camera);
+
+			bloomPass = new UnrealBloomPass(
+				new THREE.Vector2(window.innerWidth, window.innerHeight),
+				1.5,  // strength
+				0.4,  // radius
+				0.85  // threshold
+			);
+
+			const outputPass = new OutputPass();
+
+			composer = new EffectComposer(renderer);
+			composer.addPass(renderScene);
+			composer.addPass(bloomPass);
+			composer.addPass(outputPass);
+		}
+
+		// Setup GUI controls
+		function setupGUI() {
+			gui = new GUI();
+
+			const bloomFolder = gui.addFolder('bloom');
+
+			bloomFolder.add(params, 'threshold', 0.0, 1.0).onChange(function(value) {
+				bloomPass.threshold = Number(value);
+			});
+
+			bloomFolder.add(params, 'strength', 0.0, 3.0).onChange(function(value) {
+				bloomPass.strength = Number(value);
+			});
+
+			bloomFolder.add(params, 'radius', 0.0, 1.0).step(0.01).onChange(function(value) {
+				bloomPass.radius = Number(value);
+			});
+
+			const toneMappingFolder = gui.addFolder('tone mapping');
+
+			toneMappingFolder.add(params, 'exposure', 0.1, 2).onChange(function(value) {
+				renderer.toneMappingExposure = Math.pow(value, 4.0);
+			});
+		}
+
+		// Load GLTF model
+		function loadModel() {
+			const loader = new GLTFLoader();
+			const modelUrl = 'https://threejs.org/examples/models/gltf/PrimaryIonDrive.glb';
+
+			loader.load(
+				modelUrl,
+				function(gltf) {
+					const model = gltf.scene;
+					scene.add(model);
+
+					// Setup animation
+					mixer = new THREE.AnimationMixer(model);
+					const clip = gltf.animations[0];
+					if (clip) {
+						mixer.clipAction(clip.optimize()).play();
+					}
+
+					// Start animation loop
+					animate();
+				},
+				undefined,
+				function(error) {
+					console.error('Model loading failed:', error);
+					document.getElementById('error-container').classList.add('visible');
+				}
+			);
+		}
+
+		// Handle window resize
+		function onWindowResize() {
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(width, height);
+			composer.setSize(width, height);
+		}
+
+		// Animation loop
+		function animate() {
+			requestAnimationFrame(animate);
+
+			const delta = clock.getDelta();
+
+			if (mixer) {
+				mixer.update(delta);
+			}
+
+			stats.update();
+			composer.render();
+		}
+
+		// Start application
+		init();
+	</script>
+</body>
+</html>

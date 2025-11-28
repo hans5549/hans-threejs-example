@@ -27,12 +27,12 @@ examples/unreal-bloom-postprocessing/
 
 **Purpose**: 專案初始化與基本結構
 
-- [ ] T001 建立專案目錄結構 `examples/unreal-bloom-postprocessing/`
-- [ ] T002 建立 HTML 基本架構與 meta 標籤 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T003 設定 importmap 從 CDN 載入 Three.js 與所有 addons in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T004 [P] 建立基本 CSS 樣式（全螢幕 canvas、info 區塊）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T001 建立專案目錄結構 `examples/unreal-bloom-postprocessing/`
+- [X] T002 建立 HTML 基本架構與 meta 標籤 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T003 設定 importmap 從 CDN 載入 Three.js 與所有 addons in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T004 [P] 建立基本 CSS 樣式（全螢幕 canvas、info 區塊）in `examples/unreal-bloom-postprocessing/index.html`
 
-**Checkpoint**: 專案結構就緒，可開始實作核心功能
+**Checkpoint**: 專案結構就緒，可開始實作核心功能 ✅
 
 ---
 
@@ -42,15 +42,15 @@ examples/unreal-bloom-postprocessing/
 
 **⚠️ CRITICAL**: 此階段必須完成後才能開始任何使用者故事
 
-- [ ] T005 建立 JavaScript module 骨架（import 語句、init 函式、animate 函式）in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T006 實作 Scene 建立與背景設定 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T007 實作 PerspectiveCamera 建立與初始位置設定 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T008 實作燈光系統（AmbientLight + PointLight attached to camera）in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T009 實作 WebGLRenderer 建立與基本設定 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T010 實作 Clock 物件用於動畫時間追蹤 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T011 實作 WebGL 支援偵測與 2D 降級版本（顯示說明文字）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T005 建立 JavaScript module 骨架（import 語句、init 函式、animate 函式）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T006 實作 Scene 建立與背景設定 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T007 實作 PerspectiveCamera 建立與初始位置設定 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T008 實作燈光系統（AmbientLight + PointLight attached to camera）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T009 實作 WebGLRenderer 建立與基本設定 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T010 實作 Clock 物件用於動畫時間追蹤 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T011 實作 WebGL 支援偵測與 2D 降級版本（顯示說明文字）in `examples/unreal-bloom-postprocessing/index.html`
 
-**Checkpoint**: 基礎渲染架構就緒，可開始使用者故事實作
+**Checkpoint**: 基礎渲染架構就緒，可開始使用者故事實作 ✅
 
 ---
 
@@ -65,30 +65,30 @@ examples/unreal-bloom-postprocessing/
 
 ### 3D 模型載入與動畫（US1 核心）
 
-- [ ] T012 [US1] 實作 GLTFLoader 載入 PrimaryIonDrive.glb 模型（含錯誤處理與重試按鈕）in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T013 [US1] 實作 AnimationMixer 播放模型內建動畫 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T014 [US1] 在 animate 函式中更新 mixer.update(delta) in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T012 [US1] 實作 GLTFLoader 載入 PrimaryIonDrive.glb 模型（含錯誤處理與重試按鈕）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T013 [US1] 實作 AnimationMixer 播放模型內建動畫 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T014 [US1] 在 animate 函式中更新 mixer.update(delta) in `examples/unreal-bloom-postprocessing/index.html`
 
 ### 後處理管線（US1 核心）
 
-- [ ] T015 [US1] 實作 EffectComposer 建立與設定 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T016 [US1] 實作 RenderPass 加入 composer in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T017 [US1] 實作 UnrealBloomPass 建立與參數設定（resolution, strength=1.5, radius=0.4, threshold=0.85）in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T018 [US1] 實作 OutputPass 加入 composer in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T019 [US1] 修改 animate 函式使用 composer.render() 取代 renderer.render() in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T015 [US1] 實作 EffectComposer 建立與設定 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T016 [US1] 實作 RenderPass 加入 composer in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T017 [US1] 實作 UnrealBloomPass 建立與參數設定（resolution, strength=1.5, radius=0.4, threshold=0.85）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T018 [US1] 實作 OutputPass 加入 composer in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T019 [US1] 修改 animate 函式使用 composer.render() 取代 renderer.render() in `examples/unreal-bloom-postprocessing/index.html`
 
 ### 相機控制（US2 核心）
 
-- [ ] T020 [US2] 實作 OrbitControls 建立與綁定 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T021 [US2] 設定相機垂直旋轉限制 maxPolarAngle = Math.PI * 0.5 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T022 [US2] 設定相機縮放距離限制 minDistance=3, maxDistance=8 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T020 [US2] 實作 OrbitControls 建立與綁定 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T021 [US2] 設定相機垂直旋轉限制 maxPolarAngle = Math.PI * 0.5 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T022 [US2] 設定相機縮放距離限制 minDistance=3, maxDistance=8 in `examples/unreal-bloom-postprocessing/index.html`
 
 ### 效能監控
 
-- [ ] T023 [P] [US1] 實作 Stats 效能計數器顯示 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T024 [US1] 在 animate 函式中更新 stats.update() in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T023 [P] [US1] 實作 Stats 效能計數器顯示 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T024 [US1] 在 animate 函式中更新 stats.update() in `examples/unreal-bloom-postprocessing/index.html`
 
-**Checkpoint**: MVP 完成 - 使用者可看到 Bloom 效果並自由旋轉視角觀察模型
+**Checkpoint**: MVP 完成 - 使用者可看到 Bloom 效果並自由旋轉視角觀察模型 ✅
 
 ---
 
@@ -100,14 +100,14 @@ examples/unreal-bloom-postprocessing/
 
 ### GUI 實作
 
-- [ ] T025 [US3] 建立 params 物件（threshold=0, strength=1, radius=0.5, exposure=1）in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T026 [US3] 實作 GUI 建立與 bloom 資料夾 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T027 [US3] 實作 threshold 滑桿（0.0-1.0）與 onChange 回呼更新 bloomPass.threshold in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T028 [US3] 實作 strength 滑桿（0.0-3.0）與 onChange 回呼更新 bloomPass.strength in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T029 [US3] 實作 radius 滑桿（0.0-1.0, step=0.01）與 onChange 回呼更新 bloomPass.radius in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T030 [US3] 實作 tone mapping 資料夾與 exposure 滑桿（0.1-2.0）更新 renderer.toneMappingExposure in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T025 [US3] 建立 params 物件（threshold=0, strength=1, radius=0.5, exposure=1）in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T026 [US3] 實作 GUI 建立與 bloom 資料夾 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T027 [US3] 實作 threshold 滑桿（0.0-1.0）與 onChange 回呼更新 bloomPass.threshold in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T028 [US3] 實作 strength 滑桿（0.0-3.0）與 onChange 回呼更新 bloomPass.strength in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T029 [US3] 實作 radius 滑桿（0.0-1.0, step=0.01）與 onChange 回呼更新 bloomPass.radius in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T030 [US3] 實作 tone mapping 資料夾與 exposure 滑桿（0.1-2.0）更新 renderer.toneMappingExposure in `examples/unreal-bloom-postprocessing/index.html`
 
-**Checkpoint**: GUI 功能完成 - 使用者可即時調整所有 Bloom 參數
+**Checkpoint**: GUI 功能完成 - 使用者可即時調整所有 Bloom 參數 ✅
 
 ---
 
@@ -119,12 +119,12 @@ examples/unreal-bloom-postprocessing/
 
 ### 響應式實作
 
-- [ ] T031 [US4] 實作 onWindowResize 函式更新 camera.aspect 與 camera.updateProjectionMatrix() in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T032 [US4] 在 onWindowResize 中更新 renderer.setSize() in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T033 [US4] 在 onWindowResize 中更新 composer.setSize() in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T034 [US4] 註冊 window.addEventListener('resize', onWindowResize) in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T031 [US4] 實作 onWindowResize 函式更新 camera.aspect 與 camera.updateProjectionMatrix() in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T032 [US4] 在 onWindowResize 中更新 renderer.setSize() in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T033 [US4] 在 onWindowResize 中更新 composer.setSize() in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T034 [US4] 註冊 window.addEventListener('resize', onWindowResize) in `examples/unreal-bloom-postprocessing/index.html`
 
-**Checkpoint**: 響應式功能完成 - 所有使用者故事皆已獨立可用
+**Checkpoint**: 響應式功能完成 - 所有使用者故事皆已獨立可用 ✅
 
 ---
 
@@ -132,10 +132,12 @@ examples/unreal-bloom-postprocessing/
 
 **Purpose**: 跨功能改善與最終優化
 
-- [ ] T035 [P] 新增 HTML info 區塊顯示專案說明與作者資訊 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T036 程式碼整理與註解優化 in `examples/unreal-bloom-postprocessing/index.html`
-- [ ] T037 執行 quickstart.md 驗證流程確認所有功能正常運作
-- [ ] T038 [P] 更新 README.md 新增此範例的連結與說明
+- [X] T035 [P] 新增 HTML info 區塊顯示專案說明與作者資訊 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T036 程式碼整理與註解優化 in `examples/unreal-bloom-postprocessing/index.html`
+- [X] T037 執行 quickstart.md 驗證流程確認所有功能正常運作
+- [X] T038 [P] 更新 README.md 新增此範例的連結與說明
+
+**Checkpoint**: 所有任務已完成 ✅
 
 ---
 
