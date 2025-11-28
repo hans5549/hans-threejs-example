@@ -15,38 +15,38 @@
 
 ---
 
-## Phase 1: Setup (專案初始化)
+## Phase 1: Setup (專案初始化) ✅ COMPLETED
 
 **Purpose**: 建立專案基礎結構和下載模型檔案
 
-- [ ] T001 建立專案目錄結構 `examples/collada-kinematics/` 和 `examples/collada-kinematics/models/`
-- [ ] T002 [P] 下載 ABB IRB 52 模型至 `examples/collada-kinematics/models/abb_irb52_7_120.dae`
-- [ ] T003 [P] 下載並解壓縮 KUKA KR5-R650 模型至 `examples/collada-kinematics/models/kuka-kr5-r650.dae`
-- [ ] T004 [P] 下載並解壓縮 Universal Robots UR6 模型至 `examples/collada-kinematics/models/universalrobots-ur6-85-5-a.dae`
-- [ ] T005 [P] 建立 WebGL fallback 圖片 `examples/collada-kinematics/fallback.svg`
+- [x] T001 建立專案目錄結構 `examples/collada-kinematics/` 和 `examples/collada-kinematics/models/`
+- [x] T002 [P] 下載 ABB IRB 52 模型至 `examples/collada-kinematics/models/abb_irb52_7_120.dae`
+- [x] T003 [P] 下載並解壓縮 KUKA KR5-R650 模型至 `examples/collada-kinematics/models/kuka-kr5-r650.dae`
+- [x] T004 [P] 下載並解壓縮 Universal Robots UR6 模型至 `examples/collada-kinematics/models/universalrobots-ur6-85-5-a.dae`
+- [x] T005 [P] 建立 WebGL fallback 圖片 `examples/collada-kinematics/fallback.svg`
 
-**Checkpoint**: 專案目錄結構完成，所有模型檔案就緒
+**Checkpoint**: ✅ 專案目錄結構完成，所有模型檔案就緒
 
 ---
 
-## Phase 2: Foundational (基礎框架)
+## Phase 2: Foundational (基礎框架) ✅ COMPLETED
 
 **Purpose**: 建立 HTML 骨架、CSS 樣式和核心 Three.js 初始化
 
 **⚠️ CRITICAL**: 所有 User Story 都依賴此階段完成
 
-- [ ] T006 建立 HTML 基本結構含 importmap 和 meta 標籤於 `examples/collada-kinematics/index.html`
-- [ ] T007 實作內嵌 CSS 樣式（body reset、loading overlay、selector、info panel）於 `examples/collada-kinematics/index.html`
-- [ ] T008 實作 WebGL 支援檢測和降級處理於 `examples/collada-kinematics/index.html`
-- [ ] T009 實作 Scene 模組：建立場景、渲染器、光源、地板網格於 `examples/collada-kinematics/index.html`
-- [ ] T010 實作 Camera 模組：建立透視攝影機和 onResize 處理於 `examples/collada-kinematics/index.html`
-- [ ] T011 實作主要渲染迴圈 `animate()` 函式於 `examples/collada-kinematics/index.html`
+- [x] T006 建立 HTML 基本結構含 importmap 和 meta 標籤於 `examples/collada-kinematics/index.html`
+- [x] T007 實作內嵌 CSS 樣式（body reset、loading overlay、selector、info panel）於 `examples/collada-kinematics/index.html`
+- [x] T008 實作 WebGL 支援檢測和降級處理於 `examples/collada-kinematics/index.html`
+- [x] T009 實作 Scene 模組：建立場景、渲染器、光源、地板網格於 `examples/collada-kinematics/index.html`
+- [x] T010 實作 Camera 模組：建立透視攝影機和 onResize 處理於 `examples/collada-kinematics/index.html`
+- [x] T011 實作主要渲染迴圈 `animate()` 函式於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 基礎 Three.js 場景可渲染空場景，視窗縮放正常運作
+**Checkpoint**: ✅ 基礎 Three.js 場景可渲染空場景，視窗縮放正常運作
 
 ---
 
-## Phase 3: User Story 1 - 觀看機器人自動運動 (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - 觀看機器人自動運動 (Priority: P1) 🎯 MVP ✅ COMPLETED
 
 **Goal**: 載入機器人模型並展示自動關節運動動畫
 
@@ -54,20 +54,20 @@
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] 定義 ROBOT_CATALOG 靜態資料（3 種機器人配置）於 `examples/collada-kinematics/index.html`
-- [ ] T013 [US1] 實作 Robot.load() 使用 ColladaLoader 載入模型於 `examples/collada-kinematics/index.html`
-- [ ] T014 [US1] 實作模型後處理：FlatShading 材質、縮放定位於 `examples/collada-kinematics/index.html`
-- [ ] T015 [US1] 實作運動學資料解析：提取 joints 和 limits 於 `examples/collada-kinematics/index.html`
-- [ ] T016 [US1] 實作 Animation.setupTween() 產生隨機目標關節值於 `examples/collada-kinematics/index.html`
-- [ ] T017 [US1] 實作 TWEEN 動畫循環：完成後自動重新觸發於 `examples/collada-kinematics/index.html`
-- [ ] T018 [US1] 整合 Animation.update() 至渲染迴圈於 `examples/collada-kinematics/index.html`
-- [ ] T019 [US1] 處理缺少運動學資料的情況（顯示靜態模型）於 `examples/collada-kinematics/index.html`
+- [x] T012 [US1] 定義 ROBOT_CATALOG 靜態資料（3 種機器人配置）於 `examples/collada-kinematics/index.html`
+- [x] T013 [US1] 實作 Robot.load() 使用 ColladaLoader 載入模型於 `examples/collada-kinematics/index.html`
+- [x] T014 [US1] 實作模型後處理：FlatShading 材質、縮放定位於 `examples/collada-kinematics/index.html`
+- [x] T015 [US1] 實作運動學資料解析：提取 joints 和 limits 於 `examples/collada-kinematics/index.html`
+- [x] T016 [US1] 實作 Animation.setupTween() 產生隨機目標關節值於 `examples/collada-kinematics/index.html`
+- [x] T017 [US1] 實作 TWEEN 動畫循環：完成後自動重新觸發於 `examples/collada-kinematics/index.html`
+- [x] T018 [US1] 整合 Animation.update() 至渲染迴圈於 `examples/collada-kinematics/index.html`
+- [x] T019 [US1] 處理缺少運動學資料的情況（顯示靜態模型）於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: ABB 機器人載入並執行隨機關節動畫，動畫 1-5 秒週期循環
+**Checkpoint**: ✅ ABB 機器人載入並執行隨機關節動畫，動畫 1-5 秒週期循環
 
 ---
 
-## Phase 4: User Story 2 - 環繞視角觀察 (Priority: P1)
+## Phase 4: User Story 2 - 環繞視角觀察 (Priority: P1) ✅ COMPLETED
 
 **Goal**: 攝影機自動環繞機器人旋轉，提供 360 度觀察
 
@@ -75,15 +75,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] 實作 Camera.updateOrbit() 環繞動畫邏輯於 `examples/collada-kinematics/index.html`
-- [ ] T021 [US2] 整合環繞動畫至渲染迴圈於 `examples/collada-kinematics/index.html`
-- [ ] T022 [US2] 設定攝影機初始位置和目標點於 `examples/collada-kinematics/index.html`
+- [x] T020 [US2] 實作 Camera.updateOrbit() 環繞動畫邏輯於 `examples/collada-kinematics/index.html`
+- [x] T021 [US2] 整合環繞動畫至渲染迴圈於 `examples/collada-kinematics/index.html`
+- [x] T022 [US2] 設定攝影機初始位置和目標點於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 攝影機自動環繞機器人，可從各角度觀察模型
+**Checkpoint**: ✅ 攝影機自動環繞機器人，可從各角度觀察模型
 
 ---
 
-## Phase 5: User Story 5 - 切換機器人樣式 (Priority: P1)
+## Phase 5: User Story 5 - 切換機器人樣式 (Priority: P1) ✅ COMPLETED
 
 **Goal**: 使用者可透過下拉選單切換不同機器人模型
 
@@ -91,21 +91,21 @@
 
 ### Implementation for User Story 5
 
-- [ ] T023 [US5] 建立機器人選擇器 HTML 元素（右上角 select）於 `examples/collada-kinematics/index.html`
-- [ ] T024 [US5] 實作 UI.init() 動態填充選擇器選項於 `examples/collada-kinematics/index.html`
-- [ ] T025 [US5] 實作 Robot.unload() 移除當前模型於 `examples/collada-kinematics/index.html`
-- [ ] T026 [US5] 實作 Robot.switchTo() 整合載入/卸載流程於 `examples/collada-kinematics/index.html`
-- [ ] T027 [US5] 建立載入進度指示器 HTML 元素（中央 overlay）於 `examples/collada-kinematics/index.html`
-- [ ] T028 [US5] 實作 UI.showLoading() 和 UI.hideLoading() 於 `examples/collada-kinematics/index.html`
-- [ ] T029 [US5] 實作載入進度回呼更新百分比顯示於 `examples/collada-kinematics/index.html`
-- [ ] T030 [US5] 綁定選擇器 change 事件觸發模型切換於 `examples/collada-kinematics/index.html`
-- [ ] T031 [US5] 處理快速連續切換的情況（取消前一個載入）於 `examples/collada-kinematics/index.html`
+- [x] T023 [US5] 建立機器人選擇器 HTML 元素（右上角 select）於 `examples/collada-kinematics/index.html`
+- [x] T024 [US5] 實作 UI.init() 動態填充選擇器選項於 `examples/collada-kinematics/index.html`
+- [x] T025 [US5] 實作 Robot.unload() 移除當前模型於 `examples/collada-kinematics/index.html`
+- [x] T026 [US5] 實作 Robot.switchTo() 整合載入/卸載流程於 `examples/collada-kinematics/index.html`
+- [x] T027 [US5] 建立載入進度指示器 HTML 元素（中央 overlay）於 `examples/collada-kinematics/index.html`
+- [x] T028 [US5] 實作 UI.showLoading() 和 UI.hideLoading() 於 `examples/collada-kinematics/index.html`
+- [x] T029 [US5] 實作載入進度回呼更新百分比顯示於 `examples/collada-kinematics/index.html`
+- [x] T030 [US5] 綁定選擇器 change 事件觸發模型切換於 `examples/collada-kinematics/index.html`
+- [x] T031 [US5] 處理快速連續切換的情況（取消前一個載入）於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 可切換 3 種機器人，載入時顯示進度，切換後動畫自動重啟
+**Checkpoint**: ✅ 可切換 3 種機器人，載入時顯示進度，切換後動畫自動重啟
 
 ---
 
-## Phase 6: User Story 3 - 效能監控 (Priority: P2)
+## Phase 6: User Story 3 - 效能監控 (Priority: P2) ✅ COMPLETED
 
 **Goal**: 顯示即時 FPS 統計資訊
 
@@ -113,15 +113,15 @@
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] 引入 Stats 模組並初始化於 `examples/collada-kinematics/index.html`
-- [ ] T033 [US3] 將 Stats DOM 元素加入頁面於 `examples/collada-kinematics/index.html`
-- [ ] T034 [US3] 整合 stats.update() 至渲染迴圈於 `examples/collada-kinematics/index.html`
+- [x] T032 [US3] 引入 Stats 模組並初始化於 `examples/collada-kinematics/index.html`
+- [x] T033 [US3] 將 Stats DOM 元素加入頁面於 `examples/collada-kinematics/index.html`
+- [x] T034 [US3] 整合 stats.update() 至渲染迴圈於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 左上角顯示即時 FPS 統計
+**Checkpoint**: ✅ 左上角顯示即時 FPS 統計
 
 ---
 
-## Phase 7: User Story 4 - 響應式視窗調整 (Priority: P2)
+## Phase 7: User Story 4 - 響應式視窗調整 (Priority: P2) ✅ COMPLETED
 
 **Goal**: 視窗大小改變時自動調整場景
 
@@ -129,14 +129,14 @@
 
 ### Implementation for User Story 4
 
-- [ ] T035 [US4] 實作 window resize 事件監聽器於 `examples/collada-kinematics/index.html`
-- [ ] T036 [US4] 更新攝影機 aspect ratio 和 renderer size 於 `examples/collada-kinematics/index.html`
+- [x] T035 [US4] 實作 window resize 事件監聽器於 `examples/collada-kinematics/index.html`
+- [x] T036 [US4] 更新攝影機 aspect ratio 和 renderer size 於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 視窗縮放時場景正確調整，保持正確長寬比
+**Checkpoint**: ✅ 視窗縮放時場景正確調整，保持正確長寬比
 
 ---
 
-## Phase 8: User Story 6 - 顯示機器人資訊 (Priority: P3)
+## Phase 8: User Story 6 - 顯示機器人資訊 (Priority: P3) ✅ COMPLETED
 
 **Goal**: 顯示當前機器人的基本資訊
 
@@ -144,22 +144,22 @@
 
 ### Implementation for User Story 6
 
-- [ ] T037 [US6] 建立機器人資訊面板 HTML 元素（左下角）於 `examples/collada-kinematics/index.html`
-- [ ] T038 [US6] 實作 UI.updateRobotInfo() 更新顯示內容於 `examples/collada-kinematics/index.html`
-- [ ] T039 [US6] 在模型載入完成後呼叫資訊更新於 `examples/collada-kinematics/index.html`
+- [x] T037 [US6] 建立機器人資訊面板 HTML 元素（左下角）於 `examples/collada-kinematics/index.html`
+- [x] T038 [US6] 實作 UI.updateRobotInfo() 更新顯示內容於 `examples/collada-kinematics/index.html`
+- [x] T039 [US6] 在模型載入完成後呼叫資訊更新於 `examples/collada-kinematics/index.html`
 
-**Checkpoint**: 左下角顯示當前機器人名稱和製造商
+**Checkpoint**: ✅ 左下角顯示當前機器人名稱和製造商
 
 ---
 
-## Phase 9: Polish & 整合測試
+## Phase 9: Polish & 整合測試 ✅ COMPLETED
 
 **Purpose**: 最終驗證和品質確認
 
-- [ ] T040 錯誤處理完善：模型載入失敗時顯示友善訊息於 `examples/collada-kinematics/index.html`
-- [ ] T041 [P] 程式碼清理和註解完善於 `examples/collada-kinematics/index.html`
-- [ ] T042 [P] 執行 quickstart.md 驗證所有功能
-- [ ] T043 驗證所有 Success Criteria (SC-001 至 SC-008)
+- [x] T040 錯誤處理完善：模型載入失敗時顯示友善訊息於 `examples/collada-kinematics/index.html`
+- [x] T041 [P] 程式碼清理和註解完善於 `examples/collada-kinematics/index.html`
+- [x] T042 [P] 執行 quickstart.md 驗證所有功能
+- [x] T043 驗證所有 Success Criteria (SC-001 至 SC-008)
 
 ---
 
