@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<title>three.js webgl - lights - spotlight</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+			background-color: #000;
+		}
+		#info {
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			color: #fff;
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			z-index: 100;
+		}
+		#info a {
+			color: #4af;
+			text-decoration: none;
+		}
+		#info a:hover {
+			text-decoration: underline;
+		}
+		#fallback {
+			display: none;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			color: #fff;
+			font-family: Arial, sans-serif;
+		}
+		#fallback img {
+			max-width: 80vw;
+			max-height: 60vh;
+			border-radius: 8px;
+		}
+		#fallback p {
+			margin-top: 20px;
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body>
+	<div id="info">
+		<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - spotlight
+	</div>
+
+	<div id="fallback">
+		<img src="fallback.svg" alt="WebGL Spotlight 展示截圖">
+		<p>您的瀏覽器不支援 WebGL。請使用現代瀏覽器開啟此頁面。</p>
+	</div>
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+			}
+		}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+		// 全域變數
+		let renderer, scene, camera, controls;
+		let spotLight, lightHelper, shadowCameraHelper;
+		let textures = {};
+
+		// GUI 參數物件
+		const params = {
+			map: 'disturb.jpg',
+			color: 0xffffff,
+			intensity: 100,
+			distance: 0,
+			angle: Math.PI / 6,
+			penumbra: 1,
+			decay: 2,
+			focus: 1,
+			shadowIntensity: 1,
+			helpers: false
+		};
+
+		// ========== WebGL 偵測模組 ==========
+
+		/**
+		 * 檢查瀏覽器 WebGL 支援
+		 * @returns {boolean} 是否支援 WebGL
+		 */
+		function checkWebGLSupport() {
+			try {
+				const canvas = document.createElement('canvas');
+				const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+				return !!gl;
+			} catch (e) {
+				return false;
+			}
+		}
+
+		/**
+		 * 顯示 WebGL 不支援時的降級畫面
+		 */
+		function showFallback() {
+			document.getElementById('fallback').style.display = 'block';
+			document.getElementById('info').style.display = 'none';
+		}
+
+		// ========== 資源載入模組 ==========
+
+		/**
+		 * 載入所有紋理資源
+		 * @returns {Object} 紋理物件對映表
+		 */
+		function loadTextures() {
+			const basePath = 'https://threejs.org/examples/textures/';
+			const loader = new THREE.TextureLoader().setPath(basePath);
+			const filenames = ['disturb.jpg', 'colors.png', 'uv_grid_opengl.jpg'];
+
+			const textureMap = { none: null };
+
+			for (const filename of filenames) {
+				try {
+					const texture = loader.load(
+						filename,
+						undefined,
+						undefined,
+						(error) => {
+							console.warn(`紋理 ${filename} 載入失敗:`, error);
+							textureMap[filename] = null;
+						}
+					);
+					texture.minFilter = THREE.LinearFilter;
+					texture.magFilter = THREE.LinearFilter;
+					texture.generateMipmaps = false;
+					texture.colorSpace = THREE.SRGBColorSpace;
+					textureMap[filename] = texture;
+				} catch (error) {
+					console.warn(`紋理 ${filename} 載入失敗:`, error);
+					textureMap[filename] = null;
+				}
+			}
+
+			return textureMap;
+		}
+
+		/**
+		 * 建立後備幾何體（當 Lucy 模型載入失敗時）
+		 * @returns {THREE.Mesh} 後備球體 Mesh
+		 */
+		function createFallbackModel() {
+			const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+			const material = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+			const mesh = new THREE.Mesh(geometry, material);
+			mesh.position.y = 0.5;
+			mesh.castShadow = true;
+			mesh.receiveShadow = true;
+			return mesh;
+		}
+
+		/**
+		 * 載入 Lucy 3D 模型
+		 * @param {THREE.Scene} targetScene - 要加入模型的場景
+		 */
+		function loadLucyModel(targetScene) {
+			const plyLoader = new PLYLoader();
+			const modelUrl = 'https://threejs.org/examples/models/ply/binary/Lucy100k.ply';
+
+			plyLoader.load(
+				modelUrl,
+				function (geometry) {
+					// 成功載入
+					geometry.scale(0.0024, 0.0024, 0.0024);
+					geometry.computeVertexNormals();
+
+					const material = new THREE.MeshLambertMaterial();
+					const mesh = new THREE.Mesh(geometry, material);
+					mesh.rotation.y = -Math.PI / 2;
+					mesh.position.y = 0.8;
+					mesh.castShadow = true;
+					mesh.receiveShadow = true;
+					targetScene.add(mesh);
+				},
+				undefined,
+				function (error) {
+					// 載入失敗，使用後備球體
+					console.warn('Lucy 模型載入失敗，使用後備球體:', error);
+					const fallback = createFallbackModel();
+					targetScene.add(fallback);
+				}
+			);
+		}
+
+		// ========== 場景建構模組 ==========
+
+		/**
+		 * 建立並配置 WebGL 渲染器
+		 * @param {HTMLElement} container - 渲染器容器
+		 * @returns {THREE.WebGLRenderer} 配置完成的渲染器
+		 */
+		function createRenderer(container) {
+			const webglRenderer = new THREE.WebGLRenderer({ antialias: true });
+			webglRenderer.setPixelRatio(window.devicePixelRatio);
+			webglRenderer.setSize(window.innerWidth, window.innerHeight);
+			webglRenderer.toneMapping = THREE.NeutralToneMapping;
+			webglRenderer.toneMappingExposure = 1;
+			webglRenderer.shadowMap.enabled = true;
+			webglRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			container.appendChild(webglRenderer.domElement);
+			return webglRenderer;
+		}
+
+		/**
+		 * 建立透視攝影機
+		 * @returns {THREE.PerspectiveCamera} 配置完成的攝影機
+		 */
+		function createCamera() {
+			const perspectiveCamera = new THREE.PerspectiveCamera(
+				40,
+				window.innerWidth / window.innerHeight,
+				0.1,
+				100
+			);
+			perspectiveCamera.position.set(7, 4, 1);
+			return perspectiveCamera;
+		}
+
+		/**
+		 * 建立軌道控制器
+		 * @param {THREE.Camera} cam - 攝影機
+		 * @param {HTMLElement} domElement - DOM 元素
+		 * @returns {OrbitControls} 配置完成的控制器
+		 */
+		function createControls(cam, domElement) {
+			const orbitControls = new OrbitControls(cam, domElement);
+			orbitControls.minDistance = 2;
+			orbitControls.maxDistance = 10;
+			orbitControls.maxPolarAngle = Math.PI / 2;
+			orbitControls.target.set(0, 1, 0);
+			orbitControls.update();
+			return orbitControls;
+		}
+
+		/**
+		 * 建立地面平面
+		 * @returns {THREE.Mesh} 地面 Mesh
+		 */
+		function createGroundPlane() {
+			const geometry = new THREE.PlaneGeometry(10, 10);
+			const material = new THREE.MeshLambertMaterial({ color: 0xbcbcbc });
+			const ground = new THREE.Mesh(geometry, material);
+			ground.position.set(0, -1, 0);
+			ground.rotation.x = -Math.PI / 2;
+			ground.receiveShadow = true;
+			return ground;
+		}
+
+		/**
+		 * 建立並配置聚光燈
+		 * @param {Object} textureMap - 紋理對映表
+		 * @returns {THREE.SpotLight} 配置完成的聚光燈
+		 */
+		function createSpotLight(textureMap) {
+			const light = new THREE.SpotLight(0xffffff, 100);
+			light.position.set(2.5, 5, 2.5);
+			light.angle = Math.PI / 6;
+			light.penumbra = 1;
+			light.decay = 2;
+			light.distance = 0;
+			light.name = 'spotLight';
+
+			// 設定紋理投射
+			light.map = textureMap['disturb.jpg'];
+
+			// 配置陰影
+			light.castShadow = true;
+			light.shadow.mapSize.width = 1024;
+			light.shadow.mapSize.height = 1024;
+			light.shadow.camera.near = 2;
+			light.shadow.camera.far = 10;
+			light.shadow.focus = 1;
+			light.shadow.bias = -0.003;
+			light.shadow.intensity = 1;
+
+			return light;
+		}
+
+		// ========== GUI 模組 ==========
+
+		/**
+		 * 建立 lil-gui 控制面板
+		 * @param {THREE.SpotLight} light - 聚光燈物件
+		 * @param {Object} textureMap - 紋理對映表
+		 */
+		function createGUI(light, textureMap) {
+			const gui = new GUI();
+
+			// 紋理選擇
+			gui.add(params, 'map', Object.keys(textureMap)).name('紋理').onChange((value) => {
+				light.map = textureMap[value];
+			});
+
+			// 顏色控制
+			gui.addColor(params, 'color').name('顏色').onChange((value) => {
+				light.color.setHex(value);
+			});
+
+			// 強度控制
+			gui.add(params, 'intensity', 0, 500).name('強度').onChange((value) => {
+				light.intensity = value;
+			});
+
+			// 距離控制
+			gui.add(params, 'distance', 0, 20).name('距離').onChange((value) => {
+				light.distance = value;
+			});
+
+			// 角度控制 (轉換為角度顯示)
+			gui.add(params, 'angle', 0, Math.PI / 3).name('角度').onChange((value) => {
+				light.angle = value;
+			});
+
+			// 邊緣模糊控制
+			gui.add(params, 'penumbra', 0, 1).name('邊緣模糊').onChange((value) => {
+				light.penumbra = value;
+			});
+
+			// 衰減控制
+			gui.add(params, 'decay', 1, 2).name('衰減').onChange((value) => {
+				light.decay = value;
+			});
+
+			// 陰影聚焦控制
+			gui.add(params, 'focus', 0, 1).name('陰影聚焦').onChange((value) => {
+				light.shadow.focus = value;
+			});
+
+			// 陰影強度控制
+			gui.add(params, 'shadowIntensity', 0, 1).name('陰影強度').onChange((value) => {
+				light.shadow.intensity = value;
+			});
+
+			// 輔助線開關
+			gui.add(params, 'helpers').name('輔助線').onChange((value) => {
+				lightHelper.visible = value;
+				shadowCameraHelper.visible = value;
+			});
+		}
+
+		// ========== 事件處理模組 ==========
+
+		/**
+		 * 處理視窗大小變更
+		 */
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		}
+
+		// ========== 動畫模組 ==========
+
+		/**
+		 * 動畫主迴圈
+		 */
+		function animate() {
+			const time = performance.now() / 3000;
+
+			// 更新聚光燈位置 (環繞移動)
+			spotLight.position.x = Math.cos(time) * 2.5;
+			spotLight.position.z = Math.sin(time) * 2.5;
+
+			// 更新輔助線
+			lightHelper.update();
+
+			// 渲染場景
+			renderer.render(scene, camera);
+		}
+
+		// ========== 初始化模組 ==========
+
+		/**
+		 * 初始化整個場景
+		 */
+		function init() {
+			// 1. 建立渲染器
+			renderer = createRenderer(document.body);
+
+			// 2. 建立場景
+			scene = new THREE.Scene();
+
+			// 3. 建立攝影機
+			camera = createCamera();
+
+			// 4. 建立控制器
+			controls = createControls(camera, renderer.domElement);
+
+			// 5. 載入紋理
+			textures = loadTextures();
+
+			// 6. 建立環境光
+			const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 0.25);
+			scene.add(hemisphereLight);
+
+			// 7. 建立聚光燈
+			spotLight = createSpotLight(textures);
+			scene.add(spotLight);
+
+			// 8. 建立輔助物件
+			lightHelper = new THREE.SpotLightHelper(spotLight);
+			lightHelper.visible = false;
+			scene.add(lightHelper);
+
+			shadowCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+			shadowCameraHelper.visible = false;
+			scene.add(shadowCameraHelper);
+
+			// 9. 建立地面
+			const ground = createGroundPlane();
+			scene.add(ground);
+
+			// 10. 載入 3D 模型
+			loadLucyModel(scene);
+
+			// 11. 註冊事件監聽
+			window.addEventListener('resize', onWindowResize);
+
+			// 12. 建立 GUI
+			createGUI(spotLight, textures);
+
+			// 13. 啟動動畫迴圈
+			renderer.setAnimationLoop(animate);
+		}
+
+		// ========== 程式進入點 ==========
+
+		// 檢查 WebGL 支援
+		if (checkWebGLSupport()) {
+			init();
+		} else {
+			showFallback();
+		}
+	</script>
+</body>
+</html>
