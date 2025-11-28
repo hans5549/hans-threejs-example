@@ -30,9 +30,9 @@ examples/
 
 **Purpose**: 專案初始化與基本結構
 
-- [ ] T001 建立專案目錄結構 `examples/interactive-raycasting-points/`
-- [ ] T002 建立空白 HTML 骨架檔案 `examples/interactive-raycasting-points/index.html`
-- [ ] T003 [P] 配置 Import Map 載入 Three.js r160+ 和 Stats.js 於 `index.html`
+- [X] T001 建立專案目錄結構 `examples/interactive-raycasting-points/`
+- [X] T002 建立空白 HTML 骨架檔案 `examples/interactive-raycasting-points/index.html`
+- [X] T003 [P] 配置 Import Map 載入 Three.js r160+ 和 Stats.js 於 `index.html`
 
 ---
 
@@ -42,12 +42,12 @@ examples/
 
 **⚠️ 重要**: 此階段完成前，無法開始任何 User Story 實作
 
-- [ ] T004 實作 CSS 樣式：全螢幕畫布、info 標籤定位、無滾軸 於 `index.html`
-- [ ] T005 [P] 實作 Scene 建立與初始化 於 `index.html`
-- [ ] T006 [P] 實作 PerspectiveCamera 建立 (fov=45, near=1, far=10000, position=(10,10,10)) 於 `index.html`
-- [ ] T007 [P] 實作 WebGLRenderer 建立並附加到 DOM 於 `index.html`
-- [ ] T008 實作 window resize 事件處理器：更新 aspect ratio 和 renderer size 於 `index.html`
-- [ ] T009 實作動畫迴圈框架 (animate + render functions) 於 `index.html`
+- [X] T004 實作 CSS 樣式：全螢幕畫布、info 標籤定位、無滾軸 於 `index.html`
+- [X] T005 [P] 實作 Scene 建立與初始化 於 `index.html`
+- [X] T006 [P] 實作 PerspectiveCamera 建立 (fov=45, near=1, far=10000, position=(10,10,10)) 於 `index.html`
+- [X] T007 [P] 實作 WebGLRenderer 建立並附加到 DOM 於 `index.html`
+- [X] T008 實作 window resize 事件處理器：更新 aspect ratio 和 renderer size 於 `index.html`
+- [X] T009 實作動畫迴圈框架 (animate + render functions) 於 `index.html`
 
 **Checkpoint**: 基礎設施就緒 - 可開始 User Story 實作
 
@@ -61,14 +61,14 @@ examples/
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] 實作 `generatePointCloudGeometry(color, width, length)` 函數：使用 Float32Array 建立 position 和 color attributes 於 `index.html`
-- [ ] T011 [P] [US1] 實作波浪形狀數學公式：y = (cos(u×π×4) + sin(v×π×8))/20 於 `index.html`
-- [ ] T012 [P] [US1] 實作顏色強度計算：intensity = (y + 0.1) × 5 於 `index.html`
-- [ ] T013 [US1] 實作 `generatePointcloud(color, width, length)` 函數：標準點雲建立 於 `index.html`
-- [ ] T014 [US1] 實作 `generateIndexedPointcloud(color, width, length)` 函數：帶索引的點雲建立 於 `index.html`
-- [ ] T015 [US1] 實作 `generateIndexedWithOffsetPointcloud(color, width, length)` 函數：帶分組偏移的點雲建立 於 `index.html`
-- [ ] T016 [US1] 在 init() 中建立三組點雲：紅色(-5,0,0)、綠色(0,0,0)、青色(5,0,0)，scale=(5,10,10) 於 `index.html`
-- [ ] T017 [US1] 實作攝影機旋轉：使用 Matrix4.makeRotationY(0.005) 於 render() 中 於 `index.html`
+- [X] T010 [P] [US1] 實作 `generatePointCloudGeometry(color, width, length)` 函數：使用 Float32Array 建立 position 和 color attributes 於 `index.html`
+- [X] T011 [P] [US1] 實作波浪形狀數學公式：y = (cos(u×π×4) + sin(v×π×8))/20 於 `index.html`
+- [X] T012 [P] [US1] 實作顏色強度計算：intensity = (y + 0.1) × 5 於 `index.html`
+- [X] T013 [US1] 實作 `generatePointcloud(color, width, length)` 函數：標準點雲建立 於 `index.html`
+- [X] T014 [US1] 實作 `generateIndexedPointcloud(color, width, length)` 函數：帶索引的點雲建立 於 `index.html`
+- [X] T015 [US1] 實作 `generateIndexedWithOffsetPointcloud(color, width, length)` 函數：帶分組偏移的點雲建立 於 `index.html`
+- [X] T016 [US1] 在 init() 中建立三組點雲：紅色(-5,0,0)、綠色(0,0,0)、青色(5,0,0)，scale=(5,10,10) 於 `index.html`
+- [X] T017 [US1] 實作攝影機旋轉：使用 Matrix4.makeRotationY(0.005) 於 render() 中 於 `index.html`
 
 **Checkpoint**: User Story 1 完成，可獨立測試：開啟 HTML 應看到三組彩色點雲自動旋轉
 
@@ -82,15 +82,15 @@ examples/
 
 ### Implementation for User Story 2
 
-- [ ] T018 [P] [US2] 宣告 Raycaster 和 pointer (Vector2) 全域變數 於 `index.html`
-- [ ] T019 [P] [US2] 宣告物件池相關變數：spheres[], spheresIndex, toggle, clock 於 `index.html`
-- [ ] T020 [US2] 實作 Raycaster 初始化：設定 params.Points.threshold = 0.1 於 `index.html`
-- [ ] T021 [US2] 實作球體物件池：建立 40 個 SphereGeometry(0.1, 32, 32) + MeshBasicMaterial(0xff0000) 於 `index.html`
-- [ ] T022 [US2] 實作 `onPointerMove(event)` 事件處理器：轉換滑鼠座標到 NDC 空間 於 `index.html`
-- [ ] T023 [US2] 在 render() 中實作 Raycasting：raycaster.setFromCamera + intersectObjects 於 `index.html`
-- [ ] T024 [US2] 實作時間節流機制：toggle > 0.02 時才更新標記，使用 clock.getDelta() 於 `index.html`
-- [ ] T025 [US2] 實作標記放置邏輯：將球體移動到 intersection.point，重設 scale 為 1 於 `index.html`
-- [ ] T026 [US2] 實作球體縮放動畫：每幀 scale *= 0.98，clamp 在 0.01~1 範圍 於 `index.html`
+- [X] T018 [P] [US2] 宣告 Raycaster 和 pointer (Vector2) 全域變數 於 `index.html`
+- [X] T019 [P] [US2] 宣告物件池相關變數：spheres[], spheresIndex, toggle, clock 於 `index.html`
+- [X] T020 [US2] 實作 Raycaster 初始化：設定 params.Points.threshold = 0.1 於 `index.html`
+- [X] T021 [US2] 實作球體物件池：建立 40 個 SphereGeometry(0.1, 32, 32) + MeshBasicMaterial(0xff0000) 於 `index.html`
+- [X] T022 [US2] 實作 `onPointerMove(event)` 事件處理器：轉換滑鼠座標到 NDC 空間 於 `index.html`
+- [X] T023 [US2] 在 render() 中實作 Raycasting：raycaster.setFromCamera + intersectObjects 於 `index.html`
+- [X] T024 [US2] 實作時間節流機制：toggle > 0.02 時才更新標記，使用 clock.getDelta() 於 `index.html`
+- [X] T025 [US2] 實作標記放置邏輯：將球體移動到 intersection.point，重設 scale 為 1 於 `index.html`
+- [X] T026 [US2] 實作球體縮放動畫：每幀 scale *= 0.98，clamp 在 0.01~1 範圍 於 `index.html`
 
 **Checkpoint**: User Stories 1 和 2 完成，點雲顯示且滑鼠互動正常運作
 
@@ -104,9 +104,9 @@ examples/
 
 ### Implementation for User Story 3
 
-- [ ] T027 [P] [US3] Import Stats module 從 'three/addons/libs/stats.module.js' 於 `index.html`
-- [ ] T028 [US3] 在 init() 中建立 Stats 並附加到 container 於 `index.html`
-- [ ] T029 [US3] 在 animate() 中呼叫 stats.update() 於 `index.html`
+- [X] T027 [P] [US3] Import Stats module 從 'three/addons/libs/stats.module.js' 於 `index.html`
+- [X] T028 [US3] 在 init() 中建立 Stats 並附加到 container 於 `index.html`
+- [X] T029 [US3] 在 animate() 中呼叫 stats.update() 於 `index.html`
 
 **Checkpoint**: User Stories 1, 2, 3 完成，FPS 面板顯示正常
 
@@ -120,9 +120,9 @@ examples/
 
 ### Implementation for User Story 4
 
-- [ ] T030 [US4] 實作 `onWindowResize()` 函數：更新 camera.aspect 和 renderer.setSize 於 `index.html`
-- [ ] T031 [US4] 加入 window resize 事件監聽器 於 `index.html`
-- [ ] T032 [US4] 實作最小視窗限制：Math.max(window.innerWidth, 320), Math.max(window.innerHeight, 240) 於 `index.html`
+- [X] T030 [US4] 實作 `onWindowResize()` 函數：更新 camera.aspect 和 renderer.setSize 於 `index.html`
+- [X] T031 [US4] 加入 window resize 事件監聽器 於 `index.html`
+- [X] T032 [US4] 實作最小視窗限制：Math.max(window.innerWidth, 320), Math.max(window.innerHeight, 240) 於 `index.html`
 
 **Checkpoint**: 所有 User Stories 完成，視窗調整功能正常
 
@@ -132,10 +132,10 @@ examples/
 
 **Purpose**: 影響多個 User Stories 的改進項目
 
-- [ ] T033 [P] 加入 HTML info 標籤說明文字 於 `index.html`
-- [ ] T034 [P] 加入 WebGL 降級偵測：檢查 renderer 是否支援 WebGL 於 `index.html`
-- [ ] T035 程式碼整理：確保變數命名一致、移除 console.log 於 `index.html`
-- [ ] T036 執行 quickstart.md 驗證：使用 HTTP server 開啟並手動測試所有功能
+- [X] T033 [P] 加入 HTML info 標籤說明文字 於 `index.html`
+- [X] T034 [P] 加入 WebGL 降級偵測：檢查 renderer 是否支援 WebGL 於 `index.html`
+- [X] T035 程式碼整理：確保變數命名一致、移除 console.log 於 `index.html`
+- [X] T036 執行 quickstart.md 驗證：使用 HTTP server 開啟並手動測試所有功能
 
 ---
 
