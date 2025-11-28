@@ -25,10 +25,10 @@
 
 **Purpose**: 專案初始化與基礎結構
 
-- [ ] T001 Create directory structure in examples/buffergeometry-drawrange/
-- [ ] T002 Create base HTML5 document with meta tags in examples/buffergeometry-drawrange/index.html
-- [ ] T003 [P] Add CSS styles for full-screen canvas and info overlay in examples/buffergeometry-drawrange/index.html
-- [ ] T004 [P] Configure import map for Three.js r160 CDN dependencies in examples/buffergeometry-drawrange/index.html
+- [X] T001 Create directory structure in examples/buffergeometry-drawrange/
+- [X] T002 Create base HTML5 document with meta tags in examples/buffergeometry-drawrange/index.html
+- [X] T003 [P] Add CSS styles for full-screen canvas and info overlay in examples/buffergeometry-drawrange/index.html
+- [X] T004 [P] Configure import map for Three.js r160 CDN dependencies in examples/buffergeometry-drawrange/index.html
 
 ---
 
@@ -38,15 +38,15 @@
 
 **⚠️ CRITICAL**: 無法開始任何使用者故事直到此階段完成
 
-- [ ] T005 Setup global variables and constants (maxParticleCount, r, rHalf, etc.) in examples/buffergeometry-drawrange/index.html
-- [ ] T006 Implement effectController object with default values in examples/buffergeometry-drawrange/index.html
-- [ ] T007 Create PerspectiveCamera with FOV 45 and position z=1750 in examples/buffergeometry-drawrange/index.html
-- [ ] T008 Create Scene and Group container in examples/buffergeometry-drawrange/index.html
-- [ ] T009 Create WebGLRenderer with antialias and setAnimationLoop in examples/buffergeometry-drawrange/index.html
-- [ ] T010 [P] Create BoxHelper boundary visualization (800x800x800) with additive blending in examples/buffergeometry-drawrange/index.html
-- [ ] T011 [P] Setup Stats.js FPS counter in examples/buffergeometry-drawrange/index.html
+- [X] T005 Setup global variables and constants (maxParticleCount, r, rHalf, etc.) in examples/buffergeometry-drawrange/index.html
+- [X] T006 Implement effectController object with default values in examples/buffergeometry-drawrange/index.html
+- [X] T007 Create PerspectiveCamera with FOV 45 and position z=1750 in examples/buffergeometry-drawrange/index.html
+- [X] T008 Create Scene and Group container in examples/buffergeometry-drawrange/index.html
+- [X] T009 Create WebGLRenderer with antialias and setAnimationLoop in examples/buffergeometry-drawrange/index.html
+- [X] T010 [P] Create BoxHelper boundary visualization (800x800x800) with additive blending in examples/buffergeometry-drawrange/index.html
+- [X] T011 [P] Setup Stats.js FPS counter in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: 基礎場景架構完成 - 可以看到空的場景和邊界框
+**Checkpoint**: 基礎場景架構完成 - 可以看到空的場景和邊界框 ✅
 
 ---
 
@@ -58,19 +58,19 @@
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Create particlePositions Float32Array buffer (maxParticleCount × 3) in examples/buffergeometry-drawrange/index.html
-- [ ] T013 [US1] Initialize random particle positions within boundary (-rHalf to rHalf) in examples/buffergeometry-drawrange/index.html
-- [ ] T014 [US1] Create particlesData array with velocity vectors and numConnections in examples/buffergeometry-drawrange/index.html
-- [ ] T015 [US1] Create particles BufferGeometry with DynamicDrawUsage position attribute in examples/buffergeometry-drawrange/index.html
-- [ ] T016 [US1] Create PointsMaterial with white color, size 3, AdditiveBlending, sizeAttenuation false in examples/buffergeometry-drawrange/index.html
-- [ ] T017 [US1] Create pointCloud (THREE.Points) and add to group in examples/buffergeometry-drawrange/index.html
-- [ ] T018 [US1] Set particles.setDrawRange(0, particleCount) for initial render count in examples/buffergeometry-drawrange/index.html
-- [ ] T019 [US1] Implement animate() function with particle position updates in examples/buffergeometry-drawrange/index.html
-- [ ] T020 [US1] Implement boundary collision detection and velocity reversal in examples/buffergeometry-drawrange/index.html
-- [ ] T021 [US1] Set particles.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
-- [ ] T022 [US1] Implement render() function with group rotation based on time in examples/buffergeometry-drawrange/index.html
+- [X] T012 [US1] Create particlePositions Float32Array buffer (maxParticleCount × 3) in examples/buffergeometry-drawrange/index.html
+- [X] T013 [US1] Initialize random particle positions within boundary (-rHalf to rHalf) in examples/buffergeometry-drawrange/index.html
+- [X] T014 [US1] Create particlesData array with velocity vectors and numConnections in examples/buffergeometry-drawrange/index.html
+- [X] T015 [US1] Create particles BufferGeometry with DynamicDrawUsage position attribute in examples/buffergeometry-drawrange/index.html
+- [X] T016 [US1] Create PointsMaterial with white color, size 3, AdditiveBlending, sizeAttenuation false in examples/buffergeometry-drawrange/index.html
+- [X] T017 [US1] Create pointCloud (THREE.Points) and add to group in examples/buffergeometry-drawrange/index.html
+- [X] T018 [US1] Set particles.setDrawRange(0, particleCount) for initial render count in examples/buffergeometry-drawrange/index.html
+- [X] T019 [US1] Implement animate() function with particle position updates in examples/buffergeometry-drawrange/index.html
+- [X] T020 [US1] Implement boundary collision detection and velocity reversal in examples/buffergeometry-drawrange/index.html
+- [X] T021 [US1] Set particles.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
+- [X] T022 [US1] Implement render() function with group rotation based on time in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: User Story 1 完成 - 粒子應持續移動、反彈，場景緩慢旋轉
+**Checkpoint**: User Story 1 完成 - 粒子應持續移動、反彈，場景緩慢旋轉 ✅
 
 ---
 
@@ -82,24 +82,24 @@
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Create positions Float32Array for line segments (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
-- [ ] T024 [P] [US2] Create colors Float32Array for line segment colors (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
-- [ ] T025 [US2] Create line geometry BufferGeometry with DynamicDrawUsage position and color attributes in examples/buffergeometry-drawrange/index.html
-- [ ] T026 [US2] Create LineBasicMaterial with vertexColors, AdditiveBlending, transparent in examples/buffergeometry-drawrange/index.html
-- [ ] T027 [US2] Create linesMesh (THREE.LineSegments) and add to group in examples/buffergeometry-drawrange/index.html
-- [ ] T028 [US2] Set line geometry.computeBoundingSphere() and setDrawRange(0, 0) in examples/buffergeometry-drawrange/index.html
-- [ ] T029 [US2] Reset all particleData.numConnections to 0 at start of each animate() frame in examples/buffergeometry-drawrange/index.html
-- [ ] T030 [US2] Implement O(n²) distance calculation loop between particles in animate() in examples/buffergeometry-drawrange/index.html
-- [ ] T031 [US2] Calculate alpha transparency based on distance (alpha = 1.0 - dist/minDistance) in examples/buffergeometry-drawrange/index.html
-- [ ] T032 [US2] Write line segment vertex positions for connected particles in examples/buffergeometry-drawrange/index.html
-- [ ] T033 [US2] Write line segment colors with calculated alpha values in examples/buffergeometry-drawrange/index.html
-- [ ] T034 [US2] Increment numConnections counters for both particles in connection in examples/buffergeometry-drawrange/index.html
-- [ ] T035 [US2] Check limitConnections and maxConnections before creating connection in examples/buffergeometry-drawrange/index.html
-- [ ] T036 [US2] Update linesMesh.geometry.setDrawRange(0, numConnected × 2) each frame in examples/buffergeometry-drawrange/index.html
-- [ ] T037 [US2] Set linesMesh.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
-- [ ] T038 [US2] Set linesMesh.geometry.attributes.color.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
+- [X] T023 [US2] Create positions Float32Array for line segments (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
+- [X] T024 [P] [US2] Create colors Float32Array for line segment colors (maxParticleCount² × 3) in examples/buffergeometry-drawrange/index.html
+- [X] T025 [US2] Create line geometry BufferGeometry with DynamicDrawUsage position and color attributes in examples/buffergeometry-drawrange/index.html
+- [X] T026 [US2] Create LineBasicMaterial with vertexColors, AdditiveBlending, transparent in examples/buffergeometry-drawrange/index.html
+- [X] T027 [US2] Create linesMesh (THREE.LineSegments) and add to group in examples/buffergeometry-drawrange/index.html
+- [X] T028 [US2] Set line geometry.computeBoundingSphere() and setDrawRange(0, 0) in examples/buffergeometry-drawrange/index.html
+- [X] T029 [US2] Reset all particleData.numConnections to 0 at start of each animate() frame in examples/buffergeometry-drawrange/index.html
+- [X] T030 [US2] Implement O(n²) distance calculation loop between particles in animate() in examples/buffergeometry-drawrange/index.html
+- [X] T031 [US2] Calculate alpha transparency based on distance (alpha = 1.0 - dist/minDistance) in examples/buffergeometry-drawrange/index.html
+- [X] T032 [US2] Write line segment vertex positions for connected particles in examples/buffergeometry-drawrange/index.html
+- [X] T033 [US2] Write line segment colors with calculated alpha values in examples/buffergeometry-drawrange/index.html
+- [X] T034 [US2] Increment numConnections counters for both particles in connection in examples/buffergeometry-drawrange/index.html
+- [X] T035 [US2] Check limitConnections and maxConnections before creating connection in examples/buffergeometry-drawrange/index.html
+- [X] T036 [US2] Update linesMesh.geometry.setDrawRange(0, numConnected × 2) each frame in examples/buffergeometry-drawrange/index.html
+- [X] T037 [US2] Set linesMesh.geometry.attributes.position.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
+- [X] T038 [US2] Set linesMesh.geometry.attributes.color.needsUpdate = true each frame in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: User Story 2 完成 - 連線應根據距離動態顯示/消失，透明度隨距離變化
+**Checkpoint**: User Story 2 完成 - 連線應根據距離動態顯示/消失，透明度隨距離變化 ✅
 
 ---
 
@@ -111,17 +111,17 @@
 
 ### Implementation for User Story 3
 
-- [ ] T039 [US3] Import GUI from three/addons/libs/lil-gui.module.min.js in examples/buffergeometry-drawrange/index.html
-- [ ] T040 [US3] Implement initGUI() function creating new GUI instance in examples/buffergeometry-drawrange/index.html
-- [ ] T041 [US3] Add showDots checkbox with onChange toggling pointCloud.visible in examples/buffergeometry-drawrange/index.html
-- [ ] T042 [P] [US3] Add showLines checkbox with onChange toggling linesMesh.visible in examples/buffergeometry-drawrange/index.html
-- [ ] T043 [P] [US3] Add minDistance slider (10-300) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
-- [ ] T044 [P] [US3] Add limitConnections checkbox reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
-- [ ] T045 [P] [US3] Add maxConnections slider (0-30, step 1) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
-- [ ] T046 [US3] Add particleCount slider (0-1000, step 1) with onChange updating particleCount and particles.setDrawRange in examples/buffergeometry-drawrange/index.html
-- [ ] T047 [US3] Call initGUI() at beginning of init() function in examples/buffergeometry-drawrange/index.html
+- [X] T039 [US3] Import GUI from three/addons/libs/lil-gui.module.min.js in examples/buffergeometry-drawrange/index.html
+- [X] T040 [US3] Implement initGUI() function creating new GUI instance in examples/buffergeometry-drawrange/index.html
+- [X] T041 [US3] Add showDots checkbox with onChange toggling pointCloud.visible in examples/buffergeometry-drawrange/index.html
+- [X] T042 [P] [US3] Add showLines checkbox with onChange toggling linesMesh.visible in examples/buffergeometry-drawrange/index.html
+- [X] T043 [P] [US3] Add minDistance slider (10-300) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [X] T044 [P] [US3] Add limitConnections checkbox reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [X] T045 [P] [US3] Add maxConnections slider (0-30, step 1) reading from effectController in animate() in examples/buffergeometry-drawrange/index.html
+- [X] T046 [US3] Add particleCount slider (0-1000, step 1) with onChange updating particleCount and particles.setDrawRange in examples/buffergeometry-drawrange/index.html
+- [X] T047 [US3] Call initGUI() at beginning of init() function in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: User Story 3 完成 - 所有 GUI 控制項應即時影響場景
+**Checkpoint**: User Story 3 完成 - 所有 GUI 控制項應即時影響場景 ✅
 
 ---
 
@@ -133,12 +133,12 @@
 
 ### Implementation for User Story 4
 
-- [ ] T048 [US4] Import OrbitControls from three/addons/controls/OrbitControls.js in examples/buffergeometry-drawrange/index.html
-- [ ] T049 [US4] Create OrbitControls instance attached to camera and container in examples/buffergeometry-drawrange/index.html
-- [ ] T050 [US4] Set controls.minDistance = 1000 for zoom limit in examples/buffergeometry-drawrange/index.html
-- [ ] T051 [US4] Set controls.maxDistance = 3000 for zoom limit in examples/buffergeometry-drawrange/index.html
+- [X] T048 [US4] Import OrbitControls from three/addons/controls/OrbitControls.js in examples/buffergeometry-drawrange/index.html
+- [X] T049 [US4] Create OrbitControls instance attached to camera and container in examples/buffergeometry-drawrange/index.html
+- [X] T050 [US4] Set controls.minDistance = 1000 for zoom limit in examples/buffergeometry-drawrange/index.html
+- [X] T051 [US4] Set controls.maxDistance = 3000 for zoom limit in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: User Story 4 完成 - 攝影機控制應流暢運作
+**Checkpoint**: User Story 4 完成 - 攝影機控制應流暢運作 ✅
 
 ---
 
@@ -150,13 +150,13 @@
 
 ### Implementation for User Story 5
 
-- [ ] T052 [US5] Implement onWindowResize() function in examples/buffergeometry-drawrange/index.html
-- [ ] T053 [US5] Update camera.aspect in onWindowResize() in examples/buffergeometry-drawrange/index.html
-- [ ] T054 [US5] Call camera.updateProjectionMatrix() in onWindowResize() in examples/buffergeometry-drawrange/index.html
-- [ ] T055 [US5] Call renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in examples/buffergeometry-drawrange/index.html
-- [ ] T056 [US5] Add window.addEventListener('resize', onWindowResize) in init() in examples/buffergeometry-drawrange/index.html
+- [X] T052 [US5] Implement onWindowResize() function in examples/buffergeometry-drawrange/index.html
+- [X] T053 [US5] Update camera.aspect in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [X] T054 [US5] Call camera.updateProjectionMatrix() in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [X] T055 [US5] Call renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in examples/buffergeometry-drawrange/index.html
+- [X] T056 [US5] Add window.addEventListener('resize', onWindowResize) in init() in examples/buffergeometry-drawrange/index.html
 
-**Checkpoint**: User Story 5 完成 - 視窗調整應自動適應
+**Checkpoint**: User Story 5 完成 - 視窗調整應自動適應 ✅
 
 ---
 
@@ -164,13 +164,13 @@
 
 **Purpose**: 最終驗證與優化
 
-- [ ] T057 [P] Verify all FR requirements against spec.md checklist
-- [ ] T058 [P] Test with 200 particles for 60 FPS performance target
-- [ ] T059 [P] Test with 500 particles for 30+ FPS performance target
-- [ ] T060 [P] Test edge case: particleCount = 0
-- [ ] T061 [P] Test edge case: minDistance = 300 (maximum)
-- [ ] T062 [P] Test edge case: maxConnections = 1
-- [ ] T063 Run quickstart.md validation with local server
+- [X] T057 [P] Verify all FR requirements against spec.md checklist
+- [X] T058 [P] Test with 200 particles for 60 FPS performance target
+- [X] T059 [P] Test with 500 particles for 30+ FPS performance target
+- [X] T060 [P] Test edge case: particleCount = 0
+- [X] T061 [P] Test edge case: minDistance = 300 (maximum)
+- [X] T062 [P] Test edge case: maxConnections = 1
+- [X] T063 Run quickstart.md validation with local server
 - [ ] T064 Update README.md to include new example link (if applicable)
 
 ---
