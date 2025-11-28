@@ -15,39 +15,22 @@
   - Feature requirements from spec.md
   - Technical context from plan.md
   - Implementation details from tasks.md
-  - Constitutional requirements from .specify/memory/constitution.md
-  
-  Common checklist types aligned with constitution:
-  - Code Quality Review (Constitution I)
-  - Test Coverage Validation (Constitution II)
-  - Accessibility Audit (Constitution III)
-  - Performance Validation (Constitution IV)
-  - Pre-Merge Quality Gate
-  - Pre-Release Checklist
   
   DO NOT keep these sample items in the generated checklist file.
   ============================================================================
 -->
 
-## Constitution Compliance
-
-- [ ] CHK001 Code Quality Standards verified (Constitution I)
-- [ ] CHK002 Test coverage ≥ 80% achieved (Constitution II)
-- [ ] CHK003 UX consistency validated (Constitution III)
-- [ ] CHK004 Performance targets met (Constitution IV)
-- [ ] CHK005 Documentation in Traditional Chinese (Constitution V) - specs, plans, user-facing docs
-
 ## [Category 1]
 
-- [ ] CHK005 First checklist item with clear action
-- [ ] CHK006 Second checklist item
-- [ ] CHK007 Third checklist item
+- [ ] CHK001 First checklist item with clear action
+- [ ] CHK002 Second checklist item
+- [ ] CHK003 Third checklist item
 
 ## [Category 2]
 
-- [ ] CHK008 Another category item
-- [ ] CHK009 Item with specific criteria
-- [ ] CHK010 Final item in this category
+- [ ] CHK004 Another category item
+- [ ] CHK005 Item with specific criteria
+- [ ] CHK006 Final item in this category
 
 ## Notes
 

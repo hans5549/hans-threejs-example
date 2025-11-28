@@ -8,7 +8,7 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: According to Constitution Principle II (Test-Driven Development), tests are MANDATORY and must be written BEFORE implementation. The test-first approach (red-green-refactor) is NON-NEGOTIABLE.
+**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -50,10 +50,7 @@ description: "Task list template for feature implementation"
 
 - [ ] T001 Create project structure per implementation plan
 - [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools (Constitution I: Code Quality Standards)
-- [ ] T004 [P] Setup testing framework and coverage reporting (Constitution II: TDD mandatory)
-- [ ] T005 [P] Configure CI pipeline with test execution and quality gates (Constitution II & IV)
-- [ ] T006 [P] Setup performance monitoring and profiling tools (Constitution IV: Performance Requirements)
+- [ ] T003 [P] Configure linting and formatting tools
 
 ---
 
@@ -65,14 +62,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T007 Setup database schema and migrations framework
-- [ ] T008 [P] Implement authentication/authorization framework
-- [ ] T009 [P] Setup API routing and middleware structure
-- [ ] T010 Create base models/entities that all stories depend on
-- [ ] T011 Configure error handling and logging infrastructure (Constitution III: UX Consistency)
-- [ ] T012 Setup environment configuration management
-- [ ] T013 [P] Implement accessibility foundations (WCAG 2.1 AA - Constitution III)
-- [ ] T014 [P] Setup performance baseline and monitoring dashboards (Constitution IV)
+- [ ] T004 Setup database schema and migrations framework
+- [ ] T005 [P] Implement authentication/authorization framework
+- [ ] T006 [P] Setup API routing and middleware structure
+- [ ] T007 Create base models/entities that all stories depend on
+- [ ] T008 Configure error handling and logging infrastructure
+- [ ] T009 Setup environment configuration management
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -84,35 +79,23 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (MANDATORY - Constitution II: TDD) ⚠️
+### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
 
-> **CRITICAL: Write these tests FIRST, ensure they FAIL, then implement (Red-Green-Refactor)**
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T015 [P] [US1] Unit tests for [component] in tests/unit/test_[name].py (target 80%+ coverage)
-- [ ] T016 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T017 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
-- [ ] T018 [P] [US1] Accessibility tests for UI components (WCAG 2.1 AA - Constitution III)
-- [ ] T019 [P] [US1] Performance tests for critical paths (Constitution IV: <200ms API, <1.5s FCP)
+- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
+- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
 
 ### Implementation for User Story 1
 
-- [ ] T020 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T021 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T022 [US1] Implement [Service] in src/services/[service].py (depends on T020, T021)
-- [ ] T023 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T024 [US1] Add validation and error handling (Constitution III: consistent error messages)
-- [ ] T025 [US1] Add structured logging for operations (Constitution IV: observability)
-- [ ] T026 [US1] Add loading states and user feedback (Constitution III: UX consistency)
-- [ ] T027 [US1] Optimize database queries and add indexes (Constitution IV: <50ms queries)
+- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
+- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
+- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
+- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T016 [US1] Add validation and error handling
+- [ ] T017 [US1] Add logging for user story 1 operations
 
-### Validation for User Story 1
-
-- [ ] T028 [US1] Verify test coverage ≥ 80% (Constitution II)
-- [ ] T029 [US1] Run performance profiling and validate metrics (Constitution IV)
-- [ ] T030 [US1] Accessibility audit with automated tools (Constitution III)
-- [ ] T031 [US1] Code review focusing on SOLID principles (Constitution I)
-
-**Checkpoint**: At this point, User Story 1 should be fully functional, tested, and meet all constitutional requirements independently
+**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
 ---
 

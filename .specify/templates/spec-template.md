@@ -100,47 +100,6 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
-### Constitutional Requirements *(mandatory)*
-
-<!--
-  These requirements are derived from the project constitution and must be addressed.
-  Mark each as "Applicable" or "N/A" with justification.
--->
-
-#### Code Quality (Constitution I)
-- [ ] Code review process defined
-- [ ] Static analysis tools configured
-- [ ] Naming conventions and style guide followed
-- [ ] SOLID principles considered in design
-
-#### Testing (Constitution II - NON-NEGOTIABLE)
-- [ ] TDD approach will be followed (red-green-refactor)
-- [ ] Unit test coverage target: ≥ 80% (critical paths: 100%)
-- [ ] Integration tests defined for component interactions
-- [ ] Contract tests defined for API boundaries
-- [ ] All tests will be written BEFORE implementation
-
-#### User Experience (Constitution III)
-- [ ] UI components follow design system or have consistency plan
-- [ ] Accessibility requirements defined (WCAG 2.1 AA)
-- [ ] Responsive design requirements specified
-- [ ] Error messages are user-friendly and actionable
-- [ ] Loading states and async feedback mechanisms planned
-- [ ] [If N/A: Feature has no user-facing interface]
-
-#### Performance (Constitution IV)
-- [ ] Response time targets defined (API: <200ms, UI: FCP <1.5s, TTI <3.5s)
-- [ ] Performance budget set (bundle size, images, memory)
-- [ ] Performance testing strategy planned
-- [ ] Monitoring and observability considered
-- [ ] Scalability requirements assessed
-
-#### Documentation Language (Constitution V - NON-NEGOTIABLE)
-- [ ] This specification written in Traditional Chinese
-- [ ] User-facing documentation will be in Traditional Chinese
-- [ ] Code comments will be in English (business logic may use Traditional Chinese)
-- [ ] Internal communication will use Traditional Chinese
-
 ## Success Criteria *(mandatory)*
 
 <!--
