@@ -217,7 +217,7 @@
     // 十、終端機設定
     // *********************************************************************
     "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font Mono",
+    "terminal.integrated.fontFamily": "JetBrainsMonoNL Nerd Font Mono",
 
     // *********************************************************************
     // 十一、格式化與清理設定
