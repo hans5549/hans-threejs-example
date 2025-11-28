@@ -2,7 +2,8 @@
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning  
 **Created**: 2025-11-28  
-**Feature**: [spec.md](./spec.md)
+**Updated**: 2025-11-28  
+**Feature**: [spec.md](../spec.md)
 
 ## Content Quality
 
@@ -31,7 +32,10 @@
 
 ## Notes
 
-- 規格書已完成所有必要項目，可以進入下一階段
-- 所有使用者故事都有明確的優先級和獨立測試方式
-- 成功標準都是可量測且與技術無關的
-- 邊界案例已識別並記錄
+- 規格書已更新，新增「切換機器人樣式」功能（User Story 5, Priority P1）
+- 新增 User Story 6 用於顯示機器人資訊（Priority P3）
+- 功能需求新增 FR-013 至 FR-018 涵蓋機器人切換功能
+- 成功標準新增 SC-006 至 SC-008 用於驗證切換功能
+- 新增 Available Robot Models 表格，列出可用的機器人模型
+- 邊界案例已更新，包含快速切換和不支援運動學的情況
+- 所有項目均已通過檢查，可以進入下一階段
