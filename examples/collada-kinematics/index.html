@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>COLLADA Kinematics - Robot Arm</title>
+	<style>
+		/* ========================================
+		 * T007: 內嵌 CSS 樣式
+		 * ======================================== */
+		
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow: hidden;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+			background: #1a1a2e;
+		}
+
+		/* 載入指示器 */
+		#loadingOverlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(26, 26, 46, 0.95);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			z-index: 1000;
+			transition: opacity 0.3s ease;
+		}
+
+		#loadingOverlay.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		#loadingProgress {
+			color: #fff;
+			font-size: 28px;
+			font-weight: 300;
+			letter-spacing: 2px;
+		}
+
+		#loadingSubtext {
+			color: #888;
+			font-size: 14px;
+			margin-top: 12px;
+		}
+
+		/* 機器人選擇器 */
+		#robotSelector {
+			position: fixed;
+			top: 10px;
+			right: 10px;
+			padding: 10px 16px;
+			font-size: 14px;
+			font-family: inherit;
+			border: none;
+			border-radius: 6px;
+			background: rgba(255, 255, 255, 0.95);
+			color: #1a1a2e;
+			cursor: pointer;
+			z-index: 100;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+			transition: all 0.2s ease;
+		}
+
+		#robotSelector:hover {
+			background: #fff;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+		}
+
+		#robotSelector:focus {
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+		}
+
+		/* 機器人資訊面板 */
+		#robotInfo {
+			position: fixed;
+			bottom: 10px;
+			left: 10px;
+			padding: 14px 18px;
+			background: rgba(0, 0, 0, 0.75);
+			color: #fff;
+			font-size: 13px;
+			border-radius: 8px;
+			z-index: 100;
+			max-width: 280px;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		#robotInfo .name {
+			font-size: 18px;
+			font-weight: 500;
+			margin-bottom: 6px;
+			color: #e94560;
+		}
+
+		#robotInfo .detail {
+			opacity: 0.8;
+			line-height: 1.5;
+		}
+
+		#robotInfo .detail span {
+			color: #888;
+		}
+
+		/* WebGL 錯誤訊息 */
+		#webglError {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			color: #fff;
+			z-index: 2000;
+		}
+
+		#webglError h2 {
+			font-size: 24px;
+			font-weight: 400;
+			margin-bottom: 12px;
+		}
+
+		#webglError p {
+			color: #888;
+			font-size: 14px;
+		}
+
+		/* Canvas */
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<!-- T027: 載入進度指示器 -->
+	<div id="loadingOverlay">
+		<div id="loadingProgress">Loading... 0%</div>
+		<div id="loadingSubtext">Initializing robot model</div>
+	</div>
+
+	<!-- T023: 機器人選擇器 -->
+	<select id="robotSelector" style="display: none;">
+		<!-- 動態填充 -->
+	</select>
+
+	<!-- T037: 機器人資訊面板 -->
+	<div id="robotInfo" style="display: none;">
+		<div class="name">-</div>
+		<div class="detail">
+			<span>Manufacturer:</span> -<br>
+			<span>Joints:</span> -
+		</div>
+	</div>
+
+	<!-- Import Map -->
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+			"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+		}
+	}
+	</script>
+
+	<script type="module">
+		/* ========================================
+		 * COLLADA Kinematics Robot Arm Demo
+		 * ======================================== */
+
+		import * as THREE from 'three';
+		import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
+		import Stats from 'three/addons/libs/stats.module.js';
+		import { TWEEN } from 'three/addons/libs/tween.module.js';
+
+		/* ========================================
+		 * T012: ROBOT_CATALOG 靜態資料
+		 * ======================================== */
+		const ROBOT_CATALOG = [
+			{
+				id: 'abb',
+				name: 'ABB IRB 52',
+				manufacturer: 'ABB',
+				modelFile: 'models/abb_irb52_7_120.dae',
+				description: '小型工業機器人手臂',
+				defaultScale: 0.01,
+				defaultPosition: { x: 0, y: 0, z: 0 }
+			},
+			{
+				id: 'kuka',
+				name: 'KUKA KR5-R650',
+				manufacturer: 'KUKA',
+				modelFile: 'models/kuka-kr5-r650.dae',
+				description: '中型工業機器人',
+				defaultScale: 1.0,
+				defaultPosition: { x: 0, y: 0, z: 0 }
+			},
+			{
+				id: 'ur6',
+				name: 'Universal Robots UR6',
+				manufacturer: 'Universal Robots',
+				modelFile: 'models/universalrobots-ur6-85-5-a.dae',
+				description: '協作機器人',
+				defaultScale: 1.0,
+				defaultPosition: { x: 0, y: 0, z: 0 }
+			}
+		];
+
+		/* ========================================
+		 * 全域狀態
+		 * ======================================== */
+		let scene, renderer, camera, stats;
+		let dae, kinematics;
+		let tweenParameters = {};
+		let currentRobotId = null;
+		let isLoading = false;
+		let loadingAbortController = null;
+
+		// T022: 攝影機環繞參數
+		const cameraState = {
+			theta: 0,
+			radius: 3,
+			targetY: 1.5,
+			rotationSpeed: 0.3
+		};
+
+		/* ========================================
+		 * T008: WebGL 支援檢測
+		 * ======================================== */
+		function isWebGLAvailable() {
+			try {
+				const canvas = document.createElement('canvas');
+				return !!(window.WebGLRenderingContext && 
+					(canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+			} catch (e) {
+				return false;
+			}
+		}
+
+		function showWebGLError() {
+			const overlay = document.getElementById('loadingOverlay');
+			overlay.innerHTML = `
+				<div id="webglError">
+					<h2>WebGL Not Supported</h2>
+					<p>Please use a modern browser with WebGL support</p>
+				</div>
+			`;
+		}
+
+		/* ========================================
+		 * T028: UI 模組
+		 * ======================================== */
+		const UI = {
+			init(catalog, onRobotChange) {
+				const selector = document.getElementById('robotSelector');
+				
+				// T024: 動態填充選擇器選項
+				selector.innerHTML = '';
+				catalog.forEach(robot => {
+					const option = document.createElement('option');
+					option.value = robot.id;
+					option.textContent = robot.name;
+					selector.appendChild(option);
+				});
+
+				// T030: 綁定 change 事件
+				selector.addEventListener('change', (e) => {
+					onRobotChange(e.target.value);
+				});
+
+				selector.style.display = 'block';
+			},
+
+			showLoading(progress = 0, text = 'Loading model') {
+				const overlay = document.getElementById('loadingOverlay');
+				const progressEl = document.getElementById('loadingProgress');
+				const subtextEl = document.getElementById('loadingSubtext');
+				
+				overlay.classList.remove('hidden');
+				progressEl.textContent = `Loading... ${Math.round(progress)}%`;
+				subtextEl.textContent = text;
+			},
+
+			hideLoading() {
+				const overlay = document.getElementById('loadingOverlay');
+				overlay.classList.add('hidden');
+			},
+
+			// T038: 更新機器人資訊
+			updateRobotInfo(robotData, jointCount) {
+				const infoPanel = document.getElementById('robotInfo');
+				const nameEl = infoPanel.querySelector('.name');
+				const detailEl = infoPanel.querySelector('.detail');
+
+				nameEl.textContent = robotData.name;
+				detailEl.innerHTML = `
+					<span>Manufacturer:</span> ${robotData.manufacturer}<br>
+					<span>Joints:</span> ${jointCount} movable
+				`;
+				
+				infoPanel.style.display = 'block';
+			},
+
+			setSelectedRobot(robotId) {
+				const selector = document.getElementById('robotSelector');
+				selector.value = robotId;
+			}
+		};
+
+		/* ========================================
+		 * T009: Scene 模組
+		 * ======================================== */
+		const Scene = {
+			create() {
+				const scene = new THREE.Scene();
+				scene.background = new THREE.Color(0x1a1a2e);
+				return scene;
+			},
+
+			createRenderer() {
+				const renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+				return renderer;
+			},
+
+			setupLights(scene) {
+				// 半球光源
+				const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 3);
+				hemiLight.position.set(0, 20, 0);
+				scene.add(hemiLight);
+
+				// 方向光
+				const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+				dirLight.position.set(3, 10, 10);
+				dirLight.castShadow = false;
+				scene.add(dirLight);
+
+				// 環境光
+				const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+				scene.add(ambientLight);
+			},
+
+			setupGrid(scene) {
+				const grid = new THREE.GridHelper(20, 20, 0x888888, 0x444444);
+				grid.material.opacity = 0.4;
+				grid.material.transparent = true;
+				scene.add(grid);
+			}
+		};
+
+		/* ========================================
+		 * T010: Camera 模組
+		 * ======================================== */
+		const Camera = {
+			create() {
+				const camera = new THREE.PerspectiveCamera(
+					45,
+					window.innerWidth / window.innerHeight,
+					0.1,
+					100
+				);
+				camera.position.set(3, 2, 3);
+				return camera;
+			},
+
+			// T020: 環繞動畫
+			updateOrbit(delta) {
+				cameraState.theta += cameraState.rotationSpeed * delta;
+				
+				camera.position.x = cameraState.radius * Math.sin(cameraState.theta);
+				camera.position.z = cameraState.radius * Math.cos(cameraState.theta);
+				camera.position.y = 2;
+				
+				camera.lookAt(0, cameraState.targetY, 0);
+			},
+
+			// T036: 視窗縮放處理
+			onResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+		};
+
+		/* ========================================
+		 * T013-T019: Robot 模組
+		 * ======================================== */
+		const Robot = {
+			getCatalog() {
+				return ROBOT_CATALOG;
+			},
+
+			getRobotById(robotId) {
+				return ROBOT_CATALOG.find(r => r.id === robotId);
+			},
+
+			// T013: 載入機器人模型
+			load(robotId, onProgress) {
+				return new Promise((resolve, reject) => {
+					const robotData = this.getRobotById(robotId);
+					if (!robotData) {
+						reject(new Error(`Robot not found: ${robotId}`));
+						return;
+					}
+
+					const loader = new ColladaLoader();
+					
+					loader.load(
+						robotData.modelFile,
+						(collada) => {
+							// T014: 模型後處理
+							const loadedDae = collada.scene;
+							
+							// 設定縮放
+							loadedDae.scale.setScalar(robotData.defaultScale);
+							
+							// 設定位置
+							loadedDae.position.set(
+								robotData.defaultPosition.x,
+								robotData.defaultPosition.y,
+								robotData.defaultPosition.z
+							);
+
+							// 遍歷並設定材質
+							loadedDae.traverse((child) => {
+								if (child.isMesh) {
+									// FlatShading 材質
+									child.material.flatShading = true;
+									if (child.material.needsUpdate !== undefined) {
+										child.material.needsUpdate = true;
+									}
+								}
+							});
+
+							// T015: 提取運動學資料
+							const loadedKinematics = collada.kinematics;
+							let jointCount = 0;
+							let hasKinematics = false;
+
+							if (loadedKinematics && loadedKinematics.joints) {
+								hasKinematics = true;
+								// 計算可動關節數量
+								for (const prop in loadedKinematics.joints) {
+									if (loadedKinematics.joints[prop].static !== true) {
+										jointCount++;
+									}
+								}
+							}
+
+							resolve({
+								scene: loadedDae,
+								kinematics: loadedKinematics,
+								jointCount: jointCount,
+								hasKinematics: hasKinematics,
+								robotData: robotData
+							});
+						},
+						// T029: 載入進度回呼
+						(xhr) => {
+							if (xhr.lengthComputable && onProgress) {
+								const percent = (xhr.loaded / xhr.total) * 100;
+								onProgress(percent);
+							}
+						},
+						(error) => {
+							reject(error);
+						}
+					);
+				});
+			},
+
+			// T025: 卸載當前模型
+			unload() {
+				if (dae) {
+					scene.remove(dae);
+					// 清理記憶體
+					dae.traverse((child) => {
+						if (child.isMesh) {
+							if (child.geometry) child.geometry.dispose();
+							if (child.material) {
+								if (Array.isArray(child.material)) {
+									child.material.forEach(m => m.dispose());
+								} else {
+									child.material.dispose();
+								}
+							}
+						}
+					});
+					dae = null;
+					kinematics = null;
+				}
+				
+				// 停止當前動畫
+				Animation.stop();
+			},
+
+			// T026: 切換機器人
+			async switchTo(robotId) {
+				// T031: 處理快速連續切換
+				if (isLoading) {
+					console.log('Loading in progress, please wait...');
+					return;
+				}
+
+				if (robotId === currentRobotId) {
+					return;
+				}
+
+				isLoading = true;
+				UI.showLoading(0, 'Loading ' + this.getRobotById(robotId)?.name);
+
+				try {
+					// 卸載當前模型
+					this.unload();
+
+					// 載入新模型
+					const result = await this.load(robotId, (percent) => {
+						UI.showLoading(percent, 'Loading ' + this.getRobotById(robotId)?.name);
+					});
+
+					// 加入場景
+					dae = result.scene;
+					kinematics = result.kinematics;
+					scene.add(dae);
+
+					// T019: 處理缺少運動學資料的情況
+					if (result.hasKinematics) {
+						Animation.start(kinematics);
+					} else {
+						console.warn('No kinematics data found for this robot. Displaying static model.');
+					}
+
+					// T039: 更新資訊
+					UI.updateRobotInfo(result.robotData, result.jointCount);
+					
+					currentRobotId = robotId;
+					UI.setSelectedRobot(robotId);
+
+				} catch (error) {
+					console.error('Failed to load robot:', error);
+					UI.showLoading(0, 'Error loading model');
+					// 延遲隱藏
+					setTimeout(() => UI.hideLoading(), 2000);
+				} finally {
+					isLoading = false;
+					UI.hideLoading();
+				}
+			}
+		};
+
+		/* ========================================
+		 * T016-T018: Animation 模組
+		 * ======================================== */
+		const Animation = {
+			currentTween: null,
+
+			// T016: 產生隨機目標
+			setupTween() {
+				if (!kinematics || !kinematics.joints) {
+					return;
+				}
+
+				const duration = THREE.MathUtils.randInt(1000, 5000);
+				const target = {};
+
+				for (const prop in kinematics.joints) {
+					if (kinematics.joints[prop].static !== true) {
+						const joint = kinematics.joints[prop];
+						const from = cycleHelper(prop).from;
+						const to = cycleHelper(prop).to;
+						target[prop] = THREE.MathUtils.randFloat(from, to);
+					}
+				}
+
+				// T017: TWEEN 動畫循環
+				this.currentTween = new TWEEN.Tween(tweenParameters)
+					.to(target, duration)
+					.easing(TWEEN.Easing.Quadratic.Out)
+					.onUpdate(() => {
+						for (const prop in target) {
+							if (kinematics.setJointValue) {
+								kinematics.setJointValue(prop, tweenParameters[prop]);
+							}
+						}
+					})
+					.onComplete(() => {
+						// 完成後重新觸發
+						this.setupTween();
+					})
+					.start();
+			},
+
+			start(kinematicsInstance) {
+				kinematics = kinematicsInstance;
+				
+				// 初始化 tweenParameters
+				if (kinematics && kinematics.joints) {
+					tweenParameters = {};
+					for (const prop in kinematics.joints) {
+						if (kinematics.joints[prop].static !== true) {
+							tweenParameters[prop] = 0;
+						}
+					}
+				}
+
+				this.setupTween();
+			},
+
+			stop() {
+				if (this.currentTween) {
+					this.currentTween.stop();
+					this.currentTween = null;
+				}
+				TWEEN.removeAll();
+			},
+
+			// T018: 更新動畫
+			update(delta) {
+				TWEEN.update();
+			}
+		};
+
+		// 輔助函式：取得關節限制範圍
+		function cycleHelper(jointName) {
+			if (!kinematics || !kinematics.joints || !kinematics.joints[jointName]) {
+				return { from: 0, to: 0 };
+			}
+
+			const joint = kinematics.joints[jointName];
+			
+			if (joint.limits) {
+				return {
+					from: joint.limits.min,
+					to: joint.limits.max
+				};
+			}
+			
+			// 預設範圍
+			return { from: -Math.PI, to: Math.PI };
+		}
+
+		/* ========================================
+		 * T032-T034: Stats 模組
+		 * ======================================== */
+		function initStats() {
+			stats = new Stats();
+			stats.dom.style.position = 'absolute';
+			stats.dom.style.top = '10px';
+			stats.dom.style.left = '10px';
+			document.body.appendChild(stats.dom);
+		}
+
+		/* ========================================
+		 * T011: 主要渲染迴圈
+		 * ======================================== */
+		const clock = new THREE.Clock();
+
+		function animate() {
+			requestAnimationFrame(animate);
+
+			const delta = clock.getDelta();
+
+			// T021: 環繞動畫
+			Camera.updateOrbit(delta);
+
+			// T018: 更新動畫
+			Animation.update(delta);
+
+			// T034: 更新 Stats
+			if (stats) stats.update();
+
+			renderer.render(scene, camera);
+		}
+
+		/* ========================================
+		 * App 初始化
+		 * ======================================== */
+		async function init() {
+			// T008: WebGL 檢測
+			if (!isWebGLAvailable()) {
+				showWebGLError();
+				return;
+			}
+
+			// T009: 建立場景
+			scene = Scene.create();
+			renderer = Scene.createRenderer();
+			Scene.setupLights(scene);
+			Scene.setupGrid(scene);
+
+			// T010: 建立攝影機
+			camera = Camera.create();
+
+			// T032-T033: 初始化 Stats
+			initStats();
+
+			// T035: 視窗縮放監聽
+			window.addEventListener('resize', Camera.onResize);
+
+			// T024: 初始化 UI
+			UI.init(ROBOT_CATALOG, (robotId) => {
+				Robot.switchTo(robotId);
+			});
+
+			// 載入預設機器人 (ABB)
+			await Robot.switchTo('abb');
+
+			// 啟動渲染迴圈
+			animate();
+		}
+
+		// 啟動應用程式
+		init();
+	</script>
+</body>
+</html>
