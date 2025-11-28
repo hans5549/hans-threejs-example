@@ -2,7 +2,7 @@
 
 **Feature Branch**: `1-interactive-raycasting-points`  
 **Created**: 2025-11-28  
-**Status**: Draft  
+**Status**: Planned  
 **Input**: 建立 Three.js 互動式點雲 Raycasting 範例 - 展示如何使用 Raycaster 偵測滑鼠與 3D 點雲的互動
 
 ## Overview
