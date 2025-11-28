@@ -196,6 +196,14 @@
     // 七、Git 設定
     // *********************************************************************
     "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.allowNoVerifyCommit": true,
+    // 🔑 關鍵設定：強制使用 --no-ff 合併，產生分支樹枝
+    "git.mergeEditor": true,
+    // Git Graph 擴充功能設定（如果有安裝）
+    "git-graph.dialog.merge.noFastForward": true,
+    "git-graph.dialog.merge.squashCommits": false,
 
     // *********************************************************************
     // 八、拼寫檢查設定
