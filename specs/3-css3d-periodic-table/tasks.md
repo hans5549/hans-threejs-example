@@ -26,12 +26,12 @@
 
 **Goal**: 建立檔案結構與基礎 HTML 骨架
 
-- [ ] T001 建立 `examples/css3d-periodic-table/` 目錄與 `index.html` 基礎骨架
-- [ ] T002 在 `index.html` 加入 CDN 依賴 (Three.js r160, TWEEN.js 21.0.0, CSS3DRenderer, TrackballControls)
+- [X] T001 建立 `examples/css3d-periodic-table/` 目錄與 `index.html` 基礎骨架
+- [X] T002 在 `index.html` 加入 CDN 依賴 (Three.js r160, TWEEN.js 21.0.0, CSS3DRenderer, TrackballControls)
 
 **Completion Criteria**:
-- [ ] `index.html` 存在且可在瀏覽器開啟
-- [ ] CDN 腳本正確載入 (無 console 錯誤)
+- [X] `index.html` 存在且可在瀏覽器開啟
+- [X] CDN 腳本正確載入 (無 console 錯誤)
 
 ---
 
@@ -39,12 +39,12 @@
 
 **Goal**: 建立 3D 場景核心元件，為所有 User Stories 提供基礎
 
-- [ ] T003 實作 `init()` 函式：建立 PerspectiveCamera、Scene、CSS3DRenderer、container 掛載
-- [ ] T004 實作 `animate()` 與 `render()` 迴圈，加入 TWEEN.update()
+- [X] T003 實作 `init()` 函式：建立 PerspectiveCamera、Scene、CSS3DRenderer、container 掛載
+- [X] T004 實作 `animate()` 與 `render()` 迴圈，加入 TWEEN.update()
 
 **Completion Criteria**:
-- [ ] 3D 場景初始化成功
-- [ ] 渲染迴圈正常運作 (60fps)
+- [X] 3D 場景初始化成功
+- [X] 渲染迴圈正常運作 (60fps)
 
 **Dependencies**: Phase 1 完成
 
@@ -57,16 +57,16 @@
 **Goal**: 實作元素卡片與 Table 佈局
 
 **Independent Test Criteria**:
-- [ ] 118 個元素卡片正確顯示
-- [ ] Table 佈局位置正確 (18欄×10列)
-- [ ] 初始動畫 3 秒完成
+- [X] 118 個元素卡片正確顯示
+- [X] Table 佈局位置正確 (18欄×10列)
+- [X] 初始動畫 3 秒完成
 
 ### Tasks
 
-- [ ] T005 [US1] 定義 118 個元素的資料陣列 `table[]` 於 `examples/css3d-periodic-table/index.html`
-- [ ] T006 [US1] 實作元素卡片 DOM 結構 (.element, .number, .symbol, .details) 與 CSS 樣式
-- [ ] T007 [US1] 建立 CSS3DObject 迴圈，將 118 個卡片加入 Scene 並計算 Table 佈局目標位置
-- [ ] T008 [US1] 實作 `transform(targets, duration)` 函式並觸發初始動畫
+- [X] T005 [US1] 定義 118 個元素的資料陣列 `table[]` 於 `examples/css3d-periodic-table/index.html`
+- [X] T006 [US1] 實作元素卡片 DOM 結構 (.element, .number, .symbol, .details) 與 CSS 樣式
+- [X] T007 [US1] 建立 CSS3DObject 迴圈，將 118 個卡片加入 Scene 並計算 Table 佈局目標位置
+- [X] T008 [US1] 實作 `transform(targets, duration)` 函式並觸發初始動畫
 
 **Dependencies**: Phase 2 完成
 
@@ -79,16 +79,16 @@
 **Goal**: 實作四種佈局算法與按鈕切換
 
 **Independent Test Criteria**:
-- [ ] 四個按鈕可點擊
-- [ ] 每種視圖切換動畫流暢 (2-4秒)
-- [ ] 當前視圖按鈕有 disabled 狀態
+- [X] 四個按鈕可點擊
+- [X] 每種視圖切換動畫流暢 (2-4秒)
+- [X] 當前視圖按鈕有 disabled 狀態
 
 ### Tasks
 
-- [ ] T009 [P] [US2] 實作 Sphere 佈局算法 (球面座標公式) 於 `examples/css3d-periodic-table/index.html`
-- [ ] T010 [P] [US2] 實作 Helix 佈局算法 (圓柱座標公式) 於 `examples/css3d-periodic-table/index.html`
-- [ ] T011 [P] [US2] 實作 Grid 佈局算法 (5×5×5 立方網格) 於 `examples/css3d-periodic-table/index.html`
-- [ ] T012 [US2] 建立四個視圖按鈕 UI (#menu) 與事件綁定，包含 disabled 狀態管理
+- [X] T009 [P] [US2] 實作 Sphere 佈局算法 (球面座標公式) 於 `examples/css3d-periodic-table/index.html`
+- [X] T010 [P] [US2] 實作 Helix 佈局算法 (圓柱座標公式) 於 `examples/css3d-periodic-table/index.html`
+- [X] T011 [P] [US2] 實作 Grid 佈局算法 (5×5×5 立方網格) 於 `examples/css3d-periodic-table/index.html`
+- [X] T012 [US2] 建立四個視圖按鈕 UI (#menu) 與事件綁定，包含 disabled 狀態管理
 
 **Dependencies**: Phase 3 完成 (需要 transform 函式)
 
@@ -103,15 +103,15 @@
 **Goal**: 實作 TrackballControls 與 Hover 效果
 
 **Independent Test Criteria**:
-- [ ] 拖曳可 360 度旋轉
-- [ ] 滾輪可縮放 (有範圍限制)
-- [ ] Hover 元素有背景色變化
+- [X] 拖曳可 360 度旋轉
+- [X] 滾輪可縮放 (有範圍限制)
+- [X] Hover 元素有背景色變化
 
 ### Tasks
 
-- [ ] T013 [US3] 整合 TrackballControls 於 `init()` 函式，設定 rotateSpeed、zoomSpeed、minDistance、maxDistance
-- [ ] T014 [P] [US3] 實作元素卡片 CSS hover 效果 (背景色、box-shadow 漸變)
-- [ ] T015 [US3] 確保 controls.update() 在 animate 迴圈中正確呼叫
+- [X] T013 [US3] 整合 TrackballControls 於 `init()` 函式，設定 rotateSpeed、zoomSpeed、minDistance、maxDistance
+- [X] T014 [P] [US3] 實作元素卡片 CSS hover 效果 (背景色、box-shadow 漸變)
+- [X] T015 [US3] 確保 controls.update() 在 animate 迴圈中正確呼叫
 
 **Dependencies**: Phase 2 完成
 
@@ -126,13 +126,13 @@
 **Goal**: 實作 window resize 處理
 
 **Independent Test Criteria**:
-- [ ] 調整視窗大小時畫面不變形
-- [ ] 全螢幕切換正常
+- [X] 調整視窗大小時畫面不變形
+- [X] 全螢幕切換正常
 
 ### Tasks
 
-- [ ] T016 [US4] 實作 `onWindowResize()` 函式，更新 camera.aspect、projection matrix、renderer size
-- [ ] T017 [US4] 綁定 window resize 事件監聽器
+- [X] T016 [US4] 實作 `onWindowResize()` 函式，更新 camera.aspect、projection matrix、renderer size
+- [X] T017 [US4] 綁定 window resize 事件監聽器
 
 **Dependencies**: Phase 2 完成
 
@@ -144,12 +144,12 @@
 
 **Goal**: 程式碼整理、效能確認、文件更新
 
-- [ ] T018 檢查整體程式碼結構、註解，確保與 three.js 官方範例風格一致
+- [X] T018 檢查整體程式碼結構、註解，確保與 three.js 官方範例風格一致
 
 **Completion Criteria**:
-- [ ] 所有功能正常運作
-- [ ] 60fps 效能達標
-- [ ] 程式碼風格一致
+- [X] 所有功能正常運作
+- [X] 60fps 效能達標
+- [X] 程式碼風格一致
 
 **Dependencies**: Phase 3-6 全部完成
 
