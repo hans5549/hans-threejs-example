@@ -84,7 +84,7 @@
 
 **Acceptance Scenarios**:
 
-1. **Given** 網頁已載入, **When** 使用者查看機器人選單, **Then** 選單顯示至少 5 種不同的機器人選項
+1. **Given** 網頁已載入, **When** 使用者查看機器人選單, **Then** 選單顯示 3 種不同的機器人選項
 2. **Given** 使用者選擇新的機器人, **When** 選擇確認後, **Then** 系統移除當前機器人並載入新選擇的機器人模型
 3. **Given** 新機器人載入完成, **When** 模型顯示在場景中, **Then** 運動學動畫自動重新啟動，使用新機器人的關節配置
 4. **Given** 載入過程進行中, **When** 使用者等待, **Then** 顯示載入進度或指示
@@ -129,15 +129,13 @@
 - **FR-010**: System MUST 將機器人模型縮放至適當大小以便觀察
 - **FR-011**: System MUST 顯示即時 FPS 統計資訊
 - **FR-012**: System MUST 在視窗大小改變時自動調整渲染器和攝影機設定
-- **FR-013**: System MUST 提供下拉選單讓使用者選擇不同的機器人模型
-- **FR-014**: System MUST 支援至少以下機器人模型選項：
+- **FR-013**: System MUST 提供下拉選單讓使用者選擇不同的機器人模型，選單位於畫面右上角
+- **FR-014**: System MUST 支援以下 3 種機器人模型選項：
   - ABB IRB 52（預設）
   - KUKA KR5 R650
-  - KUKA KR5 R850
-  - KUKA YouBot
   - Universal Robots UR6
 - **FR-015**: System MUST 在切換機器人時平滑地移除舊模型並載入新模型
-- **FR-016**: System MUST 在載入新模型時顯示載入狀態指示
+- **FR-016**: System MUST 在載入新模型時於畫面中央顯示載入進度百分比
 - **FR-017**: System MUST 在新模型載入完成後自動重新配置運動學動畫
 - **FR-018**: System MUST 顯示當前選擇的機器人名稱
 
@@ -163,7 +161,7 @@
 - **SC-004**: 每個關節運動週期持續 1-5 秒，提供自然的運動節奏
 - **SC-005**: 視窗調整大小後，畫面在 0.5 秒內完成重新渲染
 - **SC-006**: 使用者切換機器人後，新模型在 5 秒內完成載入並開始動畫
-- **SC-007**: 機器人選單提供至少 5 種不同的機器人選項
+- **SC-007**: 機器人選單提供 3 種不同的機器人選項
 - **SC-008**: 90% 的使用者能在首次使用時成功切換機器人模型（無需說明）
 
 ### Technical Assumptions
@@ -172,6 +170,16 @@
 - 使用者的網路連線可以載入 COLLADA 模型檔案（檔案大小不等）
 - 使用者的裝置具備基本的 3D 圖形處理能力
 - 部分機器人模型可能不包含完整的運動學資訊，此時僅顯示靜態模型
+- 機器人模型檔案將預先從 .zae 格式解壓縮為 .dae 格式，並託管在專案的 models 目錄中
+
+## Clarifications
+
+### Session 2025-11-28
+
+- Q: 機器人模型檔案來源如何處理（.zae vs .dae 格式）？ → A: 預先將所需的 .zae 檔案解壓縮為 .dae 並託管在專案中
+- Q: UI 選擇器應放置在畫面的哪個位置？ → A: 右上角（固定位置，與 FPS 計數器分開）
+- Q: 載入新模型時應如何顯示載入狀態？ → A: 畫面中央顯示載入進度百分比
+- Q: 預設支援多少種機器人模型？ → A: 3 種（ABB IRB 52、KUKA KR5、Universal Robots UR6）
 
 ## Available Robot Models
 
@@ -180,10 +188,5 @@
 | 機器人名稱 | 製造商 | 檔案名稱 | 說明 |
 |-----------|--------|----------|------|
 | ABB IRB 52 | ABB | abb_irb52_7_120.dae | 小型工業機器人手臂（預設） |
-| KUKA KR5 R650 | KUKA | kuka-kr5-r650.zae | 中型工業機器人 |
-| KUKA KR5 R850 | KUKA | kuka-kr5-r850.zae | 中型工業機器人（加長版） |
-| KUKA YouBot | KUKA | kuka-youbot.zae | 移動式研究機器人 |
-| Universal Robots UR6 | Universal Robots | universalrobots-ur6-85-5-a.zae | 協作機器人 |
-| Barrett WAM | Barrett | barrett-wam.zae | 研究用機器人手臂 |
-| Shadow Hand | Shadow Robot | shadow-hand.zae | 仿人機器人手 |
-| PR2 | Willow Garage | willowgarage-pr2.zae | 個人服務機器人 |
+| KUKA KR5 R650 | KUKA | kuka-kr5-r650.dae | 中型工業機器人 |
+| Universal Robots UR6 | Universal Robots | universalrobots-ur6-85-5-a.dae | 協作機器人 |
