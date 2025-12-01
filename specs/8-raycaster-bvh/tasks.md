@@ -25,10 +25,10 @@
 
 **Purpose**: 建立專案基礎結構與檔案
 
-- [ ] T001 建立專案目錄 `examples/webgl-raycaster-bvh/`
-- [ ] T002 建立基礎 HTML 結構於 `examples/webgl-raycaster-bvh/index.html`，包含 DOCTYPE、meta、title
-- [ ] T003 [P] 加入 CDN 引用：Three.js r160+、three-mesh-bvh、Stats.js、lil-gui 於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T004 [P] 建立基礎 CSS 樣式（全螢幕 canvas、載入進度 UI）於 `examples/webgl-raycaster-bvh/index.html` 的 `<style>` 區塊
+- [X] T001 建立專案目錄 `examples/webgl-raycaster-bvh/`
+- [X] T002 建立基礎 HTML 結構於 `examples/webgl-raycaster-bvh/index.html`，包含 DOCTYPE、meta、title
+- [X] T003 [P] 加入 CDN 引用：Three.js r160+、three-mesh-bvh、Stats.js、lil-gui 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T004 [P] 建立基礎 CSS 樣式（全螢幕 canvas、載入進度 UI）於 `examples/webgl-raycaster-bvh/index.html` 的 `<style>` 區塊
 
 ---
 
@@ -38,18 +38,18 @@
 
 **⚠️ CRITICAL**: 此階段必須完成後才能開始任何使用者故事
 
-- [ ] T005 實作 `init()` 函式：建立 Scene（background: 0x000000）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T006 實作 PerspectiveCamera 設定（fov: 60, near: 0.1, far: 100, position: (10, 10, 10)）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T007 實作 WebGLRenderer 設定（antialias: true, setPixelRatio）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T008 [P] 實作 OrbitControls 設定（enableDamping: true, dampingFactor: 0.05）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T009 [P] 實作基礎光照系統（AmbientLight + DirectionalLight）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T010 實作 `onWindowResize()` 視窗大小調整處理於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T011 實作 `animate()` 主動畫迴圈（requestAnimationFrame）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T012 實作載入狀態管理（LoadingState: idle → loading → building → ready → error）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T013 [P] 實作載入進度 UI（進度條、百分比、狀態訊息）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T014 實作 `loadModel()` 函式：FBXLoader 載入模型，包含 60 秒逾時處理於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T015 實作 `showError()` 錯誤訊息顯示函式於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T016 擴展 Three.js 原型：`computeBoundsTree`、`disposeBoundsTree`、`acceleratedRaycast` 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T005 實作 `init()` 函式：建立 Scene（background: 0x000000）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T006 實作 PerspectiveCamera 設定（fov: 60, near: 0.1, far: 100, position: (10, 10, 10)）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T007 實作 WebGLRenderer 設定（antialias: true, setPixelRatio）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T008 [P] 實作 OrbitControls 設定（enableDamping: true, dampingFactor: 0.05）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T009 [P] 實作基礎光照系統（AmbientLight + DirectionalLight）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T010 實作 `onWindowResize()` 視窗大小調整處理於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T011 實作 `animate()` 主動畫迴圈（requestAnimationFrame）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T012 實作載入狀態管理（LoadingState: idle → loading → building → ready → error）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T013 [P] 實作載入進度 UI（進度條、百分比、狀態訊息）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T014 實作 `loadModel()` 函式：FBXLoader 載入模型，包含 60 秒逾時處理於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T015 實作 `showError()` 錯誤訊息顯示函式於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T016 擴展 Three.js 原型：`computeBoundsTree`、`disposeBoundsTree`、`acceleratedRaycast` 於 `examples/webgl-raycaster-bvh/index.html`
 
 **Checkpoint**: 基礎架構完成 - 場景可渲染、模型可載入、BVH 擴展已就緒
 
@@ -63,16 +63,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] 實作 `buildBVH()` 函式：建構 BVH 加速結構（strategy: CENTER, maxDepth: 40）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T018 [US1] 實作 `toggleBVH()` 函式：啟用/停用 BVH 加速並恢復原始 raycast 於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T019 [P] [US1] 實作 `generateRayOrigins()` 函式：Fibonacci 球面採樣產生光線原點（100條, 半徑 5）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T020 [US1] 實作 `castRays()` 函式：執行光線追蹤查詢並收集交點於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T021 [P] [US1] 整合 Stats.js：建立 FPS 監控面板於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T022 [US1] 實作 PerformanceMonitor：追蹤 FPS 歷史、計算平均值於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T023 [US1] 實作 FPS 警告機制：FPS < 30 時顯示效能警告 UI 於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T024 [P] [US1] 建立 lil-gui 控制面板基礎結構於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T025 [US1] 加入 GUI 控制項：Enable BVH 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T026 [US1] 在 animate() 中整合光線追蹤效能計算於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T017 [US1] 實作 `buildBVH()` 函式：建構 BVH 加速結構（strategy: CENTER, maxDepth: 40）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T018 [US1] 實作 `toggleBVH()` 函式：啟用/停用 BVH 加速並恢復原始 raycast 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T019 [P] [US1] 實作 `generateRayOrigins()` 函式：Fibonacci 球面採樣產生光線原點（100條, 半徑 5）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T020 [US1] 實作 `castRays()` 函式：執行光線追蹤查詢並收集交點於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T021 [P] [US1] 整合 Stats.js：建立 FPS 監控面板於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T022 [US1] 實作 PerformanceMonitor：追蹤 FPS 歷史、計算平均值於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T023 [US1] 實作 FPS 警告機制：FPS < 30 時顯示效能警告 UI 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T024 [P] [US1] 建立 lil-gui 控制面板基礎結構於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T025 [US1] 加入 GUI 控制項：Enable BVH 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T026 [US1] 在 animate() 中整合光線追蹤效能計算於 `examples/webgl-raycaster-bvh/index.html`
 
 **Checkpoint**: User Story 1 完成 - 可獨立驗證 BVH 加速效果（60+ FPS vs 10-20 FPS）
 
@@ -86,15 +86,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T027 [P] [US2] 建立 RayOrigins InstancedMesh：球體幾何、綠色半透明材質於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T028 [P] [US2] 建立 IntersectionPoints InstancedMesh：球體幾何、紅色材質於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T029 [US2] 實作 `visualizeRays()` 函式：建立光線 LineSegments 視覺化於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T030 [US2] 實作光線材質設定：白色半透明 LineBasicMaterial（opacity: 0.5）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T031 [US2] 實作交點位置更新：更新 IntersectionPoints 實例矩陣於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T032 [US2] 實作 `clearRays()` 函式：清除所有光線視覺化元素於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T033 [US2] 區分有相交/無相交光線的視覺化（有相交顯示完整光線，無相交延伸到最大距離）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T034 [P] [US2] 加入 GUI 控制項：Ray Opacity 滑桿（範圍 0-1，預設 0.5）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T035 [US2] 實作模型自動旋轉（params.animate: true）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T027 [P] [US2] 建立 RayOrigins InstancedMesh：球體幾何、綠色半透明材質於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T028 [P] [US2] 建立 IntersectionPoints InstancedMesh：球體幾何、紅色材質於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T029 [US2] 實作 `visualizeRays()` 函式：建立光線 LineSegments 視覺化於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T030 [US2] 實作光線材質設定：白色半透明 LineBasicMaterial（opacity: 0.5）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T031 [US2] 實作交點位置更新：更新 IntersectionPoints 實例矩陣於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T032 [US2] 實作 `clearRays()` 函式：清除所有光線視覺化元素於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T033 [US2] 區分有相交/無相交光線的視覺化（有相交顯示完整光線，無相交延伸到最大距離）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T034 [P] [US2] 加入 GUI 控制項：Ray Opacity 滑桿（範圍 0-1，預設 0.5）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T035 [US2] 實作模型自動旋轉（params.animate: true）於 `examples/webgl-raycaster-bvh/index.html`
 
 **Checkpoint**: User Story 2 完成 - 可觀察光線路徑和相交點視覺化
 
@@ -108,11 +108,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] 實作 `toggleBVHHelper()` 函式：建立/顯示/隱藏 MeshBVHHelper 於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T037 [US3] 實作 `updateBVHHelper()` 函式：更新 BVH 視覺化深度（1-20）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T038 [US3] 設定 BVH Helper 樣式：邊界框顏色、線條寬度於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T039 [P] [US3] 加入 GUI 控制項：Show BVH Visualization 開關（預設 false）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T040 [US3] 加入 GUI 控制項：BVH Depth 滑桿（範圍 1-20，預設 10）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T036 [US3] 實作 `toggleBVHHelper()` 函式：建立/顯示/隱藏 MeshBVHHelper 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T037 [US3] 實作 `updateBVHHelper()` 函式：更新 BVH 視覺化深度（1-20）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T038 [US3] 設定 BVH Helper 樣式：邊界框顏色、線條寬度於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T039 [P] [US3] 加入 GUI 控制項：Show BVH Visualization 開關（預設 false）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T040 [US3] 加入 GUI 控制項：BVH Depth 滑桿（範圍 1-20，預設 10）於 `examples/webgl-raycaster-bvh/index.html`
 
 **Checkpoint**: User Story 3 完成 - 可顯示/隱藏 BVH 層級邊界框
 
@@ -126,10 +126,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T041 [US4] 實作 `updateRayCount()` 函式：動態調整光線數量並重新執行光線追蹤於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T042 [US4] 實作光線數量為零的處理邏輯（不顯示光線但模型正常顯示）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T043 [P] [US4] 加入 GUI 控制項：Ray Count 滑桿（範圍 1-200，預設 100）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T044 [US4] 實作光線數量變更時的效能影響視覺回饋於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T041 [US4] 實作 `updateRayCount()` 函式：動態調整光線數量並重新執行光線追蹤於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T042 [US4] 實作光線數量為零的處理邏輯（不顯示光線但模型正常顯示）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T043 [P] [US4] 加入 GUI 控制項：Ray Count 滑桿（範圍 1-200，預設 100）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T044 [US4] 實作光線數量變更時的效能影響視覺回饋於 `examples/webgl-raycaster-bvh/index.html`
 
 **Checkpoint**: User Story 4 完成 - 可動態調整光線數量
 
@@ -139,13 +139,13 @@
 
 **Purpose**: 跨功能優化與最終整合
 
-- [ ] T045 [P] 整合所有 GUI 控制項到統一面板（右上角）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T046 [P] 加入 GUI 控制項：Auto Rotate 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T047 優化載入流程：載入完成後自動隱藏進度 UI 於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T048 實作 WebGL 支援檢測與友善錯誤訊息於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T049 [P] 加入頁面標題和基本說明註解於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T050 [P] 程式碼清理：移除 console.log、統一命名風格於 `examples/webgl-raycaster-bvh/index.html`
-- [ ] T051 執行 quickstart.md 驗證流程，確認所有測試場景通過
+- [X] T045 [P] 整合所有 GUI 控制項到統一面板（右上角）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T046 [P] 加入 GUI 控制項：Auto Rotate 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T047 優化載入流程：載入完成後自動隱藏進度 UI 於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T048 實作 WebGL 支援檢測與友善錯誤訊息於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T049 [P] 加入頁面標題和基本說明註解於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T050 [P] 程式碼清理：移除 console.log、統一命名風格於 `examples/webgl-raycaster-bvh/index.html`
+- [X] T051 執行 quickstart.md 驗證流程，確認所有測試場景通過
 
 ---
 

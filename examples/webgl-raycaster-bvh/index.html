@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>WebGL Raycaster BVH - 高效能光線投射展示</title>
     <style>
         body {
@@ -10,11 +10,30 @@
             padding: 0;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
+            background-color: #eeeeee;
+            color: #333;
         }
         
         canvas {
             display: block;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        #info a {
+            color: #E91E63;
+            text-decoration: underline;
+            pointer-events: auto;
         }
         
         #loading {
@@ -23,7 +42,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            color: #fff;
+            color: #333;
             font-size: 18px;
             z-index: 1000;
         }
@@ -32,7 +51,7 @@
             margin-top: 20px;
             width: 300px;
             height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 2px;
             overflow: hidden;
         }
@@ -40,7 +59,7 @@
         #loading-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            background: linear-gradient(90deg, #E91E63, #FF5722);
             transition: width 0.3s ease;
         }
         
@@ -65,45 +84,24 @@
         
         #performance-warning {
             position: absolute;
-            top: 80px;
-            left: 10px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 152, 0, 0.9);
             color: #fff;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 4px;
             display: none;
             z-index: 100;
             font-size: 14px;
         }
-        
-        #info {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: #fff;
-            font-size: 14px;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 4px;
-            z-index: 10;
-        }
-        
-        #info a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-        
-        #info a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
     <div id="info">
-        <strong>WebGL Raycaster BVH</strong><br>
-        展示 BVH 加速結構對光線投射效能的影響<br>
-        使用滑鼠旋轉和縮放場景
+        <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> raycaster - 
+        <a href="https://github.com/gkjohnson/three-mesh-bvh" target="_blank" rel="noopener">three-mesh-bvh</a><br/>
+        展示 BVH 加速結構對光線投射效能的影響。切換「啟用 BVH」觀察 FPS 差異。
     </div>
     
     <div id="loading">
@@ -111,7 +109,7 @@
         <div id="loading-progress">
             <div id="loading-bar"></div>
         </div>
-        <div id="loading-text" style="margin-top: 10px; font-size: 14px; color: #aaa;">0%</div>
+        <div id="loading-text" style="margin-top: 10px; font-size: 14px; color: #666;">0%</div>
     </div>
     
     <div id="error">
@@ -123,598 +121,353 @@
         ⚠️ FPS 過低 - 建議減少光線數量或啟用 BVH 加速
     </div>
 
-    <!-- Three.js Core -->
     <script type="importmap">
         {
             "imports": {
                 "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+                "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.3/build/index.module.js"
             }
         }
     </script>
 
     <script type="module">
         import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast, MeshBVHHelper } from 'three-mesh-bvh';
+        import Stats from 'three/addons/libs/stats.module.js';
         import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
-        import Stats from 'https://cdn.jsdelivr.net/npm/stats.js@0.17.0/build/stats.min.js';
-        import { GUI } from 'https://cdn.jsdelivr.net/npm/lil-gui@0.19.1/dist/lil-gui.esm.min.js';
-        import { 
-            computeBoundsTree, 
-            disposeBoundsTree, 
-            acceleratedRaycast,
-            MeshBVHHelper
-        } from 'https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.3/build/index.module.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
-        // ==================== 全域變數 ====================
-        let scene, camera, renderer, controls, stats;
-        let model, raycaster;
-        let rayOriginsGroup, intersectionPointsGroup, rayLinesGroup;
-        let bvhHelper;
-        let gui;
-        let performanceMonitor;
-        
-        // ==================== 狀態管理 ====================
-        const loadingState = {
-            status: 'idle', // 'idle' | 'loading' | 'building' | 'ready' | 'error'
-            progress: 0,
-            message: '',
-            startTime: 0
-        };
-        
-        const guiParams = {
-            rayCount: 100,
-            enableBVH: true,
-            showBVHHelper: false,
-            helperDepth: 10,
-            rayOpacity: 0.5,
-            animate: true
-        };
-        
-        // ==================== BVH 擴展 ====================
-        // 擴展 BufferGeometry 原型以支援 BVH
+        // 擴展 Three.js 原型以支援 BVH
         THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
         THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
         THREE.Mesh.prototype.raycast = acceleratedRaycast;
+
+        // 全域變數
+        let stats;
+        let camera, scene, renderer;
+        let mesh, helper, bvh;
+        let sphereInstance, lineSegments;
+
+        // 可重用變數（避免每幀建立新物件）
+        const _raycaster = new THREE.Raycaster();
+        const _position = new THREE.Vector3();
+        const _quaternion = new THREE.Quaternion();
+        const _scale = new THREE.Vector3(1, 1, 1);
+        const _matrix = new THREE.Matrix4();
+        const _axis = new THREE.Vector3();
         
-        // ==================== 效能監控類別 ====================
-        class PerformanceMonitor {
-            constructor() {
-                this.fpsHistory = [];
-                this.maxHistoryLength = 60; // 60 幀
-                this.warningThreshold = 30;
-                this.warningActive = false;
-            }
-            
-            update(fps) {
-                this.fpsHistory.push(fps);
-                if (this.fpsHistory.length > this.maxHistoryLength) {
-                    this.fpsHistory.shift();
-                }
-            }
-            
-            getAverageFPS() {
-                if (this.fpsHistory.length === 0) return 0;
-                const sum = this.fpsHistory.reduce((a, b) => a + b, 0);
-                return sum / this.fpsHistory.length;
-            }
-            
-            checkWarning() {
-                const avgFPS = this.getAverageFPS();
-                const shouldWarn = avgFPS < this.warningThreshold && this.fpsHistory.length >= 30;
-                
-                if (shouldWarn && !this.warningActive) {
-                    this.warningActive = true;
-                    showPerformanceWarning(true);
-                } else if (!shouldWarn && this.warningActive) {
-                    this.warningActive = false;
-                    showPerformanceWarning(false);
-                }
-            }
-        }
-        
-        // ==================== 初始化函式 ====================
-        function init() {
-            // 建立場景
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a0a);
-            
-            // 建立攝影機
-            camera = new THREE.PerspectiveCamera(
-                60,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                100
-            );
-            camera.position.set(0, 2, 5);
-            
-            // 建立渲染器
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            document.body.appendChild(renderer.domElement);
-            
-            // 建立軌道控制
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.minDistance = 2;
-            controls.maxDistance = 10;
-            
-            // 建立光照
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight1.position.set(5, 10, 5);
-            scene.add(directionalLight1);
-            
-            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
-            directionalLight2.position.set(-5, -5, -5);
-            scene.add(directionalLight2);
-            
-            // 建立 Raycaster
-            raycaster = new THREE.Raycaster();
-            raycaster.firstHitOnly = false;
-            
-            // 建立 Stats.js
-            stats = new Stats();
-            stats.dom.style.position = 'absolute';
-            stats.dom.style.top = '10px';
-            stats.dom.style.right = '10px';
-            document.body.appendChild(stats.dom);
-            
-            // 建立效能監控器
-            performanceMonitor = new PerformanceMonitor();
-            
-            // 建立 GUI
-            createGUI();
-            
-            // 視窗大小調整
-            window.addEventListener('resize', onWindowResize);
-            
-            // 載入模型
-            loadModel();
-        }
-        
-        // ==================== 視窗大小調整 ====================
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-        
-        // ==================== 模型載入 ====================
-        function loadModel() {
-            loadingState.status = 'loading';
-            loadingState.startTime = Date.now();
-            showLoading(true);
-            
-            const loader = new FBXLoader();
-            const loadingManager = new THREE.LoadingManager();
-            
-            // 進度監聽
-            loadingManager.onProgress = (url, loaded, total) => {
-                const progress = (loaded / total) * 100;
-                updateLoadingProgress(progress);
-            };
-            
-            // 60 秒逾時
-            const timeout = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('載入逾時 (超過 60 秒)')), 60000);
-            });
-            
-            // 載入模型
-            const loadPromise = new Promise((resolve, reject) => {
-                loader.setLoadingManager(loadingManager);
-                loader.load(
-                    'https://threejs.org/examples/models/fbx/stanford-bunny.fbx',
-                    (object) => resolve(object),
-                    undefined,
-                    (error) => reject(error)
-                );
-            });
-            
-            // 使用 Promise.race 實現逾時
-            Promise.race([loadPromise, timeout])
-                .then((object) => {
-                    model = object;
-                    
-                    // 調整模型
-                    model.scale.multiplyScalar(0.01);
-                    model.position.set(0, 0, 0);
-                    
-                    // 取得網格
-                    const mesh = model.children[0];
-                    if (mesh && mesh.geometry) {
-                        // 設定材質
-                        mesh.material = new THREE.MeshStandardMaterial({
-                            color: 0x888888,
-                            roughness: 0.5,
-                            metalness: 0.3
-                        });
-                        
-                        // 建構 BVH
-                        loadingState.status = 'building';
-                        updateLoadingProgress(100, '建構 BVH 加速結構...');
-                        
-                        setTimeout(() => {
-                            buildBVH(mesh);
-                            
-                            scene.add(model);
-                            
-                            // 產生光線
-                            initializeRays();
-                            
-                            loadingState.status = 'ready';
-                            showLoading(false);
-                            
-                            // 開始動畫
-                            animate();
-                        }, 100);
-                    }
-                })
-                .catch((error) => {
-                    console.error('模型載入失敗:', error);
-                    loadingState.status = 'error';
-                    showError(error.message || '模型載入失敗，請重新整理頁面重試');
-                });
-        }
-        
-        // ==================== BVH 管理 ====================
-        function buildBVH(mesh) {
-            if (!mesh || !mesh.geometry) return;
-            
-            mesh.geometry.computeBoundsTree({
-                strategy: 0, // CENTER strategy
-                maxDepth: 40,
-                maxLeafTris: 10,
-                verbose: false
-            });
-            
-            console.log('BVH 建構完成');
-        }
-        
-        function disposeBVH(mesh) {
-            if (!mesh || !mesh.geometry) return;
-            if (mesh.geometry.boundsTree) {
-                mesh.geometry.disposeBoundsTree();
-                console.log('BVH 已清除');
+        const MAX_RAYS = 3000;
+        const RAY_COLOR = 0x444444;
+
+        // 參數設定
+        const params = {
+            count: 150,
+            firstHitOnly: true,
+            useBVH: true,
+            displayHelper: false,
+            helperDepth: 10
+        };
+
+        // 效能監控
+        let fpsHistory = [];
+        const FPS_HISTORY_LENGTH = 60;
+        const FPS_WARNING_THRESHOLD = 30;
+        let warningVisible = false;
+        let lastFrameTime = performance.now();
+
+        // 檢查 WebGL 支援
+        function checkWebGLSupport() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                return gl ? { supported: true } : { supported: false, message: '您的瀏覽器不支援 WebGL' };
+            } catch (e) {
+                return { supported: false, message: 'WebGL 初始化失敗: ' + e.message };
             }
         }
-        
-        function toggleBVH(enabled) {
-            if (!model || !model.children[0]) return;
-            
-            const mesh = model.children[0];
-            
-            if (enabled) {
-                if (!mesh.geometry.boundsTree) {
-                    buildBVH(mesh);
-                }
-            } else {
-                disposeBVH(mesh);
-            }
-            
-            console.log('BVH', enabled ? '已啟用' : '已停用');
-        }
-        
-        function toggleBVHHelper(show) {
-            if (!model || !model.children[0]) return;
-            
-            const mesh = model.children[0];
-            
-            if (show) {
-                if (!bvhHelper) {
-                    bvhHelper = new MeshBVHHelper(mesh, guiParams.helperDepth);
-                    scene.add(bvhHelper);
-                }
-                bvhHelper.visible = true;
-            } else {
-                if (bvhHelper) {
-                    bvhHelper.visible = false;
-                }
-            }
-        }
-        
-        function updateBVHHelper(depth) {
-            if (!bvhHelper) return;
-            
-            // 移除舊的 helper
-            scene.remove(bvhHelper);
-            bvhHelper.dispose();
-            
-            // 建立新的 helper
-            if (guiParams.showBVHHelper && model && model.children[0]) {
-                bvhHelper = new MeshBVHHelper(model.children[0], depth);
-                scene.add(bvhHelper);
-            }
-        }
-        
-        // ==================== 光線產生 ====================
-        function generateRayOrigins(count) {
-            const origins = [];
-            const radius = 2.5;
-            
-            // Fibonacci 球面取樣
-            const phi = Math.PI * (3 - Math.sqrt(5)); // 黃金角度
-            
-            for (let i = 0; i < count; i++) {
-                const y = 1 - (i / (count - 1)) * 2; // y 從 1 到 -1
-                const radiusAtY = Math.sqrt(1 - y * y);
-                const theta = phi * i;
-                
-                const x = Math.cos(theta) * radiusAtY;
-                const z = Math.sin(theta) * radiusAtY;
-                
-                origins.push(new THREE.Vector3(
-                    x * radius,
-                    y * radius,
-                    z * radius
-                ));
-            }
-            
-            return origins;
-        }
-        
-        function initializeRays() {
-            clearRays();
-            
-            const rayOrigins = generateRayOrigins(guiParams.rayCount);
-            
-            // 建立光線起點視覺化 (InstancedMesh)
-            const originGeometry = new THREE.SphereGeometry(0.02, 8, 8);
-            const originMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-            const originsMesh = new THREE.InstancedMesh(
-                originGeometry,
-                originMaterial,
-                rayOrigins.length
-            );
-            
-            const matrix = new THREE.Matrix4();
-            rayOrigins.forEach((origin, i) => {
-                matrix.setPosition(origin);
-                originsMesh.setMatrixAt(i, matrix);
-            });
-            originsMesh.instanceMatrix.needsUpdate = true;
-            
-            rayOriginsGroup = new THREE.Group();
-            rayOriginsGroup.add(originsMesh);
-            scene.add(rayOriginsGroup);
-            
-            // 建立相交點容器 (稍後動態建立)
-            intersectionPointsGroup = new THREE.Group();
-            scene.add(intersectionPointsGroup);
-            
-            // 建立光線容器
-            rayLinesGroup = new THREE.Group();
-            scene.add(rayLinesGroup);
-        }
-        
-        function updateRayCount(count) {
-            guiParams.rayCount = count;
-            initializeRays();
-        }
-        
-        // ==================== 光線投射 ====================
-        function castRays() {
-            if (!model || !model.children[0]) return;
-            
-            const mesh = model.children[0];
-            const rayOrigins = generateRayOrigins(guiParams.rayCount);
-            const results = [];
-            
-            rayOrigins.forEach(origin => {
-                // 光線方向指向模型中心
-                const direction = new THREE.Vector3(0, 0, 0).sub(origin).normalize();
-                
-                raycaster.set(origin, direction);
-                raycaster.far = 10;
-                
-                const intersects = raycaster.intersectObject(mesh, false);
-                
-                if (intersects.length > 0) {
-                    results.push({
-                        origin: origin,
-                        intersection: intersects[0],
-                        hasHit: true
-                    });
-                } else {
-                    results.push({
-                        origin: origin,
-                        intersection: null,
-                        hasHit: false
-                    });
-                }
-            });
-            
-            return results;
-        }
-        
-        function visualizeRays(results) {
-            // 清除舊的視覺化
-            clearRayVisualization();
-            
-            // 準備相交點
-            const intersections = results.filter(r => r.hasHit);
-            
-            if (intersections.length > 0) {
-                // 建立相交點 InstancedMesh
-                const pointGeometry = new THREE.SphereGeometry(0.025, 8, 8);
-                const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-                const pointsMesh = new THREE.InstancedMesh(
-                    pointGeometry,
-                    pointMaterial,
-                    intersections.length
-                );
-                
-                const matrix = new THREE.Matrix4();
-                intersections.forEach((result, i) => {
-                    matrix.setPosition(result.intersection.point);
-                    pointsMesh.setMatrixAt(i, matrix);
-                });
-                pointsMesh.instanceMatrix.needsUpdate = true;
-                
-                intersectionPointsGroup.add(pointsMesh);
-            }
-            
-            // 建立光線
-            results.forEach(result => {
-                const points = [];
-                points.push(result.origin);
-                
-                if (result.hasHit) {
-                    points.push(result.intersection.point);
-                } else {
-                    const endPoint = result.origin.clone().add(
-                        new THREE.Vector3(0, 0, 0).sub(result.origin).normalize().multiplyScalar(5)
-                    );
-                    points.push(endPoint);
-                }
-                
-                const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                const material = new THREE.LineBasicMaterial({
-                    color: result.hasHit ? 0x00ff00 : 0x666666,
-                    transparent: true,
-                    opacity: guiParams.rayOpacity
-                });
-                const line = new THREE.Line(geometry, material);
-                
-                rayLinesGroup.add(line);
-            });
-        }
-        
-        function clearRayVisualization() {
-            // 清除相交點
-            if (intersectionPointsGroup) {
-                intersectionPointsGroup.children.forEach(child => {
-                    if (child.geometry) child.geometry.dispose();
-                    if (child.material) child.material.dispose();
-                });
-                intersectionPointsGroup.clear();
-            }
-            
-            // 清除光線
-            if (rayLinesGroup) {
-                rayLinesGroup.children.forEach(child => {
-                    if (child.geometry) child.geometry.dispose();
-                    if (child.material) child.material.dispose();
-                });
-                rayLinesGroup.clear();
-            }
-        }
-        
-        function clearRays() {
-            if (rayOriginsGroup) {
-                scene.remove(rayOriginsGroup);
-                rayOriginsGroup.children.forEach(child => {
-                    if (child.geometry) child.geometry.dispose();
-                    if (child.material) child.material.dispose();
-                });
-            }
-            
-            clearRayVisualization();
-        }
-        
-        // ==================== GUI 建立 ====================
-        function createGUI() {
-            gui = new GUI();
-            gui.title('控制面板');
-            
-            gui.add(guiParams, 'rayCount', 10, 200, 10)
-                .name('光線數量')
-                .onChange(value => updateRayCount(value));
-            
-            gui.add(guiParams, 'enableBVH')
-                .name('啟用 BVH 加速')
-                .onChange(value => toggleBVH(value));
-            
-            gui.add(guiParams, 'showBVHHelper')
-                .name('顯示 BVH 視覺化')
-                .onChange(value => toggleBVHHelper(value));
-            
-            gui.add(guiParams, 'helperDepth', 1, 20, 1)
-                .name('BVH 顯示深度')
-                .onChange(value => updateBVHHelper(value));
-            
-            gui.add(guiParams, 'rayOpacity', 0.1, 1.0, 0.1)
-                .name('光線透明度')
-                .onChange(value => {
-                    if (rayLinesGroup) {
-                        rayLinesGroup.children.forEach(line => {
-                            if (line.material) {
-                                line.material.opacity = value;
-                            }
-                        });
-                    }
-                });
-            
-            gui.add(guiParams, 'animate')
-                .name('自動旋轉');
-        }
-        
-        // ==================== UI 輔助函式 ====================
+
+        // UI 輔助函式
         function showLoading(show) {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
-        
+
         function updateLoadingProgress(progress, message = null) {
             const bar = document.getElementById('loading-bar');
             const text = document.getElementById('loading-text');
-            
             bar.style.width = progress + '%';
-            
-            if (message) {
-                text.textContent = message;
-            } else {
-                text.textContent = Math.round(progress) + '%';
-            }
+            text.textContent = message || Math.round(progress) + '%';
         }
-        
+
         function showError(message) {
             document.getElementById('error-message').textContent = message;
             document.getElementById('error').style.display = 'block';
             document.getElementById('loading').style.display = 'none';
         }
-        
-        function showPerformanceWarning(show) {
-            document.getElementById('performance-warning').style.display = show ? 'block' : 'none';
+
+        function updatePerformanceWarning(fps) {
+            fpsHistory.push(fps);
+            if (fpsHistory.length > FPS_HISTORY_LENGTH) {
+                fpsHistory.shift();
+            }
+            
+            if (fpsHistory.length >= 30) {
+                const avgFps = fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length;
+                const shouldWarn = avgFps < FPS_WARNING_THRESHOLD;
+                
+                if (shouldWarn !== warningVisible) {
+                    warningVisible = shouldWarn;
+                    document.getElementById('performance-warning').style.display = shouldWarn ? 'block' : 'none';
+                }
+            }
         }
-        
-        // ==================== 動畫迴圈 ====================
+
+        // 初始化
+        function init() {
+            // 攝影機
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 100);
+            camera.position.z = 10;
+
+            // 場景
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xeeeeee);
+
+            // 光照
+            const ambient = new THREE.HemisphereLight(0xffffff, 0x999999, 3);
+            scene.add(ambient);
+
+            // 渲染器
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setAnimationLoop(animate);
+            document.body.appendChild(renderer.domElement);
+
+            // Stats
+            stats = new Stats();
+            document.body.appendChild(stats.dom);
+
+            // 光線視覺化 - 預先建立 LineSegments
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_RAYS * 2 * 3), 3));
+            lineSegments = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({
+                color: RAY_COLOR,
+                transparent: true,
+                opacity: 0.25,
+                depthWrite: false
+            }));
+
+            // 光線視覺化 - 預先建立 InstancedMesh（光線起點和交點）
+            sphereInstance = new THREE.InstancedMesh(
+                new THREE.SphereGeometry(),
+                new THREE.MeshBasicMaterial({ color: RAY_COLOR }),
+                2 * MAX_RAYS
+            );
+            sphereInstance.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+            sphereInstance.count = 0;
+
+            scene.add(sphereInstance, lineSegments);
+
+            // 載入模型
+            showLoading(true);
+            const loader = new FBXLoader();
+            
+            // 60 秒逾時
+            const timeoutId = setTimeout(() => {
+                showError('載入逾時 (超過 60 秒)，請檢查網路連線');
+            }, 60000);
+            
+            loader.load(
+                'https://threejs.org/examples/models/fbx/stanford-bunny.fbx',
+                (object) => {
+                    clearTimeout(timeoutId);
+                    
+                    mesh = object.children[0];
+                    const geometry = mesh.geometry;
+                    
+                    // 調整模型位置
+                    geometry.translate(0, 0.5 / 0.0075, 0);
+                    
+                    // 建構 BVH
+                    updateLoadingProgress(100, '建構 BVH 加速結構...');
+                    geometry.computeBoundsTree();
+                    bvh = geometry.boundsTree;
+
+                    if (!params.useBVH) {
+                        geometry.boundsTree = null;
+                    }
+
+                    scene.add(mesh);
+                    mesh.scale.setScalar(0.0075);
+
+                    // 建立 BVH Helper
+                    helper = new MeshBVHHelper(mesh, params.helperDepth);
+                    helper.color.set(0xE91E63);
+                    helper.visible = params.displayHelper;
+                    scene.add(helper);
+                    
+                    showLoading(false);
+                },
+                (xhr) => {
+                    if (xhr.lengthComputable) {
+                        const progress = (xhr.loaded / xhr.total) * 90; // 留 10% 給 BVH 建構
+                        updateLoadingProgress(progress);
+                    }
+                },
+                (error) => {
+                    clearTimeout(timeoutId);
+                    console.error('模型載入失敗:', error);
+                    showError('模型載入失敗: ' + (error.message || '請重新整理頁面重試'));
+                }
+            );
+
+            // 軌道控制
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.minDistance = 5;
+            controls.maxDistance = 75;
+
+            // GUI
+            const gui = new GUI();
+            
+            const rayFolder = gui.addFolder('光線設定');
+            rayFolder.add(params, 'count', 1, MAX_RAYS, 1).name('光線數量');
+            rayFolder.add(params, 'firstHitOnly').name('只檢測第一交點');
+            rayFolder.add(params, 'useBVH').name('啟用 BVH').onChange(v => {
+                if (mesh) {
+                    mesh.geometry.boundsTree = v ? bvh : null;
+                }
+            });
+
+            const helperFolder = gui.addFolder('BVH 視覺化');
+            helperFolder.add(params, 'displayHelper').name('顯示 BVH');
+            helperFolder.add(params, 'helperDepth', 1, 20, 1).name('顯示深度').onChange(v => {
+                if (helper) {
+                    helper.depth = v;
+                    helper.update();
+                }
+            });
+
+            // 視窗大小調整
+            window.addEventListener('resize', onWindowResize);
+            onWindowResize();
+
+            // 初始化光線位置
+            initRays();
+        }
+
+        // 初始化光線起點位置
+        function initRays() {
+            const position = new THREE.Vector3();
+            const quaternion = new THREE.Quaternion();
+            const scale = new THREE.Vector3(1, 1, 1);
+            const matrix = new THREE.Matrix4();
+
+            for (let i = 0; i < MAX_RAYS * 2; i++) {
+                position.randomDirection().multiplyScalar(3.75);
+                matrix.compose(position, quaternion, scale);
+                sphereInstance.setMatrixAt(i, matrix);
+            }
+        }
+
+        // 更新光線（每幀呼叫）
+        function updateRays() {
+            if (!mesh) return;
+
+            _raycaster.firstHitOnly = params.firstHitOnly;
+            const rayCount = params.count;
+            let lineNum = 0;
+
+            for (let i = 0; i < rayCount; i++) {
+                // 取得當前光線起點位置
+                sphereInstance.getMatrixAt(i * 2, _matrix);
+                _matrix.decompose(_position, _quaternion, _scale);
+
+                // 繞原點旋轉（讓光線動起來）
+                const offset = 1e-4 * window.performance.now();
+                _axis.set(
+                    Math.sin(i * 100 + offset),
+                    Math.cos(-i * 10 + offset),
+                    Math.sin(i * 1 + offset),
+                ).normalize();
+                _position.applyAxisAngle(_axis, 0.001);
+
+                // 更新起點位置
+                _scale.setScalar(0.02);
+                _matrix.compose(_position, _quaternion, _scale);
+                sphereInstance.setMatrixAt(i * 2, _matrix);
+
+                // 執行光線投射
+                _raycaster.ray.origin.copy(_position);
+                _raycaster.ray.direction.copy(_position).multiplyScalar(-1).normalize();
+
+                // 更新交點和光線
+                const hits = _raycaster.intersectObject(mesh);
+                if (hits.length !== 0) {
+                    const hit = hits[0];
+                    const point = hit.point;
+                    _scale.setScalar(0.01);
+                    _matrix.compose(point, _quaternion, _scale);
+                    sphereInstance.setMatrixAt(i * 2 + 1, _matrix);
+
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, _position.x, _position.y, _position.z);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, point.x, point.y, point.z);
+                } else {
+                    sphereInstance.setMatrixAt(i * 2 + 1, _matrix);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, _position.x, _position.y, _position.z);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, 0, 0, 0);
+                }
+            }
+
+            sphereInstance.count = rayCount * 2;
+            sphereInstance.instanceMatrix.needsUpdate = true;
+
+            lineSegments.geometry.setDrawRange(0, lineNum);
+            lineSegments.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // 視窗大小調整
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // 動畫迴圈
         function animate() {
-            requestAnimationFrame(animate);
+            // 計算 FPS
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            const fps = 1000 / deltaTime;
+            updatePerformanceWarning(fps);
             
-            // 更新統計
-            stats.begin();
-            
-            // 更新效能監控
-            const fps = 1000 / stats.getFps();
-            performanceMonitor.update(1 / fps * 1000);
-            performanceMonitor.checkWarning();
-            
-            // 更新控制
-            controls.update();
-            
-            // 自動旋轉模型
-            if (guiParams.animate && model) {
-                model.rotation.y += 0.005;
-            }
-            
-            // 投射光線並視覺化
-            if (loadingState.status === 'ready') {
-                const results = castRays();
-                visualizeRays(results);
-            }
-            
-            // 渲染場景
-            renderer.render(scene, camera);
-            
-            stats.end();
+            render();
+            stats.update();
         }
-        
-        // ==================== 啟動應用程式 ====================
-        init();
+
+        // 渲染
+        function render() {
+            if (helper) {
+                helper.visible = params.displayHelper;
+            }
+
+            if (mesh) {
+                mesh.rotation.y += 0.002;
+                mesh.updateMatrixWorld();
+            }
+
+            updateRays();
+            renderer.render(scene, camera);
+        }
+
+        // 啟動
+        const webglCheck = checkWebGLSupport();
+        if (webglCheck.supported) {
+            init();
+        } else {
+            showError(webglCheck.message + '。請使用支援 WebGL 的現代瀏覽器（Chrome、Firefox、Safari、Edge）。');
+        }
     </script>
 </body>
 </html>
