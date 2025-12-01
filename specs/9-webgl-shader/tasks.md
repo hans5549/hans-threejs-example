@@ -15,9 +15,9 @@
 
 **Purpose**: 專案初始化和基礎結構
 
-- [ ] T001 Create project directory structure at examples/webgl-shader/
-- [ ] T002 Create base HTML5 document with meta tags in examples/webgl-shader/index.html
-- [ ] T003 [P] Configure Three.js import map (CDN unpkg r160) in examples/webgl-shader/index.html
+- [X] T001 Create project directory structure at examples/webgl-shader/
+- [X] T002 Create base HTML5 document with meta tags in examples/webgl-shader/index.html
+- [X] T003 [P] Configure Three.js import map (CDN unpkg r160) in examples/webgl-shader/index.html
 
 ---
 
@@ -27,12 +27,12 @@
 
 **⚠️ CRITICAL**: 此階段必須完成後才能開始使用者故事
 
-- [ ] T004 [P] Implement inline CSS styles (body margin, overflow, info positioning) in examples/webgl-shader/index.html
-- [ ] T005 [P] Create container div element (#container) in examples/webgl-shader/index.html
-- [ ] T006 [P] Implement GLSL Vertex Shader in <script id="vertexShader"> in examples/webgl-shader/index.html
-- [ ] T007 [P] Implement GLSL Fragment Shader (Monjori) in <script id="fragmentShader"> in examples/webgl-shader/index.html
+- [X] T004 [P] Implement inline CSS styles (body margin, overflow, info positioning) in examples/webgl-shader/index.html
+- [X] T005 [P] Create container div element (#container) in examples/webgl-shader/index.html
+- [X] T006 [P] Implement GLSL Vertex Shader in <script id="vertexShader"> in examples/webgl-shader/index.html
+- [X] T007 [P] Implement GLSL Fragment Shader (Monjori) in <script id="fragmentShader"> in examples/webgl-shader/index.html
 
-**Checkpoint**: Foundation ready - 基礎 HTML 結構和 Shader 程式碼已就緒
+**Checkpoint**: Foundation ready - 基礎 HTML 結構和 Shader 程式碼已就緒 ✅
 
 ---
 
@@ -44,19 +44,19 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Implement global variables declaration (camera, scene, renderer, uniforms) in examples/webgl-shader/index.html
-- [ ] T009 [US1] Implement init() function - create OrthographicCamera(-1, 1, 1, -1, 0, 1) in examples/webgl-shader/index.html
-- [ ] T010 [US1] Implement init() function - create Scene in examples/webgl-shader/index.html
-- [ ] T011 [US1] Implement init() function - create PlaneGeometry(2, 2) in examples/webgl-shader/index.html
-- [ ] T012 [US1] Implement init() function - create uniforms object { time: { value: 1.0 } } in examples/webgl-shader/index.html
-- [ ] T013 [US1] Implement init() function - create ShaderMaterial with vertex/fragment shaders in examples/webgl-shader/index.html
-- [ ] T014 [US1] Implement init() function - create Mesh and add to Scene in examples/webgl-shader/index.html
-- [ ] T015 [US1] Implement init() function - create WebGLRenderer with pixelRatio and size in examples/webgl-shader/index.html
-- [ ] T016 [US1] Implement init() function - append canvas to container and set animationLoop in examples/webgl-shader/index.html
-- [ ] T017 [US1] Implement animate() function - update time uniform and render scene in examples/webgl-shader/index.html
-- [ ] T018 [US1] Add init() call to start application in examples/webgl-shader/index.html
+- [X] T008 [US1] Implement global variables declaration (camera, scene, renderer, uniforms) in examples/webgl-shader/index.html
+- [X] T009 [US1] Implement init() function - create OrthographicCamera(-1, 1, 1, -1, 0, 1) in examples/webgl-shader/index.html
+- [X] T010 [US1] Implement init() function - create Scene in examples/webgl-shader/index.html
+- [X] T011 [US1] Implement init() function - create PlaneGeometry(2, 2) in examples/webgl-shader/index.html
+- [X] T012 [US1] Implement init() function - create uniforms object { time: { value: 1.0 } } in examples/webgl-shader/index.html
+- [X] T013 [US1] Implement init() function - create ShaderMaterial with vertex/fragment shaders in examples/webgl-shader/index.html
+- [X] T014 [US1] Implement init() function - create Mesh and add to Scene in examples/webgl-shader/index.html
+- [X] T015 [US1] Implement init() function - create WebGLRenderer with pixelRatio and size in examples/webgl-shader/index.html
+- [X] T016 [US1] Implement init() function - append canvas to container and set animationLoop in examples/webgl-shader/index.html
+- [X] T017 [US1] Implement animate() function - update time uniform and render scene in examples/webgl-shader/index.html
+- [X] T018 [US1] Add init() call to start application in examples/webgl-shader/index.html
 
-**Checkpoint**: User Story 1 完成 - 動態視覺效果應可正常顯示和運行
+**Checkpoint**: User Story 1 完成 - 動態視覺效果應可正常顯示和運行 ✅
 
 ---
 
@@ -68,10 +68,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement onWindowResize() function - update renderer size in examples/webgl-shader/index.html
-- [ ] T020 [US2] Add resize event listener in init() function in examples/webgl-shader/index.html
+- [X] T019 [US2] Implement onWindowResize() function - update renderer size in examples/webgl-shader/index.html
+- [X] T020 [US2] Add resize event listener in init() function in examples/webgl-shader/index.html
 
-**Checkpoint**: User Story 2 完成 - 視窗調整後效果應正常填滿
+**Checkpoint**: User Story 2 完成 - 視窗調整後效果應正常填滿 ✅
 
 ---
 
@@ -83,12 +83,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T021 [P] [US3] Create #info div with title text in examples/webgl-shader/index.html
-- [ ] T022 [P] [US3] Add Three.js official website link (target="_blank") in examples/webgl-shader/index.html
-- [ ] T023 [P] [US3] Add Monjori original work link (Pouët, target="_blank") in examples/webgl-shader/index.html
-- [ ] T024 [US3] Style #info div for proper positioning and visibility in examples/webgl-shader/index.html
+- [X] T021 [P] [US3] Create #info div with title text in examples/webgl-shader/index.html
+- [X] T022 [P] [US3] Add Three.js official website link (target="_blank") in examples/webgl-shader/index.html
+- [X] T023 [P] [US3] Add Monjori original work link (Pouët, target="_blank") in examples/webgl-shader/index.html
+- [X] T024 [US3] Style #info div for proper positioning and visibility in examples/webgl-shader/index.html
 
-**Checkpoint**: User Story 3 完成 - 資訊和連結應正確顯示
+**Checkpoint**: User Story 3 完成 - 資訊和連結應正確顯示 ✅
 
 ---
 
@@ -96,13 +96,15 @@
 
 **Purpose**: 最終驗證和調整
 
-- [ ] T025 Run visual verification - confirm dynamic effect displays immediately on page load
-- [ ] T026 Run visual verification - confirm effect continues animating without stutter
-- [ ] T027 Run visual verification - confirm window resize works correctly
-- [ ] T028 Run visual verification - confirm links open in new tabs
-- [ ] T029 [P] Browser test - Chrome latest version
-- [ ] T030 [P] Browser test - Firefox latest version
-- [ ] T031 Run quickstart.md validation
+- [X] T025 Run visual verification - confirm dynamic effect displays immediately on page load
+- [X] T026 Run visual verification - confirm effect continues animating without stutter
+- [X] T027 Run visual verification - confirm window resize works correctly
+- [X] T028 Run visual verification - confirm links open in new tabs
+- [X] T029 [P] Browser test - Chrome latest version
+- [X] T030 [P] Browser test - Firefox latest version
+- [X] T031 Run quickstart.md validation
+
+**Checkpoint**: Phase 6 完成 - 所有驗證通過 ✅
 
 ---
 
