@@ -1,151 +1,151 @@
 # Tasks: WebGL Raycaster BVH 高效能光線投射
 
 **Input**: Design documents from `/specs/8-raycaster-bvh/`
-**Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/component-interface.md, quickstart.md
+**Prerequisites**: plan.md ✅, spec.md ✅, research.md ✅, data-model.md ✅, contracts/component-interface.md ✅, quickstart.md ✅
 
-**Tests**: This feature does NOT require automated tests - validation will be done through manual browser testing and performance comparison as specified in quickstart.md.
+**Tests**: 未明確要求測試，本任務清單不包含測試任務
 
-**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+**Organization**: 任務依照使用者故事分組，支援獨立實作與測試
 
----
+## Format: `[ID] [P?] [Story] Description`
 
-## Format: `- [ ] [ID] [P?] [Story?] Description with file path`
+- **[P]**: 可平行執行（不同檔案，無相依性）
+- **[Story]**: 所屬使用者故事（US1, US2, US3, US4）
+- 包含精確的檔案路徑
 
-- **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (US1, US2, US3, US4)
-- Include exact file paths in descriptions
+## Path Conventions
 
----
-
-## Phase 1: Setup (專案初始化)
-
-**Purpose**: 建立基本專案結構和 HTML 檔案框架
-
-- [X] T001 建立專案目錄結構 examples/webgl-raycaster-bvh/
-- [X] T002 建立 index.html 主檔案 examples/webgl-raycaster-bvh/index.html
-- [X] T003 [P] 在 index.html 中加入基本 HTML 結構 (doctype, head, body)
-- [X] T004 [P] 在 index.html 中加入 CDN 載入: Three.js r160+, three-mesh-bvh v0.7.3, Stats.js, lil-gui
+本專案採用單一 HTML 檔案結構：
+- **主檔案**: `examples/webgl-raycaster-bvh/index.html`
+- **文件**: `specs/8-raycaster-bvh/`
 
 ---
 
-## Phase 2: Foundational (核心基礎建設)
+## Phase 1: Setup（專案初始化）
 
-**Purpose**: 場景初始化、載入系統、BVH 整合 - 所有使用者故事的前置需求
+**Purpose**: 建立專案基礎結構與檔案
 
-**⚠️ CRITICAL**: 此階段必須完成才能開始任何使用者故事實作
+- [ ] T001 建立專案目錄 `examples/webgl-raycaster-bvh/`
+- [ ] T002 建立基礎 HTML 結構於 `examples/webgl-raycaster-bvh/index.html`，包含 DOCTYPE、meta、title
+- [ ] T003 [P] 加入 CDN 引用：Three.js r160+、three-mesh-bvh、Stats.js、lil-gui 於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T004 [P] 建立基礎 CSS 樣式（全螢幕 canvas、載入進度 UI）於 `examples/webgl-raycaster-bvh/index.html` 的 `<style>` 區塊
 
-- [X] T005 實作 init() 函式: 建立 THREE.Scene, PerspectiveCamera, WebGLRenderer in examples/webgl-raycaster-bvh/index.html
-- [X] T006 [P] 實作 onWindowResize() 函式處理視窗大小調整 in examples/webgl-raycaster-bvh/index.html
-- [X] T007 [P] 實作 OrbitControls 整合讓使用者旋轉和縮放場景 in examples/webgl-raycaster-bvh/index.html
-- [X] T008 實作 LoadingState 狀態管理物件 (status, progress, message, startTime) in examples/webgl-raycaster-bvh/index.html
-- [X] T009 實作 loadModel() 函式: 使用 FBXLoader 和 LoadingManager 載入 Stanford Bunny in examples/webgl-raycaster-bvh/index.html
-- [X] T010 實作載入進度指示器 UI (顯示百分比或動畫) in examples/webgl-raycaster-bvh/index.html
-- [X] T011 實作 60 秒載入逾時機制 (Promise.race) in examples/webgl-raycaster-bvh/index.html
-- [X] T012 實作 showError() 函式處理載入失敗和逾時錯誤 in examples/webgl-raycaster-bvh/index.html
-- [X] T013 擴展 BufferGeometry.prototype 加入 computeBoundsTree, disposeBoundsTree, acceleratedRaycast in examples/webgl-raycaster-bvh/index.html
-- [X] T014 實作 buildBVH() 函式: 使用 three-mesh-bvh 建構 BVH (strategy: CENTER, maxDepth: 40, maxLeafTris: 10) in examples/webgl-raycaster-bvh/index.html
-- [X] T015 實作 disposeBVH() 函式清除 BVH 加速結構 in examples/webgl-raycaster-bvh/index.html
-- [X] T016 實作 animate() 主迴圈: requestAnimationFrame, renderer.render() in examples/webgl-raycaster-bvh/index.html
-- [X] T017 加入場景光照 (AmbientLight, DirectionalLight) 和基本材質設定 in examples/webgl-raycaster-bvh/index.html
+---
 
-**Checkpoint**: 基礎完成 - 可載入模型、建構 BVH、顯示場景，使用者故事實作可並行開始
+## Phase 2: Foundational（基礎架構）
+
+**Purpose**: 建立核心 3D 場景基礎設施，所有使用者故事都依賴此階段
+
+**⚠️ CRITICAL**: 此階段必須完成後才能開始任何使用者故事
+
+- [ ] T005 實作 `init()` 函式：建立 Scene（background: 0x000000）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T006 實作 PerspectiveCamera 設定（fov: 60, near: 0.1, far: 100, position: (10, 10, 10)）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T007 實作 WebGLRenderer 設定（antialias: true, setPixelRatio）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T008 [P] 實作 OrbitControls 設定（enableDamping: true, dampingFactor: 0.05）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T009 [P] 實作基礎光照系統（AmbientLight + DirectionalLight）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T010 實作 `onWindowResize()` 視窗大小調整處理於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T011 實作 `animate()` 主動畫迴圈（requestAnimationFrame）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T012 實作載入狀態管理（LoadingState: idle → loading → building → ready → error）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T013 [P] 實作載入進度 UI（進度條、百分比、狀態訊息）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T014 實作 `loadModel()` 函式：FBXLoader 載入模型，包含 60 秒逾時處理於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T015 實作 `showError()` 錯誤訊息顯示函式於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T016 擴展 Three.js 原型：`computeBoundsTree`、`disposeBoundsTree`、`acceleratedRaycast` 於 `examples/webgl-raycaster-bvh/index.html`
+
+**Checkpoint**: 基礎架構完成 - 場景可渲染、模型可載入、BVH 擴展已就緒
 
 ---
 
 ## Phase 3: User Story 1 - 觀察 BVH 加速效果 (Priority: P1) 🎯 MVP
 
-**Goal**: 使用者能看到啟用/停用 BVH 時的明顯效能差異 (60 FPS vs 10-20 FPS)
+**Goal**: 使用者載入 3D 模型後，能夠清楚看到使用 BVH 加速結構與未使用時的效能差異
 
-**Independent Test**: 載入模型後觀察 Stats.js FPS 指標，切換 BVH 開關驗證效能差異達 70%
+**Independent Test**: 載入模型並觀察 FPS 指標，切換 BVH 開關驗證效能差異（啟用: 60+ FPS → 停用: 10-20 FPS）
 
 ### Implementation for User Story 1
 
-- [X] T018 [P] [US1] 整合 Stats.js: 建立 stats 物件並加入 DOM in examples/webgl-raycaster-bvh/index.html
-- [X] T019 [P] [US1] 建立 PerformanceMonitor 類別: 追蹤 FPS 歷史 (60 幀滾動視窗) in examples/webgl-raycaster-bvh/index.html
-- [X] T020 [US1] 實作 updatePerformanceMetrics() 函式: 計算平均 FPS 和幀時間 in examples/webgl-raycaster-bvh/index.html
-- [X] T021 [US1] 實作 checkPerformanceWarning() 函式: FPS < 30 時顯示警告訊息 in examples/webgl-raycaster-bvh/index.html
-- [X] T022 [US1] 實作 toggleBVH() 函式: 啟用/停用 BVH 加速並更新 Raycaster in examples/webgl-raycaster-bvh/index.html
-- [X] T023 [US1] 建立 GUI 控制介面: 加入 BVH 開關 (enableBVH checkbox) in examples/webgl-raycaster-bvh/index.html
-- [X] T024 [US1] 在 animate() 迴圈中更新 Stats.js 和 PerformanceMonitor in examples/webgl-raycaster-bvh/index.html
-- [X] T025 [US1] 實作效能警告 UI 顯示邏輯 (動態警告訊息) in examples/webgl-raycaster-bvh/index.html
+- [ ] T017 [US1] 實作 `buildBVH()` 函式：建構 BVH 加速結構（strategy: CENTER, maxDepth: 40）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T018 [US1] 實作 `toggleBVH()` 函式：啟用/停用 BVH 加速並恢復原始 raycast 於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T019 [P] [US1] 實作 `generateRayOrigins()` 函式：Fibonacci 球面採樣產生光線原點（100條, 半徑 5）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T020 [US1] 實作 `castRays()` 函式：執行光線追蹤查詢並收集交點於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T021 [P] [US1] 整合 Stats.js：建立 FPS 監控面板於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T022 [US1] 實作 PerformanceMonitor：追蹤 FPS 歷史、計算平均值於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T023 [US1] 實作 FPS 警告機制：FPS < 30 時顯示效能警告 UI 於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T024 [P] [US1] 建立 lil-gui 控制面板基礎結構於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T025 [US1] 加入 GUI 控制項：Enable BVH 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T026 [US1] 在 animate() 中整合光線追蹤效能計算於 `examples/webgl-raycaster-bvh/index.html`
 
-**Checkpoint**: 使用者故事 1 完成 - 可觀察 BVH 效能差異並獨立測試
+**Checkpoint**: User Story 1 完成 - 可獨立驗證 BVH 加速效果（60+ FPS vs 10-20 FPS）
 
 ---
 
 ## Phase 4: User Story 2 - 視覺化光線投射結果 (Priority: P2)
 
-**Goal**: 使用者能看到從隨機位置投射的光線和相交點
+**Goal**: 使用者可以直觀看到多條光線和與模型的相交點
 
-**Independent Test**: 載入場景後觀察螢幕上的半透明光線和相交點小球體
+**Independent Test**: 載入場景並觀察螢幕上的光線（白色線條）和相交點（紅色小球體）
 
 ### Implementation for User Story 2
 
-- [X] T026 [P] [US2] 實作 generateRayOrigins() 函式: Fibonacci 球面取樣產生 100 個隨機位置 in examples/webgl-raycaster-bvh/index.html
-- [X] T027 [P] [US2] 建立 Ray Origins InstancedMesh: 100 個小球體標記光線起點 in examples/webgl-raycaster-bvh/index.html
-- [X] T028 [US2] 實作 castRays() 函式: 使用 Raycaster 偵測相交並回傳 Intersection[] in examples/webgl-raycaster-bvh/index.html
-- [X] T029 [US2] 建立 Intersection Points InstancedMesh: 動態數量的小球體標記相交點 in examples/webgl-raycaster-bvh/index.html
-- [X] T030 [US2] 實作 visualizeRays() 函式: 使用 LineSegments 顯示光線路徑 in examples/webgl-raycaster-bvh/index.html
-- [X] T031 [US2] 實作 updateRayVisualization() 函式: 更新光線和相交點的位置矩陣 in examples/webgl-raycaster-bvh/index.html
-- [X] T032 [US2] 實作 clearRays() 函式: 清除場景中的舊光線和相交點 in examples/webgl-raycaster-bvh/index.html
-- [X] T033 [US2] 在 animate() 迴圈中呼叫 castRays() 和 updateRayVisualization() in examples/webgl-raycaster-bvh/index.html
-- [X] T034 [US2] 設定光線材質為半透明 (opacity: 0.5, transparent: true) in examples/webgl-raycaster-bvh/index.html
+- [ ] T027 [P] [US2] 建立 RayOrigins InstancedMesh：球體幾何、綠色半透明材質於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T028 [P] [US2] 建立 IntersectionPoints InstancedMesh：球體幾何、紅色材質於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T029 [US2] 實作 `visualizeRays()` 函式：建立光線 LineSegments 視覺化於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T030 [US2] 實作光線材質設定：白色半透明 LineBasicMaterial（opacity: 0.5）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T031 [US2] 實作交點位置更新：更新 IntersectionPoints 實例矩陣於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T032 [US2] 實作 `clearRays()` 函式：清除所有光線視覺化元素於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T033 [US2] 區分有相交/無相交光線的視覺化（有相交顯示完整光線，無相交延伸到最大距離）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T034 [P] [US2] 加入 GUI 控制項：Ray Opacity 滑桿（範圍 0-1，預設 0.5）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T035 [US2] 實作模型自動旋轉（params.animate: true）於 `examples/webgl-raycaster-bvh/index.html`
 
-**Checkpoint**: 使用者故事 1 和 2 都能獨立運作
+**Checkpoint**: User Story 2 完成 - 可觀察光線路徑和相交點視覺化
 
 ---
 
 ## Phase 5: User Story 3 - 互動式 BVH 視覺化 (Priority: P3)
 
-**Goal**: 使用者能切換顯示/隱藏 BVH 包圍盒視覺化
+**Goal**: 使用者可以選擇顯示或隱藏 BVH 樹狀結構的包圍盒視覺化
 
-**Independent Test**: 切換 BVH 視覺化選項觀察包圍盒框線的顯示與隱藏
+**Independent Test**: 切換 BVH 視覺化選項並觀察包圍盒的顯示與隱藏
 
 ### Implementation for User Story 3
 
-- [X] T035 [P] [US3] 整合 MeshBVHHelper: 建立 helper 物件並加入場景 in examples/webgl-raycaster-bvh/index.html
-- [X] T036 [P] [US3] 實作 toggleBVHHelper() 函式: 顯示/隱藏 BVH 包圍盒視覺化 in examples/webgl-raycaster-bvh/index.html
-- [X] T037 [US3] 實作 updateBVHHelper() 函式: 調整顯示深度 (1-20) in examples/webgl-raycaster-bvh/index.html
-- [X] T038 [US3] 加入 GUI 控制: showBVHHelper checkbox 和 helperDepth slider (1-20) in examples/webgl-raycaster-bvh/index.html
-- [X] T039 [US3] 實作 BVH Helper 的動態更新邏輯 (深度改變時重建) in examples/webgl-raycaster-bvh/index.html
+- [ ] T036 [US3] 實作 `toggleBVHHelper()` 函式：建立/顯示/隱藏 MeshBVHHelper 於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T037 [US3] 實作 `updateBVHHelper()` 函式：更新 BVH 視覺化深度（1-20）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T038 [US3] 設定 BVH Helper 樣式：邊界框顏色、線條寬度於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T039 [P] [US3] 加入 GUI 控制項：Show BVH Visualization 開關（預設 false）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T040 [US3] 加入 GUI 控制項：BVH Depth 滑桿（範圍 1-20，預設 10）於 `examples/webgl-raycaster-bvh/index.html`
 
-**Checkpoint**: 使用者故事 1, 2 和 3 都能獨立運作
+**Checkpoint**: User Story 3 完成 - 可顯示/隱藏 BVH 層級邊界框
 
 ---
 
 ## Phase 6: User Story 4 - 控制光線數量 (Priority: P3)
 
-**Goal**: 使用者能調整光線數量並觀察效能影響
+**Goal**: 使用者可以透過控制介面調整同時投射的光線數量
 
-**Independent Test**: 調整光線數量滑桿並觀察 FPS 變化和畫面上的光線數量
+**Independent Test**: 調整光線數量滑桿並觀察 FPS 變化和畫面上光線數量變化
 
 ### Implementation for User Story 4
 
-- [X] T040 [P] [US4] 實作 updateRayCount() 函式: 根據新數量重新產生光線 (1-200 範圍) in examples/webgl-raycaster-bvh/index.html
-- [X] T041 [P] [US4] 實作 GUIParams 物件: 集中管理所有 GUI 參數 (rayCount, enableBVH, showBVHHelper, helperDepth, rayOpacity, animate) in examples/webgl-raycaster-bvh/index.html
-- [X] T042 [US4] 加入 GUI 控制: rayCount slider (1-200, step: 10, default: 100) in examples/webgl-raycaster-bvh/index.html
-- [X] T043 [US4] 實作光線數量變更回呼: 清除舊光線、重新產生、更新視覺化 in examples/webgl-raycaster-bvh/index.html
-- [X] T044 [US4] 加入 GUI 控制: rayOpacity slider (0.1-1.0, step: 0.1, default: 0.5) in examples/webgl-raycaster-bvh/index.html
-- [X] T045 [US4] 實作光線透明度動態更新邏輯 in examples/webgl-raycaster-bvh/index.html
-- [X] T046 [US4] 加入 GUI 控制: animate checkbox 控制模型自動旋轉 in examples/webgl-raycaster-bvh/index.html
+- [ ] T041 [US4] 實作 `updateRayCount()` 函式：動態調整光線數量並重新執行光線追蹤於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T042 [US4] 實作光線數量為零的處理邏輯（不顯示光線但模型正常顯示）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T043 [P] [US4] 加入 GUI 控制項：Ray Count 滑桿（範圍 1-200，預設 100）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T044 [US4] 實作光線數量變更時的效能影響視覺回饋於 `examples/webgl-raycaster-bvh/index.html`
 
-**Checkpoint**: 所有使用者故事獨立運作正常
+**Checkpoint**: User Story 4 完成 - 可動態調整光線數量
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns (完善與跨領域改進)
+## Phase 7: Polish & Cross-Cutting Concerns
 
-**Purpose**: 最終優化和完善
+**Purpose**: 跨功能優化與最終整合
 
-- [ ] T047 [P] 優化記憶體使用: 實作物件池 (object pooling) 重用 InstancedMesh 實例 in examples/webgl-raycaster-bvh/index.html
-- [ ] T048 [P] 加入詳細錯誤處理: 分類錯誤類型 (ModelLoadError, BVHBuildError, TimeoutError) in examples/webgl-raycaster-bvh/index.html
-- [ ] T049 [P] 優化光線視覺化效能: 使用 setDrawRange 減少不必要的渲染 in examples/webgl-raycaster-bvh/index.html
-- [ ] T050 [P] 加入 WebGL 支援檢測: 顯示友善的不支援訊息 in examples/webgl-raycaster-bvh/index.html
-- [ ] T051 程式碼重構: 將核心邏輯分離成獨立函式 (提高可讀性) in examples/webgl-raycaster-bvh/index.html
-- [X] T052 [P] 加入程式碼註解: 解釋關鍵演算法和決策 in examples/webgl-raycaster-bvh/index.html
-- [X] T053 [P] 加入 CSS 樣式: 美化 loading UI, error messages, performance warning in examples/webgl-raycaster-bvh/index.html
-- [ ] T054 依據 quickstart.md 執行完整驗證測試 (3 項性能測試)
-- [ ] T055 驗證所有 8 項成功標準 (SC-001 to SC-008) from spec.md
+- [ ] T045 [P] 整合所有 GUI 控制項到統一面板（右上角）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T046 [P] 加入 GUI 控制項：Auto Rotate 開關（預設 true）於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T047 優化載入流程：載入完成後自動隱藏進度 UI 於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T048 實作 WebGL 支援檢測與友善錯誤訊息於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T049 [P] 加入頁面標題和基本說明註解於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T050 [P] 程式碼清理：移除 console.log、統一命名風格於 `examples/webgl-raycaster-bvh/index.html`
+- [ ] T051 執行 quickstart.md 驗證流程，確認所有測試場景通過
 
 ---
 
@@ -154,113 +154,129 @@
 ### Phase Dependencies
 
 - **Setup (Phase 1)**: 無相依性 - 可立即開始
-- **Foundational (Phase 2)**: 依賴 Setup 完成 - **阻塞所有使用者故事**
-- **User Stories (Phase 3-6)**: 所有故事依賴 Foundational 完成
-  - 故事可並行實作 (如有足夠人力)
-  - 或依優先順序循序實作 (P1 → P2 → P3 → P3)
-- **Polish (Phase 7)**: 依賴所有所需使用者故事完成
+- **Foundational (Phase 2)**: 依賴 Setup 完成 - **阻擋所有使用者故事**
+- **User Story 1 (Phase 3)**: 依賴 Foundational 完成 - 可先完成作為 MVP
+- **User Story 2 (Phase 4)**: 依賴 Foundational 完成 - 可與 US1 平行進行
+- **User Story 3 (Phase 5)**: 依賴 Foundational 完成 - 需要 BVH 功能（建議在 US1 後）
+- **User Story 4 (Phase 6)**: 依賴 Foundational 完成 - 需要光線視覺化（建議在 US2 後）
+- **Polish (Phase 7)**: 依賴所有使用者故事完成
 
 ### User Story Dependencies
 
-- **User Story 1 (P1)**: Foundational 完成後可開始 - 不依賴其他故事
-- **User Story 2 (P2)**: Foundational 完成後可開始 - 需整合 US1 的 BVH 切換功能
-- **User Story 3 (P3)**: Foundational 完成後可開始 - 需整合 US1 的 BVH 基礎建設
-- **User Story 4 (P3)**: Foundational 完成後可開始 - 需整合 US2 的光線產生和視覺化
-
-### Within Each User Story
-
-- GUI 控制優先於互動邏輯
-- 核心功能優先於視覺優化
-- 完成故事後才進入下個優先級
+```
+Setup (T001-T004)
+       │
+       ▼
+Foundational (T005-T016)
+       │
+       ├────────────────────────────────────┐
+       │                                    │
+       ▼                                    ▼
+User Story 1 (T017-T026)          User Story 2 (T027-T035)
+BVH 加速效果                       光線視覺化
+       │                                    │
+       ▼                                    ▼
+User Story 3 (T036-T040)          User Story 4 (T041-T044)
+BVH 視覺化                         光線數量控制
+       │                                    │
+       └──────────────┬─────────────────────┘
+                      │
+                      ▼
+               Polish (T045-T051)
+```
 
 ### Parallel Opportunities
 
-- Setup 階段: T003 和 T004 可並行
-- Foundational 階段: T006, T007 可在 T005 完成後並行
-- User Story 1: T018, T019 可並行開始
-- User Story 2: T026, T027 可並行開始
-- User Story 3: T035, T036 可並行開始
-- User Story 4: T040, T041 可並行開始
-- Polish 階段: 所有標記 [P] 的任務可並行
-
----
-
-## Parallel Example: User Story 1 Implementation
-
+**Setup Phase:**
 ```bash
-# Terminal 1: 實作效能監控
-開始 T018 (Stats.js 整合)
-開始 T019 (PerformanceMonitor 類別)
+# 可平行執行:
+T003 [P] CDN 引用
+T004 [P] CSS 樣式
+```
 
-# Terminal 2: 等待 T018, T019 完成後
-開始 T020 (updatePerformanceMetrics)
-開始 T021 (checkPerformanceWarning)
+**Foundational Phase:**
+```bash
+# 可平行執行:
+T008 [P] OrbitControls
+T009 [P] 光照系統
+T013 [P] 載入進度 UI
+```
 
-# Terminal 3: 等待基礎完成後
-開始 T022 (toggleBVH)
-開始 T023 (GUI 控制介面)
+**User Story 1:**
+```bash
+# 可平行執行:
+T019 [P] generateRayOrigins()
+T021 [P] Stats.js 整合
+T024 [P] lil-gui 基礎結構
+```
 
-# Terminal 4: 整合所有組件
-開始 T024 (animate 迴圈更新)
-開始 T025 (警告 UI)
+**User Story 2:**
+```bash
+# 可平行執行:
+T027 [P] RayOrigins InstancedMesh
+T028 [P] IntersectionPoints InstancedMesh
+T034 [P] Ray Opacity GUI
+```
+
+**User Story 3 & 4:**
+```bash
+# 可平行執行:
+T039 [P] BVH Visualization GUI
+T043 [P] Ray Count GUI
 ```
 
 ---
 
 ## Implementation Strategy
 
-### MVP First (Minimum Viable Product)
+### MVP First (只完成 User Story 1)
 
-建議以 **User Story 1** 作為 MVP:
-- 證明 BVH 加速效果 (核心價值)
-- 包含基礎場景、模型載入、效能監控
-- 可獨立展示和驗證
-- 完成 MVP 後再擴展 US2, US3, US4
+1. ✅ Complete Phase 1: Setup (T001-T004)
+2. ✅ Complete Phase 2: Foundational (T005-T016)
+3. ✅ Complete Phase 3: User Story 1 (T017-T026)
+4. **STOP and VALIDATE**: 測試 BVH 加速效果
+5. 如果需要可部署展示 MVP
 
 ### Incremental Delivery
 
-1. **Sprint 1**: Setup + Foundational (T001-T017) - 建立可載入模型的基礎場景
-2. **Sprint 2**: User Story 1 (T018-T025) - MVP 可展示 BVH 效能差異
-3. **Sprint 3**: User Story 2 (T026-T034) - 加入光線視覺化
-4. **Sprint 4**: User Story 3 & 4 (T035-T046) - 進階控制功能
-5. **Sprint 5**: Polish (T047-T055) - 最終優化和驗證
+1. Setup + Foundational → 基礎架構就緒
+2. Add User Story 1 → BVH 效能比較功能（MVP!）
+3. Add User Story 2 → 光線視覺化（增強展示效果）
+4. Add User Story 3 → BVH 結構視覺化（教育功能）
+5. Add User Story 4 → 光線數量控制（實驗功能）
+6. 每個故事都增加價值而不影響之前的功能
 
-### Quality Gates
+### Single Developer Strategy
 
-- **每個 Phase 完成後**: 執行手動測試確認功能正常
-- **每個 User Story 完成後**: 執行該故事的獨立測試場景
-- **Phase 7 開始前**: 所有功能需求 (FR-001 to FR-018) 必須完成
-- **最終交付前**: 所有成功標準 (SC-001 to SC-008) 必須達成
-
----
-
-## Task Count Summary
-
-- **Total Tasks**: 55
-- **Setup (Phase 1)**: 4 tasks
-- **Foundational (Phase 2)**: 13 tasks
-- **User Story 1 (Phase 3)**: 8 tasks
-- **User Story 2 (Phase 4)**: 9 tasks
-- **User Story 3 (Phase 5)**: 5 tasks
-- **User Story 4 (Phase 6)**: 7 tasks
-- **Polish (Phase 7)**: 9 tasks
-- **Parallel Opportunities**: 18 tasks marked [P]
-- **MVP Scope**: Phase 1 + Phase 2 + Phase 3 (25 tasks)
+建議執行順序：
+1. Phase 1 → Phase 2 → Phase 3 (MVP)
+2. Phase 4 → Phase 5 → Phase 6
+3. Phase 7 (最終整合)
 
 ---
 
-## Format Validation ✅
+## Summary
 
-All tasks follow the required checklist format:
-- ✅ All tasks start with `- [ ]` (checkbox)
-- ✅ All tasks have sequential Task IDs (T001-T055)
-- ✅ All user story tasks have [Story] labels ([US1], [US2], [US3], [US4])
-- ✅ Setup and Foundational phases have NO story labels
-- ✅ Polish phase has NO story labels
-- ✅ All parallelizable tasks marked with [P]
-- ✅ All descriptions include exact file paths
+| 項目 | 數量 |
+|------|------|
+| **總任務數** | 51 |
+| **Setup 任務** | 4 (T001-T004) |
+| **Foundational 任務** | 12 (T005-T016) |
+| **User Story 1 任務** | 10 (T017-T026) |
+| **User Story 2 任務** | 9 (T027-T035) |
+| **User Story 3 任務** | 5 (T036-T040) |
+| **User Story 4 任務** | 4 (T041-T044) |
+| **Polish 任務** | 7 (T045-T051) |
+| **可平行任務 [P]** | 18 |
+| **MVP 範圍（建議）** | T001-T026 (26 任務) |
 
 ---
 
-Generated: 2025-12-01
-Based on: spec.md, plan.md, research.md, data-model.md, contracts/component-interface.md, quickstart.md
+## Notes
+
+- 所有程式碼都在單一檔案 `examples/webgl-raycaster-bvh/index.html` 中
+- [P] 標記的任務可同時進行（寫入不同的程式碼區塊）
+- [Story] 標記對應 spec.md 中的使用者故事
+- 每個 Checkpoint 都是可驗證的里程碑
+- 建議在每個 Phase 完成後進行瀏覽器測試
+- 使用 `<!-- Section: XXX -->` 註解來區分程式碼區塊
