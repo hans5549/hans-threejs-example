@@ -21,9 +21,9 @@
 
 **Purpose**: 建立專案目錄結構和基礎檔案
 
-- [ ] T001 建立專案目錄 examples/webgl-buffergeometry-lines/
-- [ ] T002 [P] 建立 fallback 圖片佔位符 examples/webgl-buffergeometry-lines/fallback.png
-- [ ] T003 建立 HTML 基礎結構和樣式 examples/webgl-buffergeometry-lines/index.html
+- [x] T001 建立專案目錄 examples/webgl-buffergeometry-lines/
+- [x] T002 [P] 建立 fallback 圖片佔位符 examples/webgl-buffergeometry-lines/fallback.svg
+- [x] T003 建立 HTML 基礎結構和樣式 examples/webgl-buffergeometry-lines/index.html
 
 ---
 
@@ -33,13 +33,13 @@
 
 **⚠️ CRITICAL**: 必須完成此階段才能開始任何使用者情境的實作
 
-- [ ] T004 設定 import map 和 Three.js/Stats 模組匯入 examples/webgl-buffergeometry-lines/index.html
-- [ ] T005 宣告全域變數和常數（container, camera, scene, renderer, line, segments, r, t）examples/webgl-buffergeometry-lines/index.html
-- [ ] T006 實作 init() 函式骨架（含 try-catch 和 WebGL 錯誤處理）examples/webgl-buffergeometry-lines/index.html
-- [ ] T007 實作 showFallback() 函式 examples/webgl-buffergeometry-lines/index.html
-- [ ] T008 建立 WebGL Fallback 樣式 (.fallback) examples/webgl-buffergeometry-lines/index.html
+- [x] T004 設定 import map 和 Three.js/Stats 模組匯入 examples/webgl-buffergeometry-lines/index.html
+- [x] T005 宣告全域變數和常數（container, camera, scene, renderer, line, segments, r, t）examples/webgl-buffergeometry-lines/index.html
+- [x] T006 實作 init() 函式骨架（含 try-catch 和 WebGL 錯誤處理）examples/webgl-buffergeometry-lines/index.html
+- [x] T007 實作 showFallback() 函式 examples/webgl-buffergeometry-lines/index.html
+- [x] T008 建立 WebGL Fallback 樣式 (.fallback) examples/webgl-buffergeometry-lines/index.html
 
-**Checkpoint**: 基礎架構就緒 - 可開始使用者情境的實作
+**Checkpoint**: 基礎架構就緒 - 可開始使用者情境的實作 ✅
 
 ---
 
@@ -51,18 +51,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] 建立透視相機 (PerspectiveCamera) 並設定 FOV=27, position.z=2750 examples/webgl-buffergeometry-lines/index.html
-- [ ] T010 [US1] 建立場景 (Scene) 和 Timer，連接 document examples/webgl-buffergeometry-lines/index.html
-- [ ] T011 [US1] 建立 BufferGeometry 並產生 10,000 個隨機頂點位置 examples/webgl-buffergeometry-lines/index.html
-- [ ] T012 [US1] 計算並設定頂點顏色（根據位置的 RGB 漸層公式）examples/webgl-buffergeometry-lines/index.html
-- [ ] T013 [US1] 設定 position 和 color 的 Float32BufferAttribute examples/webgl-buffergeometry-lines/index.html
-- [ ] T014 [US1] 建立 LineBasicMaterial (vertexColors: true) examples/webgl-buffergeometry-lines/index.html
-- [ ] T015 [US1] 建立 Line 物件並加入場景，計算 boundingSphere examples/webgl-buffergeometry-lines/index.html
-- [ ] T016 [US1] 建立 WebGLRenderer 並設定尺寸、pixel ratio examples/webgl-buffergeometry-lines/index.html
-- [ ] T017 [US1] 實作 animate() 函式 - Timer 更新和旋轉動畫 (rotation.x/y) examples/webgl-buffergeometry-lines/index.html
-- [ ] T018 [US1] 設定 renderer.setAnimationLoop(animate) 啟動動畫迴圈 examples/webgl-buffergeometry-lines/index.html
+- [x] T009 [US1] 建立透視相機 (PerspectiveCamera) 並設定 FOV=27, position.z=2750 examples/webgl-buffergeometry-lines/index.html
+- [x] T010 [US1] 建立場景 (Scene) 和 Timer，連接 document examples/webgl-buffergeometry-lines/index.html
+- [x] T011 [US1] 建立 BufferGeometry 並產生 10,000 個隨機頂點位置 examples/webgl-buffergeometry-lines/index.html
+- [x] T012 [US1] 計算並設定頂點顏色（根據位置的 RGB 漸層公式）examples/webgl-buffergeometry-lines/index.html
+- [x] T013 [US1] 設定 position 和 color 的 Float32BufferAttribute examples/webgl-buffergeometry-lines/index.html
+- [x] T014 [US1] 建立 LineBasicMaterial (vertexColors: true) examples/webgl-buffergeometry-lines/index.html
+- [x] T015 [US1] 建立 Line 物件並加入場景，計算 boundingSphere examples/webgl-buffergeometry-lines/index.html
+- [x] T016 [US1] 建立 WebGLRenderer 並設定尺寸、pixel ratio examples/webgl-buffergeometry-lines/index.html
+- [x] T017 [US1] 實作 animate() 函式 - Timer 更新和旋轉動畫 (rotation.x/y) examples/webgl-buffergeometry-lines/index.html
+- [x] T018 [US1] 設定 renderer.setAnimationLoop(animate) 啟動動畫迴圈 examples/webgl-buffergeometry-lines/index.html
 
-**Checkpoint**: User Story 1 完成 - 可看到彩色線段旋轉（MVP 可展示）
+**Checkpoint**: User Story 1 完成 - 可看到彩色線段旋轉（MVP 可展示）✅
 
 ---
 
@@ -74,15 +74,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] 實作 generateMorphTargets(geometry) 函式 examples/webgl-buffergeometry-lines/index.html
-- [ ] T020 [US2] 產生 morph target 的隨機位置資料陣列 examples/webgl-buffergeometry-lines/index.html
-- [ ] T021 [US2] 建立 Float32BufferAttribute 並設定 morphTarget.name examples/webgl-buffergeometry-lines/index.html
-- [ ] T022 [US2] 將 morphTarget 加入 geometry.morphAttributes.position examples/webgl-buffergeometry-lines/index.html
-- [ ] T023 [US2] 在 init() 中呼叫 generateMorphTargets() examples/webgl-buffergeometry-lines/index.html
-- [ ] T024 [US2] 在 animate() 中更新 morph 時間變數 t (t += delta * 0.5) examples/webgl-buffergeometry-lines/index.html
-- [ ] T025 [US2] 在 animate() 中更新 morphTargetInfluences[0] = abs(sin(t)) examples/webgl-buffergeometry-lines/index.html
+- [x] T019 [US2] 實作 generateMorphTargets(geometry) 函式 examples/webgl-buffergeometry-lines/index.html
+- [x] T020 [US2] 產生 morph target 的隨機位置資料陣列 examples/webgl-buffergeometry-lines/index.html
+- [x] T021 [US2] 建立 Float32BufferAttribute 並設定 morphTarget.name examples/webgl-buffergeometry-lines/index.html
+- [x] T022 [US2] 將 morphTarget 加入 geometry.morphAttributes.position examples/webgl-buffergeometry-lines/index.html
+- [x] T023 [US2] 在 init() 中呼叫 generateMorphTargets() examples/webgl-buffergeometry-lines/index.html
+- [x] T024 [US2] 在 animate() 中更新 morph 時間變數 t (t += delta * 0.5) examples/webgl-buffergeometry-lines/index.html
+- [x] T025 [US2] 在 animate() 中更新 morphTargetInfluences[0] = abs(sin(t)) examples/webgl-buffergeometry-lines/index.html
 
-**Checkpoint**: User Story 2 完成 - 線段有旋轉 + 形態變換動畫
+**Checkpoint**: User Story 2 完成 - 線段有旋轉 + 形態變換動畫 ✅
 
 ---
 
@@ -94,11 +94,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] 宣告 stats 全域變數 examples/webgl-buffergeometry-lines/index.html
-- [ ] T027 [US3] 在 init() 中建立 Stats 實例並加入 DOM examples/webgl-buffergeometry-lines/index.html
-- [ ] T028 [US3] 在 animate() 結尾呼叫 stats.update() examples/webgl-buffergeometry-lines/index.html
+- [x] T026 [US3] 宣告 stats 全域變數 examples/webgl-buffergeometry-lines/index.html
+- [x] T027 [US3] 在 init() 中建立 Stats 實例並加入 DOM examples/webgl-buffergeometry-lines/index.html
+- [x] T028 [US3] 在 animate() 結尾呼叫 stats.update() examples/webgl-buffergeometry-lines/index.html
 
-**Checkpoint**: User Story 3 完成 - FPS 面板顯示並即時更新
+**Checkpoint**: User Story 3 完成 - FPS 面板顯示並即時更新 ✅
 
 ---
 
@@ -110,12 +110,12 @@
 
 ### Implementation for User Story 4
 
-- [ ] T029 [US4] 實作 onWindowResize() 函式 examples/webgl-buffergeometry-lines/index.html
-- [ ] T030 [US4] 更新 camera.aspect 和呼叫 updateProjectionMatrix() examples/webgl-buffergeometry-lines/index.html
-- [ ] T031 [US4] 更新 renderer.setSize() examples/webgl-buffergeometry-lines/index.html
-- [ ] T032 [US4] 在 init() 中註冊 window resize 事件監聽器 examples/webgl-buffergeometry-lines/index.html
+- [x] T029 [US4] 實作 onWindowResize() 函式 examples/webgl-buffergeometry-lines/index.html
+- [x] T030 [US4] 更新 camera.aspect 和呼叫 updateProjectionMatrix() examples/webgl-buffergeometry-lines/index.html
+- [x] T031 [US4] 更新 renderer.setSize() examples/webgl-buffergeometry-lines/index.html
+- [x] T032 [US4] 在 init() 中註冊 window resize 事件監聽器 examples/webgl-buffergeometry-lines/index.html
 
-**Checkpoint**: User Story 4 完成 - 視窗調整時場景正確適配
+**Checkpoint**: User Story 4 完成 - 視窗調整時場景正確適配 ✅
 
 ---
 
@@ -123,11 +123,11 @@
 
 **Purpose**: 最終驗證和品質確保
 
-- [ ] T033 [P] 建立實際的 fallback.png 圖片（截圖或設計）examples/webgl-buffergeometry-lines/fallback.png
+- [x] T033 [P] 建立實際的 fallback.svg 圖片 examples/webgl-buffergeometry-lines/fallback.svg
 - [ ] T034 驗證 WebGL 不支援時的 fallback 顯示正確
 - [ ] T035 驗證效能達標（≥30 FPS @ 10,000 頂點）
 - [ ] T036 驗證頁面載入時間 ≤3 秒
-- [ ] T037 [P] 程式碼清理和註解
+- [x] T037 [P] 程式碼清理和註解
 - [ ] T038 執行 quickstart.md 驗證流程
 
 ---
