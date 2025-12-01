@@ -24,12 +24,12 @@
 
 **Purpose**: 建立基礎檔案結構和 HTML 框架
 
-- [ ] T001 建立專案目錄 `examples/webgl-video-kinect/`
-- [ ] T002 建立基礎 HTML 結構於 `examples/webgl-video-kinect/index.html`
+- [X] T001 建立專案目錄 `examples/webgl-video-kinect/`
+- [X] T002 建立基礎 HTML 結構於 `examples/webgl-video-kinect/index.html`
   - DOCTYPE、head、body 標籤
   - meta viewport 設定
   - 基本 CSS 樣式（背景色、滿版、資訊標題）
-- [ ] T003 設定 ES Module importmap 於 `examples/webgl-video-kinect/index.html`
+- [X] T003 設定 ES Module importmap 於 `examples/webgl-video-kinect/index.html`
   - Three.js r160+ CDN 路徑
   - lil-gui addon 路徑
 
@@ -41,27 +41,27 @@
 
 **⚠️ CRITICAL**: 必須完成此階段，User Story 才能開始
 
-- [ ] T004 建立 `<video>` 元素於 `examples/webgl-video-kinect/index.html`
+- [X] T004 建立 `<video>` 元素於 `examples/webgl-video-kinect/index.html`
   - 設定 id="video"
   - 設定 loop, muted, crossOrigin, playsinline 屬性
   - 加入 webm 和 mp4 來源（使用 Three.js 官方 kinect 影片 URL）
   - 設定 display:none 隱藏
-- [ ] T005 建立 JavaScript module 區塊和匯入語句於 `examples/webgl-video-kinect/index.html`
+- [X] T005 建立 JavaScript module 區塊和匯入語句於 `examples/webgl-video-kinect/index.html`
   - import THREE
   - import GUI from lil-gui
-- [ ] T006 宣告全域變數於 `examples/webgl-video-kinect/index.html`
+- [X] T006 宣告全域變數於 `examples/webgl-video-kinect/index.html`
   - camera, scene, renderer
   - mouse 物件
   - center (Vector3)
   - windowHalfX, windowHalfY
-- [ ] T007 實作 WebGLRenderer 初始化於 `examples/webgl-video-kinect/index.html`
+- [X] T007 實作 WebGLRenderer 初始化於 `examples/webgl-video-kinect/index.html`
   - setPixelRatio
   - setSize
   - appendChild 到 body
-- [ ] T008 實作 PerspectiveCamera 初始化於 `examples/webgl-video-kinect/index.html`
+- [X] T008 實作 PerspectiveCamera 初始化於 `examples/webgl-video-kinect/index.html`
   - FOV 50, near 1, far 10000
   - 初始位置 (0, 0, 500)
-- [ ] T009 實作 Scene 初始化於 `examples/webgl-video-kinect/index.html`
+- [X] T009 實作 Scene 初始化於 `examples/webgl-video-kinect/index.html`
   - 建立 Scene 實例
   - 設定 center = Vector3(0, 0, -1000)
 
@@ -77,40 +77,40 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] 實作 VideoTexture 建立於 `examples/webgl-video-kinect/index.html`
+- [X] T010 [US1] 實作 VideoTexture 建立於 `examples/webgl-video-kinect/index.html`
   - 從 video 元素建立 VideoTexture
   - 設定 minFilter: NearestFilter
   - 設定 generateMipmaps: false
-- [ ] T011 [US1] 定義 Vertex Shader 程式碼於 `examples/webgl-video-kinect/index.html`
+- [X] T011 [US1] 定義 Vertex Shader 程式碼於 `examples/webgl-video-kinect/index.html`
   - 宣告 uniforms (map, width, height, nearClipping, farClipping, pointSize, zOffset)
   - 定義 Kinect 常數 (XtoZ = 1.11146, YtoZ = 0.83359)
   - 實作深度取樣和 3D 座標轉換邏輯
   - 輸出 vUv, gl_PointSize, gl_Position
-- [ ] T012 [US1] 定義 Fragment Shader 程式碼於 `examples/webgl-video-kinect/index.html`
+- [X] T012 [US1] 定義 Fragment Shader 程式碼於 `examples/webgl-video-kinect/index.html`
   - 接收 vUv varying
   - 從 map 取樣顏色
   - 輸出 gl_FragColor 含透明度 0.2
-- [ ] T013 [US1] 建立 uniforms 物件於 `examples/webgl-video-kinect/index.html`
+- [X] T013 [US1] 建立 uniforms 物件於 `examples/webgl-video-kinect/index.html`
   - map: VideoTexture
   - width: 640, height: 480
   - nearClipping: 850, farClipping: 4000
   - pointSize: 2, zOffset: 1000
-- [ ] T014 [US1] 建立 ShaderMaterial 於 `examples/webgl-video-kinect/index.html`
+- [X] T014 [US1] 建立 ShaderMaterial 於 `examples/webgl-video-kinect/index.html`
   - 傳入 uniforms, vertexShader, fragmentShader
   - 設定 blending: AdditiveBlending
   - 設定 depthTest: false, depthWrite: false
   - 設定 transparent: true
-- [ ] T015 [US1] 建立 BufferGeometry 點雲於 `examples/webgl-video-kinect/index.html`
+- [X] T015 [US1] 建立 BufferGeometry 點雲於 `examples/webgl-video-kinect/index.html`
   - 計算 640 * 480 = 307,200 個頂點位置
   - 初始化 Float32Array positions 陣列
   - 設定每個點的像素座標 (x, y, 0)
   - 設定 position attribute
-- [ ] T016 [US1] 建立 THREE.Points 物件於 `examples/webgl-video-kinect/index.html`
+- [X] T016 [US1] 建立 THREE.Points 物件於 `examples/webgl-video-kinect/index.html`
   - 結合 geometry 和 material
   - 加入 scene
-- [ ] T017 [US1] 實作影片播放控制於 `examples/webgl-video-kinect/index.html`
+- [X] T017 [US1] 實作影片播放控制於 `examples/webgl-video-kinect/index.html`
   - 呼叫 video.play()
-- [ ] T018 [US1] 實作基本 animate 迴圈於 `examples/webgl-video-kinect/index.html`
+- [X] T018 [US1] 實作基本 animate 迴圈於 `examples/webgl-video-kinect/index.html`
   - requestAnimationFrame(animate)
   - renderer.render(scene, camera)
 
@@ -126,15 +126,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] 實作 mousemove 事件處理於 `examples/webgl-video-kinect/index.html`
+- [X] T019 [US2] 實作 mousemove 事件處理於 `examples/webgl-video-kinect/index.html`
   - 計算滑鼠相對視窗中心的偏移
   - 乘以縮放因子 8
   - 更新 mouse.x 和 mouse.y
   - 註冊 document.addEventListener('mousemove', handler)
-- [ ] T020 [US2] 實作相機位置插值於 animate 函式中 `examples/webgl-video-kinect/index.html`
+- [X] T020 [US2] 實作相機位置插值於 animate 函式中 `examples/webgl-video-kinect/index.html`
   - camera.position.x += (mouse.x - camera.position.x) * 0.05
   - camera.position.y += (-mouse.y - camera.position.y) * 0.05
-- [ ] T021 [US2] 實作相機 lookAt 於 animate 函式中 `examples/webgl-video-kinect/index.html`
+- [X] T021 [US2] 實作相機 lookAt 於 animate 函式中 `examples/webgl-video-kinect/index.html`
   - camera.lookAt(center)
 
 **Checkpoint**: User Story 2 完成 - 滑鼠控制相機流暢運作
@@ -149,15 +149,15 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] 建立 lil-gui 實例於 `examples/webgl-video-kinect/index.html`
+- [X] T022 [US3] 建立 lil-gui 實例於 `examples/webgl-video-kinect/index.html`
   - const gui = new GUI()
-- [ ] T023 [US3] 新增 nearClipping 控制項於 `examples/webgl-video-kinect/index.html`
+- [X] T023 [US3] 新增 nearClipping 控制項於 `examples/webgl-video-kinect/index.html`
   - gui.add(uniforms.nearClipping, 'value', 1, 10000, 1).name('Near Clipping')
-- [ ] T024 [P] [US3] 新增 farClipping 控制項於 `examples/webgl-video-kinect/index.html`
+- [X] T024 [P] [US3] 新增 farClipping 控制項於 `examples/webgl-video-kinect/index.html`
   - gui.add(uniforms.farClipping, 'value', 1, 10000, 1).name('Far Clipping')
-- [ ] T025 [P] [US3] 新增 pointSize 控制項於 `examples/webgl-video-kinect/index.html`
+- [X] T025 [P] [US3] 新增 pointSize 控制項於 `examples/webgl-video-kinect/index.html`
   - gui.add(uniforms.pointSize, 'value', 1, 10, 1).name('Point Size')
-- [ ] T026 [P] [US3] 新增 zOffset 控制項於 `examples/webgl-video-kinect/index.html`
+- [X] T026 [P] [US3] 新增 zOffset 控制項於 `examples/webgl-video-kinect/index.html`
   - gui.add(uniforms.zOffset, 'value', 0, 4000, 1).name('Z Offset')
 
 **Checkpoint**: User Story 3 完成 - GUI 控制面板運作正常
@@ -168,16 +168,16 @@
 
 **Purpose**: Edge cases 處理和最終優化
 
-- [ ] T027 實作 window resize 事件處理於 `examples/webgl-video-kinect/index.html`
+- [X] T027 實作 window resize 事件處理於 `examples/webgl-video-kinect/index.html`
   - 更新 windowHalfX, windowHalfY
   - 更新 camera.aspect
   - camera.updateProjectionMatrix()
   - renderer.setSize()
   - 註冊 window.addEventListener('resize', handler)
-- [ ] T028 加入 info 標題元素於 `examples/webgl-video-kinect/index.html`
+- [X] T028 加入 info 標題元素於 `examples/webgl-video-kinect/index.html`
   - 顯示 "three.js webgl - kinect depth video"
   - 包含 Three.js 官網連結
-- [ ] T029 執行 quickstart.md 驗證流程
+- [X] T029 執行 quickstart.md 驗證流程
   - 確認點雲正確顯示
   - 確認滑鼠控制流暢
   - 確認 GUI 參數即時生效
