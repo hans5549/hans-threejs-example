@@ -1,206 +1,207 @@
 # Tasks: WebGL Shader 動態視覺效果
 
-**Feature**: 9-webgl-shader  
-**Date**: 2025-12-01  
-**Plan**: [plan.md](./plan.md)
+**Input**: Design documents from `/specs/9-webgl-shader/`  
+**Prerequisites**: plan.md ✅, spec.md ✅, research.md ✅, data-model.md ✅, contracts/ ✅
+
+## Format: `[ID] [P?] [Story?] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (US1, US2, US3)
+- Include exact file paths in descriptions
 
 ---
 
-## 任務總覽
+## Phase 1: Setup (Shared Infrastructure)
 
-| ID | 任務 | 優先級 | 狀態 | 預估時間 |
-|----|------|--------|------|----------|
-| T1 | 建立基礎 HTML 結構 | P1 | ⬜ TODO | 15 min |
-| T2 | 實作 GLSL Vertex Shader | P1 | ⬜ TODO | 10 min |
-| T3 | 實作 GLSL Fragment Shader (Monjori) | P1 | ⬜ TODO | 15 min |
-| T4 | 實作 Three.js 初始化 | P1 | ⬜ TODO | 20 min |
-| T5 | 實作動畫迴圈 | P1 | ⬜ TODO | 10 min |
-| T6 | 實作視窗調整處理 | P2 | ⬜ TODO | 10 min |
-| T7 | 加入 UI 資訊區塊 | P3 | ⬜ TODO | 10 min |
-| T8 | 視覺驗證測試 | - | ⬜ TODO | 15 min |
+**Purpose**: 專案初始化和基礎結構
 
-**總預估時間**: 約 1.5 小時
+- [ ] T001 Create project directory structure at examples/webgl-shader/
+- [ ] T002 Create base HTML5 document with meta tags in examples/webgl-shader/index.html
+- [ ] T003 [P] Configure Three.js import map (CDN unpkg r160) in examples/webgl-shader/index.html
 
 ---
 
-## 詳細任務
+## Phase 2: Foundational (Blocking Prerequisites)
 
-### T1: 建立基礎 HTML 結構
+**Purpose**: 核心基礎設施，所有使用者故事都依賴此階段
 
-**優先級**: P1  
-**相依性**: 無  
-**產出**: `examples/webgl-shader/index.html`
+**⚠️ CRITICAL**: 此階段必須完成後才能開始使用者故事
 
-**驗收標準**:
-- [ ] HTML5 doctype
-- [ ] 正確的 meta 標籤 (charset, viewport)
-- [ ] 標題設定為 "three.js webgl - shader [Monjori]"
-- [ ] 內嵌 CSS 樣式 (body margin, overflow)
-- [ ] container div 元素
-- [ ] Import map 配置 (Three.js CDN)
+- [ ] T004 [P] Implement inline CSS styles (body margin, overflow, info positioning) in examples/webgl-shader/index.html
+- [ ] T005 [P] Create container div element (#container) in examples/webgl-shader/index.html
+- [ ] T006 [P] Implement GLSL Vertex Shader in <script id="vertexShader"> in examples/webgl-shader/index.html
+- [ ] T007 [P] Implement GLSL Fragment Shader (Monjori) in <script id="fragmentShader"> in examples/webgl-shader/index.html
+
+**Checkpoint**: Foundation ready - 基礎 HTML 結構和 Shader 程式碼已就緒
 
 ---
 
-### T2: 實作 GLSL Vertex Shader
+## Phase 3: User Story 1 - 觀看動態 Shader 視覺效果 (Priority: P1) 🎯 MVP
 
-**優先級**: P1  
-**相依性**: T1  
-**產出**: `<script id="vertexShader">` 區塊
+**Goal**: 開啟網頁立即看到流暢運行的動態視覺效果
 
-**實作內容**:
-```glsl
-varying vec2 vUv;
+**Independent Test**: 開啟 index.html 確認畫面顯示流暢的動態色彩變化
 
-void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 1.0);
-}
-```
+### Implementation for User Story 1
 
-**驗收標準**:
-- [ ] 正確宣告 varying vUv
-- [ ] 傳遞 uv 座標
-- [ ] 輸出頂點位置
+- [ ] T008 [US1] Implement global variables declaration (camera, scene, renderer, uniforms) in examples/webgl-shader/index.html
+- [ ] T009 [US1] Implement init() function - create OrthographicCamera(-1, 1, 1, -1, 0, 1) in examples/webgl-shader/index.html
+- [ ] T010 [US1] Implement init() function - create Scene in examples/webgl-shader/index.html
+- [ ] T011 [US1] Implement init() function - create PlaneGeometry(2, 2) in examples/webgl-shader/index.html
+- [ ] T012 [US1] Implement init() function - create uniforms object { time: { value: 1.0 } } in examples/webgl-shader/index.html
+- [ ] T013 [US1] Implement init() function - create ShaderMaterial with vertex/fragment shaders in examples/webgl-shader/index.html
+- [ ] T014 [US1] Implement init() function - create Mesh and add to Scene in examples/webgl-shader/index.html
+- [ ] T015 [US1] Implement init() function - create WebGLRenderer with pixelRatio and size in examples/webgl-shader/index.html
+- [ ] T016 [US1] Implement init() function - append canvas to container and set animationLoop in examples/webgl-shader/index.html
+- [ ] T017 [US1] Implement animate() function - update time uniform and render scene in examples/webgl-shader/index.html
+- [ ] T018 [US1] Add init() call to start application in examples/webgl-shader/index.html
 
----
-
-### T3: 實作 GLSL Fragment Shader (Monjori)
-
-**優先級**: P1  
-**相依性**: T1  
-**產出**: `<script id="fragmentShader">` 區塊
-
-**實作內容**:
-- 宣告 `varying vec2 vUv`
-- 宣告 `uniform float time`
-- 實作 Monjori 演算法計算顏色
-
-**驗收標準**:
-- [ ] 正確接收 vUv varying
-- [ ] 正確接收 time uniform
-- [ ] 實作完整的 Monjori 顏色計算
-- [ ] 輸出 gl_FragColor
+**Checkpoint**: User Story 1 完成 - 動態視覺效果應可正常顯示和運行
 
 ---
 
-### T4: 實作 Three.js 初始化
+## Phase 4: User Story 2 - 響應式視窗調整 (Priority: P2)
 
-**優先級**: P1  
-**相依性**: T1, T2, T3  
-**產出**: `init()` 函式
+**Goal**: 調整瀏覽器視窗大小時，視覺效果自動適應新尺寸
 
-**實作內容**:
-1. 取得 container 元素
-2. 建立 OrthographicCamera(-1, 1, 1, -1, 0, 1)
-3. 建立 Scene
-4. 建立 PlaneGeometry(2, 2)
-5. 建立 uniforms 物件 `{ time: { value: 1.0 } }`
-6. 建立 ShaderMaterial
-7. 建立 Mesh 並加入 Scene
-8. 建立 WebGLRenderer
-9. 設定 pixelRatio 和 size
-10. 將 canvas 加入 container
-11. 設定 animationLoop
-12. 註冊 resize 事件監聽器
+**Independent Test**: 改變瀏覽器視窗大小並觀察畫面是否正確調整
 
-**驗收標準**:
-- [ ] 所有 Three.js 物件正確建立
-- [ ] Canvas 正確插入 DOM
-- [ ] 無控制台錯誤
+### Implementation for User Story 2
+
+- [ ] T019 [US2] Implement onWindowResize() function - update renderer size in examples/webgl-shader/index.html
+- [ ] T020 [US2] Add resize event listener in init() function in examples/webgl-shader/index.html
+
+**Checkpoint**: User Story 2 完成 - 視窗調整後效果應正常填滿
 
 ---
 
-### T5: 實作動畫迴圈
+## Phase 5: User Story 3 - 資訊展示與來源連結 (Priority: P3)
 
-**優先級**: P1  
-**相依性**: T4  
-**產出**: `animate()` 函式
+**Goal**: 頁面顯示相關資訊和來源連結
 
-**實作內容**:
-```javascript
-function animate() {
-    uniforms['time'].value = performance.now() / 1000;
-    renderer.render(scene, camera);
-}
-```
+**Independent Test**: 檢查頁面上資訊文字和連結是否可點擊
 
-**驗收標準**:
-- [ ] time uniform 每幀更新
-- [ ] 場景正確渲染
-- [ ] 動畫持續運行不中斷
+### Implementation for User Story 3
+
+- [ ] T021 [P] [US3] Create #info div with title text in examples/webgl-shader/index.html
+- [ ] T022 [P] [US3] Add Three.js official website link (target="_blank") in examples/webgl-shader/index.html
+- [ ] T023 [P] [US3] Add Monjori original work link (Pouët, target="_blank") in examples/webgl-shader/index.html
+- [ ] T024 [US3] Style #info div for proper positioning and visibility in examples/webgl-shader/index.html
+
+**Checkpoint**: User Story 3 完成 - 資訊和連結應正確顯示
 
 ---
 
-### T6: 實作視窗調整處理
+## Phase 6: Polish & Validation
 
-**優先級**: P2  
-**相依性**: T4  
-**產出**: `onWindowResize()` 函式
+**Purpose**: 最終驗證和調整
 
-**實作內容**:
-```javascript
-function onWindowResize() {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-```
-
-**驗收標準**:
-- [ ] 視窗調整時自動更新 canvas 尺寸
-- [ ] 效果在各種視窗比例下正確顯示
+- [ ] T025 Run visual verification - confirm dynamic effect displays immediately on page load
+- [ ] T026 Run visual verification - confirm effect continues animating without stutter
+- [ ] T027 Run visual verification - confirm window resize works correctly
+- [ ] T028 Run visual verification - confirm links open in new tabs
+- [ ] T029 [P] Browser test - Chrome latest version
+- [ ] T030 [P] Browser test - Firefox latest version
+- [ ] T031 Run quickstart.md validation
 
 ---
 
-### T7: 加入 UI 資訊區塊
+## Dependencies & Execution Order
 
-**優先級**: P3  
-**相依性**: T1  
-**產出**: `#info` div 元素
-
-**實作內容**:
-- Three.js 官網連結
-- "shader demo" 文字
-- Monjori 原作連結 (Pouët)
-
-**驗收標準**:
-- [ ] 資訊顯示在頁面頂部中央
-- [ ] 連結在新分頁開啟
-- [ ] 樣式清晰可讀
-
----
-
-### T8: 視覺驗證測試
-
-**優先級**: -  
-**相依性**: T1-T7  
-**產出**: 驗證報告
-
-**測試項目**:
-- [ ] 頁面載入後立即顯示動態效果
-- [ ] 效果持續動態變化
-- [ ] 色彩漸變流暢
-- [ ] 調整視窗後效果正常
-- [ ] 連結可點擊並開啟正確網站
-- [ ] 無控制台錯誤或警告
-- [ ] 在 Chrome 測試通過
-- [ ] 在 Firefox 測試通過
-- [ ] 在 Safari 測試通過 (如可用)
-
----
-
-## 實作順序建議
+### Phase Dependencies
 
 ```
-T1 (HTML 結構)
-├── T2 (Vertex Shader) ─┐
-├── T3 (Fragment Shader)├── T4 (初始化)
-└── T7 (UI 資訊)        │     ├── T5 (動畫)
-                        │     └── T6 (Resize)
-                        └── T8 (驗證)
+Phase 1: Setup ──────────────┐
+                             ▼
+Phase 2: Foundational ───────┤
+                             │
+    ┌────────────────────────┼────────────────────────┐
+    ▼                        ▼                        ▼
+Phase 3: US1 (P1)      Phase 4: US2 (P2)       Phase 5: US3 (P3)
+    │                        │                        │
+    └────────────────────────┴────────────────────────┘
+                             │
+                             ▼
+                    Phase 6: Polish
 ```
 
-**建議流程**:
-1. 先完成 T1 建立基礎結構
-2. 平行完成 T2, T3, T7
-3. 完成 T4 整合所有元件
-4. 完成 T5, T6 功能
-5. 最後執行 T8 驗證
+### User Story Dependencies
+
+| User Story | 依賴 | 可平行 |
+|------------|------|--------|
+| US1 (P1) | Phase 2 完成 | 獨立 |
+| US2 (P2) | US1 完成 (需要 renderer) | 依賴 US1 |
+| US3 (P3) | Phase 2 完成 | 可與 US1 平行 |
+
+### Within Each Phase
+
+- Phase 1: T001 → T002 → T003
+- Phase 2: T004, T005, T006, T007 皆可平行
+- Phase 3: T008 → T009-T016 (順序執行) → T017 → T018
+- Phase 4: T019 → T020
+- Phase 5: T021, T022, T023 可平行 → T024
+- Phase 6: 所有驗證任務可平行
+
+### Parallel Opportunities
+
+```bash
+# Phase 2 - 可平行執行:
+T004 (CSS styles)
+T005 (container div)
+T006 (Vertex Shader)
+T007 (Fragment Shader)
+
+# Phase 5 - 可平行執行:
+T021 (info div)
+T022 (Three.js link)
+T023 (Monjori link)
+
+# Phase 6 - 可平行執行:
+T029 (Chrome test)
+T030 (Firefox test)
+```
+
+---
+
+## Implementation Strategy
+
+### MVP First (User Story 1 Only)
+
+1. Complete Phase 1: Setup
+2. Complete Phase 2: Foundational
+3. Complete Phase 3: User Story 1
+4. **STOP and VALIDATE**: 測試動態效果是否正常運行
+5. 如果 MVP 滿足需求，可先部署
+
+### Incremental Delivery
+
+1. Setup + Foundational → 基礎就緒
+2. Add User Story 1 → 獨立測試 → MVP 可用!
+3. Add User Story 2 → 獨立測試 → 響應式支援
+4. Add User Story 3 → 獨立測試 → 完整功能
+
+---
+
+## Task Summary
+
+| 階段 | 任務數 | 預估時間 |
+|------|--------|----------|
+| Phase 1: Setup | 3 | 10 min |
+| Phase 2: Foundational | 4 | 20 min |
+| Phase 3: US1 (MVP) | 11 | 30 min |
+| Phase 4: US2 | 2 | 10 min |
+| Phase 5: US3 | 4 | 10 min |
+| Phase 6: Polish | 7 | 15 min |
+| **Total** | **31** | **~1.5 hr** |
+
+---
+
+## Notes
+
+- [P] tasks = different files/sections, no dependencies
+- [USx] label maps task to specific user story
+- 此專案使用單一 HTML 檔案，所有任務都在同一檔案中
+- 任務編號為連續執行順序
+- 每個 checkpoint 後驗證該使用者故事是否獨立可用
+- 避免: 模糊任務、跨故事依賴
+
