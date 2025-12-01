@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>WebGL Raycaster BVH - 高效能光線投射展示</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eeeeee;
+            color: #333;
+        }
+        
+        canvas {
+            display: block;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        #info a {
+            color: #E91E63;
+            text-decoration: underline;
+            pointer-events: auto;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #333;
+            font-size: 18px;
+            z-index: 1000;
+        }
+        
+        #loading-progress {
+            margin-top: 20px;
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        #loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #E91E63, #FF5722);
+            transition: width 0.3s ease;
+        }
+        
+        #error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(244, 67, 54, 0.9);
+            color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            z-index: 1001;
+            max-width: 500px;
+        }
+        
+        #error h3 {
+            margin: 0 0 10px 0;
+        }
+        
+        #performance-warning {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 152, 0, 0.9);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: none;
+            z-index: 100;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> raycaster - 
+        <a href="https://github.com/gkjohnson/three-mesh-bvh" target="_blank" rel="noopener">three-mesh-bvh</a><br/>
+        展示 BVH 加速結構對光線投射效能的影響。切換「啟用 BVH」觀察 FPS 差異。
+    </div>
+    
+    <div id="loading">
+        <div>載入 3D 模型中...</div>
+        <div id="loading-progress">
+            <div id="loading-bar"></div>
+        </div>
+        <div id="loading-text" style="margin-top: 10px; font-size: 14px; color: #666;">0%</div>
+    </div>
+    
+    <div id="error">
+        <h3>載入失敗</h3>
+        <p id="error-message"></p>
+    </div>
+    
+    <div id="performance-warning">
+        ⚠️ FPS 過低 - 建議減少光線數量或啟用 BVH 加速
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+                "three-mesh-bvh": "https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.3/build/index.module.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast, MeshBVHHelper } from 'three-mesh-bvh';
+        import Stats from 'three/addons/libs/stats.module.js';
+        import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+        // 擴展 Three.js 原型以支援 BVH
+        THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+        THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+        THREE.Mesh.prototype.raycast = acceleratedRaycast;
+
+        // 全域變數
+        let stats;
+        let camera, scene, renderer;
+        let mesh, helper, bvh;
+        let sphereInstance, lineSegments;
+
+        // 可重用變數（避免每幀建立新物件）
+        const _raycaster = new THREE.Raycaster();
+        const _position = new THREE.Vector3();
+        const _quaternion = new THREE.Quaternion();
+        const _scale = new THREE.Vector3(1, 1, 1);
+        const _matrix = new THREE.Matrix4();
+        const _axis = new THREE.Vector3();
+        
+        const MAX_RAYS = 3000;
+        const RAY_COLOR = 0x444444;
+
+        // 參數設定
+        const params = {
+            count: 150,
+            firstHitOnly: true,
+            useBVH: true,
+            displayHelper: false,
+            helperDepth: 10
+        };
+
+        // 效能監控
+        let fpsHistory = [];
+        const FPS_HISTORY_LENGTH = 60;
+        const FPS_WARNING_THRESHOLD = 30;
+        let warningVisible = false;
+        let lastFrameTime = performance.now();
+
+        // 檢查 WebGL 支援
+        function checkWebGLSupport() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                return gl ? { supported: true } : { supported: false, message: '您的瀏覽器不支援 WebGL' };
+            } catch (e) {
+                return { supported: false, message: 'WebGL 初始化失敗: ' + e.message };
+            }
+        }
+
+        // UI 輔助函式
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function updateLoadingProgress(progress, message = null) {
+            const bar = document.getElementById('loading-bar');
+            const text = document.getElementById('loading-text');
+            bar.style.width = progress + '%';
+            text.textContent = message || Math.round(progress) + '%';
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function updatePerformanceWarning(fps) {
+            fpsHistory.push(fps);
+            if (fpsHistory.length > FPS_HISTORY_LENGTH) {
+                fpsHistory.shift();
+            }
+            
+            if (fpsHistory.length >= 30) {
+                const avgFps = fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length;
+                const shouldWarn = avgFps < FPS_WARNING_THRESHOLD;
+                
+                if (shouldWarn !== warningVisible) {
+                    warningVisible = shouldWarn;
+                    document.getElementById('performance-warning').style.display = shouldWarn ? 'block' : 'none';
+                }
+            }
+        }
+
+        // 初始化
+        function init() {
+            // 攝影機
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 100);
+            camera.position.z = 10;
+
+            // 場景
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xeeeeee);
+
+            // 光照
+            const ambient = new THREE.HemisphereLight(0xffffff, 0x999999, 3);
+            scene.add(ambient);
+
+            // 渲染器
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setAnimationLoop(animate);
+            document.body.appendChild(renderer.domElement);
+
+            // Stats
+            stats = new Stats();
+            document.body.appendChild(stats.dom);
+
+            // 光線視覺化 - 預先建立 LineSegments
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_RAYS * 2 * 3), 3));
+            lineSegments = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({
+                color: RAY_COLOR,
+                transparent: true,
+                opacity: 0.25,
+                depthWrite: false
+            }));
+
+            // 光線視覺化 - 預先建立 InstancedMesh（光線起點和交點）
+            sphereInstance = new THREE.InstancedMesh(
+                new THREE.SphereGeometry(),
+                new THREE.MeshBasicMaterial({ color: RAY_COLOR }),
+                2 * MAX_RAYS
+            );
+            sphereInstance.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+            sphereInstance.count = 0;
+
+            scene.add(sphereInstance, lineSegments);
+
+            // 載入模型
+            showLoading(true);
+            const loader = new FBXLoader();
+            
+            // 60 秒逾時
+            const timeoutId = setTimeout(() => {
+                showError('載入逾時 (超過 60 秒)，請檢查網路連線');
+            }, 60000);
+            
+            loader.load(
+                'https://threejs.org/examples/models/fbx/stanford-bunny.fbx',
+                (object) => {
+                    clearTimeout(timeoutId);
+                    
+                    mesh = object.children[0];
+                    const geometry = mesh.geometry;
+                    
+                    // 調整模型位置
+                    geometry.translate(0, 0.5 / 0.0075, 0);
+                    
+                    // 建構 BVH
+                    updateLoadingProgress(100, '建構 BVH 加速結構...');
+                    geometry.computeBoundsTree();
+                    bvh = geometry.boundsTree;
+
+                    if (!params.useBVH) {
+                        geometry.boundsTree = null;
+                    }
+
+                    scene.add(mesh);
+                    mesh.scale.setScalar(0.0075);
+
+                    // 建立 BVH Helper
+                    helper = new MeshBVHHelper(mesh, params.helperDepth);
+                    helper.color.set(0xE91E63);
+                    helper.visible = params.displayHelper;
+                    scene.add(helper);
+                    
+                    showLoading(false);
+                },
+                (xhr) => {
+                    if (xhr.lengthComputable) {
+                        const progress = (xhr.loaded / xhr.total) * 90; // 留 10% 給 BVH 建構
+                        updateLoadingProgress(progress);
+                    }
+                },
+                (error) => {
+                    clearTimeout(timeoutId);
+                    console.error('模型載入失敗:', error);
+                    showError('模型載入失敗: ' + (error.message || '請重新整理頁面重試'));
+                }
+            );
+
+            // 軌道控制
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.minDistance = 5;
+            controls.maxDistance = 75;
+
+            // GUI
+            const gui = new GUI();
+            
+            const rayFolder = gui.addFolder('光線設定');
+            rayFolder.add(params, 'count', 1, MAX_RAYS, 1).name('光線數量');
+            rayFolder.add(params, 'firstHitOnly').name('只檢測第一交點');
+            rayFolder.add(params, 'useBVH').name('啟用 BVH').onChange(v => {
+                if (mesh) {
+                    mesh.geometry.boundsTree = v ? bvh : null;
+                }
+            });
+
+            const helperFolder = gui.addFolder('BVH 視覺化');
+            helperFolder.add(params, 'displayHelper').name('顯示 BVH');
+            helperFolder.add(params, 'helperDepth', 1, 20, 1).name('顯示深度').onChange(v => {
+                if (helper) {
+                    helper.depth = v;
+                    helper.update();
+                }
+            });
+
+            // 視窗大小調整
+            window.addEventListener('resize', onWindowResize);
+            onWindowResize();
+
+            // 初始化光線位置
+            initRays();
+        }
+
+        // 初始化光線起點位置
+        function initRays() {
+            const position = new THREE.Vector3();
+            const quaternion = new THREE.Quaternion();
+            const scale = new THREE.Vector3(1, 1, 1);
+            const matrix = new THREE.Matrix4();
+
+            for (let i = 0; i < MAX_RAYS * 2; i++) {
+                position.randomDirection().multiplyScalar(3.75);
+                matrix.compose(position, quaternion, scale);
+                sphereInstance.setMatrixAt(i, matrix);
+            }
+        }
+
+        // 更新光線（每幀呼叫）
+        function updateRays() {
+            if (!mesh) return;
+
+            _raycaster.firstHitOnly = params.firstHitOnly;
+            const rayCount = params.count;
+            let lineNum = 0;
+
+            for (let i = 0; i < rayCount; i++) {
+                // 取得當前光線起點位置
+                sphereInstance.getMatrixAt(i * 2, _matrix);
+                _matrix.decompose(_position, _quaternion, _scale);
+
+                // 繞原點旋轉（讓光線動起來）
+                const offset = 1e-4 * window.performance.now();
+                _axis.set(
+                    Math.sin(i * 100 + offset),
+                    Math.cos(-i * 10 + offset),
+                    Math.sin(i * 1 + offset),
+                ).normalize();
+                _position.applyAxisAngle(_axis, 0.001);
+
+                // 更新起點位置
+                _scale.setScalar(0.02);
+                _matrix.compose(_position, _quaternion, _scale);
+                sphereInstance.setMatrixAt(i * 2, _matrix);
+
+                // 執行光線投射
+                _raycaster.ray.origin.copy(_position);
+                _raycaster.ray.direction.copy(_position).multiplyScalar(-1).normalize();
+
+                // 更新交點和光線
+                const hits = _raycaster.intersectObject(mesh);
+                if (hits.length !== 0) {
+                    const hit = hits[0];
+                    const point = hit.point;
+                    _scale.setScalar(0.01);
+                    _matrix.compose(point, _quaternion, _scale);
+                    sphereInstance.setMatrixAt(i * 2 + 1, _matrix);
+
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, _position.x, _position.y, _position.z);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, point.x, point.y, point.z);
+                } else {
+                    sphereInstance.setMatrixAt(i * 2 + 1, _matrix);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, _position.x, _position.y, _position.z);
+                    lineSegments.geometry.attributes.position.setXYZ(lineNum++, 0, 0, 0);
+                }
+            }
+
+            sphereInstance.count = rayCount * 2;
+            sphereInstance.instanceMatrix.needsUpdate = true;
+
+            lineSegments.geometry.setDrawRange(0, lineNum);
+            lineSegments.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // 視窗大小調整
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // 動畫迴圈
+        function animate() {
+            // 計算 FPS
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+            const fps = 1000 / deltaTime;
+            updatePerformanceWarning(fps);
+            
+            render();
+            stats.update();
+        }
+
+        // 渲染
+        function render() {
+            if (helper) {
+                helper.visible = params.displayHelper;
+            }
+
+            if (mesh) {
+                mesh.rotation.y += 0.002;
+                mesh.updateMatrixWorld();
+            }
+
+            updateRays();
+            renderer.render(scene, camera);
+        }
+
+        // 啟動
+        const webglCheck = checkWebGLSupport();
+        if (webglCheck.supported) {
+            init();
+        } else {
+            showError(webglCheck.message + '。請使用支援 WebGL 的現代瀏覽器（Chrome、Firefox、Safari、Edge）。');
+        }
+    </script>
+</body>
+</html>
