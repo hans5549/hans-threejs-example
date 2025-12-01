@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>three.js webgl - kinect depth video</title>
+	<style>
+		body {
+			margin: 0;
+			background-color: #000000;
+			overflow: hidden;
+		}
+		#info {
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			color: #fff;
+			font-family: Arial, sans-serif;
+		}
+		a { color: #9cf; }
+	</style>
+</head>
+<body>
+	<div id="info">
+		<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - kinect depth video
+	</div>
+
+	<video id="video" loop muted crossOrigin="anonymous" playsinline style="display:none">
+		<source src="https://threejs.org/examples/textures/kinect.webm" type="video/webm">
+		<source src="https://threejs.org/examples/textures/kinect.mp4" type="video/mp4">
+	</video>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+			"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+		}
+	}
+	</script>
+
+	<script type="module">
+
+		import * as THREE from 'three';
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+		let camera, scene, renderer;
+		let mouse = { x: 0, y: 0 };
+		let center;
+		let windowHalfX = window.innerWidth / 2;
+		let windowHalfY = window.innerHeight / 2;
+
+		init();
+
+		function init() {
+
+			// Scene initialization
+			scene = new THREE.Scene();
+			center = new THREE.Vector3( 0, 0, -1000 );
+
+			// Camera initialization
+			camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.set( 0, 0, 500 );
+
+			// Video element and VideoTexture
+			const video = document.getElementById( 'video' );
+			const texture = new THREE.VideoTexture( video );
+			texture.minFilter = THREE.NearestFilter;
+			texture.generateMipmaps = false;
+
+			// Video dimensions
+			const width = 640;
+			const height = 480;
+
+			// Vertex Shader
+			const vertexShader = `
+				uniform sampler2D map;
+				uniform float width;
+				uniform float height;
+				uniform float nearClipping, farClipping;
+				uniform float pointSize;
+				uniform float zOffset;
+
+				varying vec2 vUv;
+
+				const float XtoZ = 1.11146;
+				const float YtoZ = 0.83359;
+
+				void main() {
+
+					vUv = vec2( position.x / width, position.y / height );
+
+					vec4 color = texture2D( map, vUv );
+					float depth = ( color.r + color.g + color.b ) / 3.0;
+
+					float z = ( 1.0 - depth ) * ( farClipping - nearClipping ) + nearClipping;
+
+					vec4 pos = vec4(
+						( position.x / width - 0.5 ) * z * XtoZ,
+						( position.y / height - 0.5 ) * z * YtoZ,
+						- z + zOffset,
+						1.0
+					);
+
+					gl_PointSize = pointSize;
+					gl_Position = projectionMatrix * modelViewMatrix * pos;
+
+				}
+			`;
+
+			// Fragment Shader
+			const fragmentShader = `
+				uniform sampler2D map;
+
+				varying vec2 vUv;
+
+				void main() {
+
+					vec4 color = texture2D( map, vUv );
+					gl_FragColor = vec4( color.r, color.g, color.b, 0.2 );
+
+				}
+			`;
+
+			// Shader uniforms
+			const uniforms = {
+				map: { value: texture },
+				width: { value: width },
+				height: { value: height },
+				nearClipping: { value: 850 },
+				farClipping: { value: 4000 },
+				pointSize: { value: 2 },
+				zOffset: { value: 1000 }
+			};
+
+			// ShaderMaterial
+			const material = new THREE.ShaderMaterial( {
+				uniforms: uniforms,
+				vertexShader: vertexShader,
+				fragmentShader: fragmentShader,
+				blending: THREE.AdditiveBlending,
+				depthTest: false,
+				depthWrite: false,
+				transparent: true
+			} );
+
+			// BufferGeometry for point cloud (640 x 480 = 307,200 points)
+			const geometry = new THREE.BufferGeometry();
+			const positions = new Float32Array( width * height * 3 );
+
+			for ( let i = 0, j = 0; i < positions.length; i += 3, j ++ ) {
+
+				positions[ i ] = j % width;
+				positions[ i + 1 ] = Math.floor( j / width );
+				positions[ i + 2 ] = 0;
+
+			}
+
+			geometry.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+
+			// Points mesh
+			const mesh = new THREE.Points( geometry, material );
+			scene.add( mesh );
+
+			// WebGL Renderer
+			renderer = new THREE.WebGLRenderer();
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			// GUI Controls
+			const gui = new GUI();
+			gui.add( uniforms.nearClipping, 'value', 1, 10000, 1 ).name( 'Near Clipping' );
+			gui.add( uniforms.farClipping, 'value', 1, 10000, 1 ).name( 'Far Clipping' );
+			gui.add( uniforms.pointSize, 'value', 1, 10, 1 ).name( 'Point Size' );
+			gui.add( uniforms.zOffset, 'value', 0, 4000, 1 ).name( 'Z Offset' );
+
+			// Mouse move event handler
+			document.addEventListener( 'mousemove', onDocumentMouseMove );
+
+			// Window resize event handler
+			window.addEventListener( 'resize', onWindowResize );
+
+			// Start video playback
+			video.play();
+
+			// Start animation loop
+			animate();
+
+		}
+
+		function onDocumentMouseMove( event ) {
+
+			mouse.x = ( event.clientX - windowHalfX ) * 8;
+			mouse.y = ( event.clientY - windowHalfY ) * 8;
+
+		}
+
+		function onWindowResize() {
+
+			windowHalfX = window.innerWidth / 2;
+			windowHalfY = window.innerHeight / 2;
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		}
+
+		function animate() {
+
+			requestAnimationFrame( animate );
+
+			// Camera position interpolation (smooth follow)
+			camera.position.x += ( mouse.x - camera.position.x ) * 0.05;
+			camera.position.y += ( - mouse.y - camera.position.y ) * 0.05;
+
+			// Camera look at center
+			camera.lookAt( center );
+
+			renderer.render( scene, camera );
+
+		}
+
+	</script>
+</body>
+</html>
