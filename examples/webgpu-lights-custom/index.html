@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Three.js - WebGPU Custom Lighting Model</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background-color: #000000;
+			color: #ffffff;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			overflow: hidden;
+		}
+
+		#info {
+			position: absolute;
+			top: 20px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			pointer-events: none;
+		}
+
+		#info h1 {
+			font-size: 1.5rem;
+			font-weight: 300;
+			margin-bottom: 0.5rem;
+		}
+
+		#info p {
+			font-size: 0.9rem;
+			opacity: 0.7;
+		}
+
+		#info a {
+			color: #80c0ff;
+			pointer-events: auto;
+		}
+
+		#loading {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #000000;
+			z-index: 200;
+		}
+
+		#loading.hidden {
+			display: none;
+		}
+
+		.spinner {
+			width: 50px;
+			height: 50px;
+			border: 3px solid rgba(255, 255, 255, 0.1);
+			border-top-color: #ffffff;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+			margin-bottom: 20px;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
+
+		#loading p {
+			font-size: 1rem;
+			opacity: 0.8;
+		}
+
+		#fallback {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: none;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #000000;
+			z-index: 300;
+			padding: 20px;
+			text-align: center;
+		}
+
+		#fallback.visible {
+			display: flex;
+		}
+
+		#fallback img {
+			max-width: 80%;
+			max-height: 60%;
+			border-radius: 8px;
+			margin-bottom: 20px;
+		}
+
+		#fallback h2 {
+			font-size: 1.5rem;
+			margin-bottom: 10px;
+			color: #ff6b6b;
+		}
+
+		#fallback p {
+			font-size: 1rem;
+			opacity: 0.8;
+			max-width: 600px;
+			line-height: 1.6;
+		}
+
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="info">
+		<h1>WebGPU Custom Lighting Model</h1>
+		<p>
+			使用自訂光照模型的 50 萬粒子點雲 - 
+			<a href="https://threejs.org" target="_blank" rel="noopener">Three.js</a>
+		</p>
+	</div>
+
+	<div id="loading">
+		<div class="spinner"></div>
+		<p>正在初始化 WebGPU...</p>
+	</div>
+
+	<div id="fallback">
+		<img src="assets/fallback.svg" alt="WebGPU Custom Lighting Model Preview">
+		<h2>您的瀏覽器不支援 WebGPU</h2>
+		<p>
+			此範例需要 WebGPU 支援。請使用最新版的 Chrome 113+、Edge 113+ 或啟用 WebGPU flag 的 Firefox Nightly。
+			<br><br>
+			上方圖片展示了此範例的預期效果。
+		</p>
+	</div>
+
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.webgpu.js",
+			"three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.webgpu.js",
+			"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+		}
+	}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three/webgpu';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+		// TSL 函式從 THREE 命名空間取得
+		const { color, lights } = THREE;
+
+		// WebGPU 支援偵測
+		if ( !navigator.gpu ) {
+
+			document.getElementById( 'loading' ).classList.add( 'hidden' );
+			document.getElementById( 'fallback' ).classList.add( 'visible' );
+			throw new Error( 'WebGPU not supported' );
+
+		}
+
+		// 全域變數
+		let camera, scene, renderer, controls;
+		let light1, light2, light3;
+
+		// 自訂光照模型
+		class CustomLightingModel extends THREE.LightingModel {
+
+			direct( { lightColor, reflectedLight } ) {
+
+				reflectedLight.directDiffuse.addAssign( lightColor );
+
+			}
+
+		}
+
+		// 共用幾何
+		const sphereGeometry = new THREE.SphereGeometry( 0.02, 16, 8 );
+
+		// 初始化
+		init();
+
+		async function init() {
+
+			// 建立相機
+			camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
+			camera.position.z = 1.5;
+
+			// 建立場景
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0x000000 );
+
+			// 光源工廠函式
+			const addLight = ( hexColor ) => {
+
+				// 自發光材質（不受其他光源影響）
+				const material = new THREE.NodeMaterial();
+				material.colorNode = color( hexColor );
+				material.lightsNode = lights(); // 空陣列 = 忽略所有場景光源
+
+				// 光源指示小球
+				const mesh = new THREE.Mesh( sphereGeometry, material );
+
+				// 點光源
+				const light = new THREE.PointLight( hexColor, 0.1, 1 );
+				light.add( mesh );
+
+				scene.add( light );
+				return light;
+
+			};
+
+			// 建立三個點光源
+			light1 = addLight( 0xffaa00 ); // 橙色
+			light2 = addLight( 0x0040ff ); // 藍色
+			light3 = addLight( 0x80ff80 ); // 綠色
+
+			// 建立選擇性光源節點
+			const allLightsNode = lights( [ light1, light2, light3 ] );
+
+			// 建立自訂光照模型
+			const lightingModel = new CustomLightingModel();
+
+			// 將光照模型應用到光源節點
+			const lightingModelContext = allLightsNode.context( { lightingModel } );
+
+			// 產生 50 萬個隨機點
+			const points = [];
+			for ( let i = 0; i < 500000; i ++ ) {
+
+				const x = ( Math.random() - 0.5 ) * 3; // ±1.5
+				const y = ( Math.random() - 0.5 ) * 3;
+				const z = ( Math.random() - 0.5 ) * 3;
+				points.push( new THREE.Vector3( x, y, z ) );
+
+			}
+
+			// 建立點雲幾何
+			const geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+			// 建立點雲材質
+			const materialPoints = new THREE.PointsNodeMaterial();
+			materialPoints.lightsNode = lightingModelContext;
+
+			// 建立點雲物件
+			const pointCloud = new THREE.Points( geometry, materialPoints );
+			scene.add( pointCloud );
+
+			// 建立 WebGPU 渲染器
+			renderer = new THREE.WebGPURenderer( { antialias: true } );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setAnimationLoop( animate );
+			document.body.appendChild( renderer.domElement );
+
+			// 建立 OrbitControls
+			controls = new OrbitControls( camera, renderer.domElement );
+			controls.minDistance = 0;
+			controls.maxDistance = 4;
+
+			// 綁定視窗大小變更事件
+			window.addEventListener( 'resize', onWindowResize );
+
+			// 隱藏載入動畫
+			document.getElementById( 'loading' ).classList.add( 'hidden' );
+
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		}
+
+		function animate() {
+
+			const time = Date.now() * 0.001;
+			const scale = 0.5;
+
+			// 光源 1 - 頻率 0.3
+			light1.position.x = Math.sin( time * 0.3 ) * scale;
+			light1.position.y = Math.cos( time * 0.5 ) * scale;
+			light1.position.z = Math.cos( time * 0.3 ) * scale;
+
+			// 光源 2 - 頻率 0.5
+			light2.position.x = Math.cos( time * 0.5 ) * scale;
+			light2.position.y = Math.sin( time * 0.3 ) * scale;
+			light2.position.z = Math.sin( time * 0.5 ) * scale;
+
+			// 光源 3 - 頻率 0.7
+			light3.position.x = Math.sin( time * 0.7 ) * scale;
+			light3.position.y = Math.cos( time * 0.7 ) * scale;
+			light3.position.z = Math.sin( time * 0.3 ) * scale;
+
+			// 場景緩慢旋轉
+			scene.rotation.y = time * 0.1;
+
+			// 渲染
+			renderer.render( scene, camera );
+
+		}
+	</script>
+</body>
+</html>
