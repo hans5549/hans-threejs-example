@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  
+  <!-- Random colored lines to represent the visualization -->
+  <g stroke-width="0.5" fill="none" opacity="0.8">
+    <line x1="400" y1="300" x2="150" y2="100" stroke="#ff6666"/>
+    <line x1="400" y1="300" x2="650" y2="120" stroke="#66ff66"/>
+    <line x1="400" y1="300" x2="200" y2="480" stroke="#6666ff"/>
+    <line x1="400" y1="300" x2="700" y2="400" stroke="#ffff66"/>
+    <line x1="400" y1="300" x2="100" y2="300" stroke="#ff66ff"/>
+    <line x1="400" y1="300" x2="500" y2="550" stroke="#66ffff"/>
+    <line x1="400" y1="300" x2="300" y2="50" stroke="#ffaa66"/>
+    <line x1="400" y1="300" x2="750" y2="250" stroke="#aa66ff"/>
+    <line x1="400" y1="300" x2="50" y2="450" stroke="#66ffaa"/>
+    <line x1="400" y1="300" x2="600" y2="80" stroke="#ff6699"/>
+    <line x1="400" y1="300" x2="180" y2="200" stroke="#99ff66"/>
+    <line x1="400" y1="300" x2="680" y2="520" stroke="#6699ff"/>
+    <line x1="400" y1="300" x2="250" y2="580" stroke="#ffcc66"/>
+    <line x1="400" y1="300" x2="550" y2="30" stroke="#cc66ff"/>
+    <line x1="400" y1="300" x2="80" y2="180" stroke="#66ffcc"/>
+  </g>
+  
+  <!-- More scattered lines -->
+  <g stroke-width="0.3" fill="none" opacity="0.5">
+    <line x1="200" y1="150" x2="600" y2="450" stroke="#ff8888"/>
+    <line x1="150" y1="400" x2="650" y2="200" stroke="#88ff88"/>
+    <line x1="300" y1="100" x2="500" y2="500" stroke="#8888ff"/>
+    <line x1="100" y1="250" x2="700" y2="350" stroke="#ffff88"/>
+    <line x1="450" y1="50" x2="350" y2="550" stroke="#ff88ff"/>
+    <line x1="50" y1="350" x2="750" y2="250" stroke="#88ffff"/>
+  </g>
+  
+  <!-- Title text -->
+  <text x="400" y="560" text-anchor="middle" fill="#666" font-family="monospace" font-size="14">
+    WebGL BufferGeometry Lines
+  </text>
+</svg>
