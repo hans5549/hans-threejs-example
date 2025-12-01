@@ -24,11 +24,11 @@ Based on plan.md structure:
 
 **Purpose**: Create directory structure and basic HTML framework
 
-- [ ] T001 Create directory `examples/webgl-custom-attributes-lines/`
-- [ ] T002 Create HTML boilerplate with DOCTYPE, head, and body structure in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T003 Add import map configuration for Three.js r174+ and addons in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T001 Create directory `examples/webgl-custom-attributes-lines/`
+- [x] T002 Create HTML boilerplate with DOCTYPE, head, and body structure in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T003 Add import map configuration for Three.js r174+ and addons in `examples/webgl-custom-attributes-lines/index.html`
 
-**Checkpoint**: Basic HTML file exists with import map ready
+**Checkpoint**: ✅ Basic HTML file exists with import map ready
 
 ---
 
@@ -38,16 +38,16 @@ Based on plan.md structure:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add CSS styles for full-viewport rendering in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T005 Add container div and info div elements in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T006 Add vertex shader script (id="vertexshader") with uniform/attribute/varying declarations in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T007 Add fragment shader script (id="fragmentshader") with color/opacity output in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T008 Implement WebGLRenderer initialization (antialias, pixelRatio, size) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T009 Implement Scene and PerspectiveCamera setup (fov:30, z:400) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T010 Implement uniforms object with amplitude, opacity, and color in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T011 Implement ShaderMaterial with AdditiveBlending, depthTest:false, transparent:true in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T004 Add CSS styles for full-viewport rendering in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T005 Add container div and info div elements in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T006 Add vertex shader script (id="vertexshader") with uniform/attribute/varying declarations in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T007 Add fragment shader script (id="fragmentshader") with color/opacity output in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T008 Implement WebGLRenderer initialization (antialias, pixelRatio, size) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T009 Implement Scene and PerspectiveCamera setup (fov:30, z:400) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T010 Implement uniforms object with amplitude, opacity, and color in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T011 Implement ShaderMaterial with AdditiveBlending, depthTest:false, transparent:true in `examples/webgl-custom-attributes-lines/index.html`
 
-**Checkpoint**: Foundation ready - renderer, scene, camera, shaders, and material configured
+**Checkpoint**: ✅ Foundation ready - renderer, scene, camera, shaders, and material configured
 
 ---
 
@@ -59,20 +59,20 @@ Based on plan.md structure:
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement FontLoader to load Helvetiker Bold font from CDN in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T013 [US1] Implement init(font) function to create TextGeometry with specified parameters (size:50, depth:15) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T014 [US1] Implement geometry.center() to center TextGeometry at origin in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T015 [US1] Implement displacement BufferAttribute setup (vec3 per vertex, random initial values) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T016 [US1] Implement customColor BufferAttribute setup (vec3 per vertex, HSL-based colors) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T017 [US1] Create THREE.Line with geometry and shaderMaterial, add to scene in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T018 [US1] Implement initWithFallback() function with BoxGeometry (100x100x100) for font load failure in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T019 [US1] Implement render() function with line.rotation.y animation (0.25 * time) in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T020 [US1] Implement amplitude uniform update with sin wave (0.5 * time) in render() in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T021 [US1] Implement color uniform HSL offset animation (0.0005 per frame) in render() in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T022 [US1] Implement displacement array random update with needsUpdate flag in render() in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T023 [US1] Implement animate() function with renderer.setAnimationLoop() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T012 [US1] Implement FontLoader to load Helvetiker Bold font from CDN in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T013 [US1] Implement init(font) function to create TextGeometry with specified parameters (size:50, depth:15) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T014 [US1] Implement geometry.center() to center TextGeometry at origin in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T015 [US1] Implement displacement BufferAttribute setup (vec3 per vertex, random initial values) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T016 [US1] Implement customColor BufferAttribute setup (vec3 per vertex, HSL-based colors) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T017 [US1] Create THREE.Line with geometry and shaderMaterial, add to scene in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T018 [US1] Implement initWithFallback() function with BoxGeometry (100x100x100) for font load failure in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T019 [US1] Implement render() function with line.rotation.y animation (0.25 * time) in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T020 [US1] Implement amplitude uniform update with sin wave (0.5 * time) in render() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T021 [US1] Implement color uniform HSL offset animation (0.0005 per frame) in render() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T022 [US1] Implement displacement array random update with needsUpdate flag in render() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T023 [US1] Implement animate() function with renderer.setAnimationLoop() in `examples/webgl-custom-attributes-lines/index.html`
 
-**Checkpoint**: User Story 1 完成 - 3D 文字線條動畫可正常運作
+**Checkpoint**: ✅ User Story 1 完成 - 3D 文字線條動畫可正常運作
 
 ---
 
@@ -84,12 +84,12 @@ Based on plan.md structure:
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Implement onWindowResize() function to update camera.aspect in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T025 [US2] Add camera.updateProjectionMatrix() call in onWindowResize() in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T026 [US2] Add renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T027 [US2] Add window.addEventListener('resize', onWindowResize) in initialization in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T024 [US2] Implement onWindowResize() function to update camera.aspect in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T025 [US2] Add camera.updateProjectionMatrix() call in onWindowResize() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T026 [US2] Add renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T027 [US2] Add window.addEventListener('resize', onWindowResize) in initialization in `examples/webgl-custom-attributes-lines/index.html`
 
-**Checkpoint**: User Story 2 完成 - 視窗調整時場景正確重新渲染
+**Checkpoint**: ✅ User Story 2 完成 - 視窗調整時場景正確重新渲染
 
 ---
 
@@ -101,11 +101,11 @@ Based on plan.md structure:
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Import Stats module from three/addons/libs/stats.module.js in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T029 [US3] Initialize Stats instance and append to document.body in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T030 [US3] Add stats.update() call in animate() function in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T028 [US3] Import Stats module from three/addons/libs/stats.module.js in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T029 [US3] Initialize Stats instance and append to document.body in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T030 [US3] Add stats.update() call in animate() function in `examples/webgl-custom-attributes-lines/index.html`
 
-**Checkpoint**: User Story 3 完成 - Stats 面板顯示並即時更新
+**Checkpoint**: ✅ User Story 3 完成 - Stats 面板顯示並即時更新
 
 ---
 
@@ -113,9 +113,9 @@ Based on plan.md structure:
 
 **Purpose**: Final validation and documentation
 
-- [ ] T031 [P] Add WebGL support detection with fallback message in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T032 [P] Add console.warn for font load failure in FontLoader error callback in `examples/webgl-custom-attributes-lines/index.html`
-- [ ] T033 [P] Update page title to "three.js webgl - custom attributes [lines]" in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T031 [P] Add WebGL support detection with fallback message in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T032 [P] Add console.warn for font load failure in FontLoader error callback in `examples/webgl-custom-attributes-lines/index.html`
+- [x] T033 [P] Update page title to "three.js webgl - custom attributes [lines]" in `examples/webgl-custom-attributes-lines/index.html`
 - [ ] T034 Run quickstart.md validation (manual browser test on Chrome, Firefox, Safari, Edge)
 - [ ] T035 Verify FPS ≥ 30 on target browsers
 - [ ] T036 Update README.md to include new example link (if applicable)
