@@ -25,10 +25,10 @@
 
 **Purpose**: 專案初始化和基本結構建立
 
-- [ ] T001 建立範例目錄結構 `examples/webgpu-lights-custom/` 和 `examples/webgpu-lights-custom/assets/`
-- [ ] T002 建立基本 HTML 結構 `examples/webgpu-lights-custom/index.html`（doctype, head, body）
-- [ ] T003 [P] 設定 ES Modules import map（three, three/webgpu, three/tsl, three/addons/）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T004 [P] 建立 WebGPU 不支援時的 fallback 圖片 `examples/webgpu-lights-custom/assets/fallback.png`
+- [X] T001 建立範例目錄結構 `examples/webgpu-lights-custom/` 和 `examples/webgpu-lights-custom/assets/`
+- [X] T002 建立基本 HTML 結構 `examples/webgpu-lights-custom/index.html`（doctype, head, body）
+- [X] T003 [P] 設定 ES Modules import map（three, three/webgpu, three/tsl, three/addons/）在 `examples/webgpu-lights-custom/index.html`
+- [X] T004 [P] 建立 WebGPU 不支援時的 fallback 圖片 `examples/webgpu-lights-custom/assets/fallback.svg`
 
 ---
 
@@ -38,15 +38,15 @@
 
 **⚠️ 關鍵**: 此階段完成前無法開始任何使用者故事
 
-- [ ] T005 實作 WebGPU 支援偵測邏輯（檢查 navigator.gpu）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T006 建立 fallback UI 元素（圖片容器 + 說明文字）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T007 [P] 建立 CSS 基礎樣式（body, 全螢幕, 黑色背景）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T008 [P] 建立 loading 動畫 UI 元素（spinner + 文字）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T009 [P] 建立 info header UI 元素（標題 + 說明）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T010 初始化 WebGPURenderer（antialias: true, setPixelRatio, setSize）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T011 建立 PerspectiveCamera（FOV: 70, near: 0.1, far: 10, position.z: 1.5）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T012 建立 Scene 物件在 `examples/webgpu-lights-custom/index.html`
-- [ ] T013 建立 setAnimationLoop 動畫迴圈框架在 `examples/webgpu-lights-custom/index.html`
+- [X] T005 實作 WebGPU 支援偵測邏輯（檢查 navigator.gpu）在 `examples/webgpu-lights-custom/index.html`
+- [X] T006 建立 fallback UI 元素（圖片容器 + 說明文字）在 `examples/webgpu-lights-custom/index.html`
+- [X] T007 [P] 建立 CSS 基礎樣式（body, 全螢幕, 黑色背景）在 `examples/webgpu-lights-custom/index.html`
+- [X] T008 [P] 建立 loading 動畫 UI 元素（spinner + 文字）在 `examples/webgpu-lights-custom/index.html`
+- [X] T009 [P] 建立 info header UI 元素（標題 + 說明）在 `examples/webgpu-lights-custom/index.html`
+- [X] T010 初始化 WebGPURenderer（antialias: true, setPixelRatio, setSize）在 `examples/webgpu-lights-custom/index.html`
+- [X] T011 建立 PerspectiveCamera（FOV: 70, near: 0.1, far: 10, position.z: 1.5）在 `examples/webgpu-lights-custom/index.html`
+- [X] T012 建立 Scene 物件在 `examples/webgpu-lights-custom/index.html`
+- [X] T013 建立 setAnimationLoop 動畫迴圈框架在 `examples/webgpu-lights-custom/index.html`
 
 **Checkpoint**: Foundation ready - 使用者故事實作現在可以開始
 
@@ -60,23 +60,23 @@
 
 ### Implementation for User Story 1
 
-- [ ] T014 [P] [US1] 建立 CustomLightingModel 類別繼承 THREE.LightingModel 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T015 [P] [US1] 建立共用 SphereGeometry（radius: 0.02, widthSegments: 16, heightSegments: 8）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T016 [US1] 實作 CustomLightingModel.direct() 方法（lightColor 加到 directDiffuse）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T017 [US1] 建立 addLight(hexColor) 工廠函式在 `examples/webgpu-lights-custom/index.html`
-- [ ] T018 [US1] 在 addLight 中建立 NodeMaterial 自發光材質（colorNode + 空 lightsNode）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T019 [US1] 在 addLight 中建立 PointLight（intensity: 0.1, distance: 1）並附加 Mesh 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T020 [US1] 建立三個 PointLight（light1: 0xffaa00, light2: 0x0040ff, light3: 0x80ff80）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T021 [US1] 建立選擇性光源節點 lights([light1, light2, light3]) 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T022 [US1] 建立光照模型上下文 allLightsNode.context({ lightingModel }) 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T023 [US1] 產生 50 萬個隨機 Vector3 點（範圍 ±1.5）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T024 [US1] 建立 BufferGeometry.setFromPoints(points) 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T025 [US1] 建立 PointsNodeMaterial 並設定 lightsNode 為光照模型上下文在 `examples/webgpu-lights-custom/index.html`
-- [ ] T026 [US1] 建立 Points 物件並加入 scene 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T027 [US1] 在 animate() 中實作光源位置更新（使用三角函數，scale: 0.5）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T028 [US1] 為三個光源設定不同頻率參數（0.3, 0.5, 0.7）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T029 [US1] 在 animate() 中實作場景緩慢旋轉（scene.rotation.y = time * 0.1）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T030 [US1] 在 animate() 中呼叫 renderer.render(scene, camera) 在 `examples/webgpu-lights-custom/index.html`
+- [X] T014 [P] [US1] 建立 CustomLightingModel 類別繼承 THREE.LightingModel 在 `examples/webgpu-lights-custom/index.html`
+- [X] T015 [P] [US1] 建立共用 SphereGeometry（radius: 0.02, widthSegments: 16, heightSegments: 8）在 `examples/webgpu-lights-custom/index.html`
+- [X] T016 [US1] 實作 CustomLightingModel.direct() 方法（lightColor 加到 directDiffuse）在 `examples/webgpu-lights-custom/index.html`
+- [X] T017 [US1] 建立 addLight(hexColor) 工廠函式在 `examples/webgpu-lights-custom/index.html`
+- [X] T018 [US1] 在 addLight 中建立 NodeMaterial 自發光材質（colorNode + 空 lightsNode）在 `examples/webgpu-lights-custom/index.html`
+- [X] T019 [US1] 在 addLight 中建立 PointLight（intensity: 0.1, distance: 1）並附加 Mesh 在 `examples/webgpu-lights-custom/index.html`
+- [X] T020 [US1] 建立三個 PointLight（light1: 0xffaa00, light2: 0x0040ff, light3: 0x80ff80）在 `examples/webgpu-lights-custom/index.html`
+- [X] T021 [US1] 建立選擇性光源節點 lights([light1, light2, light3]) 在 `examples/webgpu-lights-custom/index.html`
+- [X] T022 [US1] 建立光照模型上下文 allLightsNode.context({ lightingModel }) 在 `examples/webgpu-lights-custom/index.html`
+- [X] T023 [US1] 產生 50 萬個隨機 Vector3 點（範圍 ±1.5）在 `examples/webgpu-lights-custom/index.html`
+- [X] T024 [US1] 建立 BufferGeometry.setFromPoints(points) 在 `examples/webgpu-lights-custom/index.html`
+- [X] T025 [US1] 建立 PointsNodeMaterial 並設定 lightsNode 為光照模型上下文在 `examples/webgpu-lights-custom/index.html`
+- [X] T026 [US1] 建立 Points 物件並加入 scene 在 `examples/webgpu-lights-custom/index.html`
+- [X] T027 [US1] 在 animate() 中實作光源位置更新（使用三角函數，scale: 0.5）在 `examples/webgpu-lights-custom/index.html`
+- [X] T028 [US1] 為三個光源設定不同頻率參數（0.3, 0.5, 0.7）在 `examples/webgpu-lights-custom/index.html`
+- [X] T029 [US1] 在 animate() 中實作場景緩慢旋轉（scene.rotation.y = time * 0.1）在 `examples/webgpu-lights-custom/index.html`
+- [X] T030 [US1] 在 animate() 中呼叫 renderer.render(scene, camera) 在 `examples/webgpu-lights-custom/index.html`
 
 **Checkpoint**: User Story 1 應已完整可用且可獨立測試
 
@@ -90,10 +90,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T031 [US2] 匯入 OrbitControls from 'three/addons/controls/OrbitControls.js' 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T032 [US2] 建立 OrbitControls 實例（camera, renderer.domElement）在 `examples/webgpu-lights-custom/index.html`
-- [ ] T033 [US2] 設定 OrbitControls.minDistance = 0 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T034 [US2] 設定 OrbitControls.maxDistance = 4 在 `examples/webgpu-lights-custom/index.html`
+- [X] T031 [US2] 匯入 OrbitControls from 'three/addons/controls/OrbitControls.js' 在 `examples/webgpu-lights-custom/index.html`
+- [X] T032 [US2] 建立 OrbitControls 實例（camera, renderer.domElement）在 `examples/webgpu-lights-custom/index.html`
+- [X] T033 [US2] 設定 OrbitControls.minDistance = 0 在 `examples/webgpu-lights-custom/index.html`
+- [X] T034 [US2] 設定 OrbitControls.maxDistance = 4 在 `examples/webgpu-lights-custom/index.html`
 
 **Checkpoint**: User Stories 1 AND 2 應皆可獨立運作
 
@@ -107,10 +107,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T035 [US3] 實作 onWindowResize() 函式在 `examples/webgpu-lights-custom/index.html`
-- [ ] T036 [US3] 在 onWindowResize 中更新 camera.aspect 和呼叫 updateProjectionMatrix() 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T037 [US3] 在 onWindowResize 中呼叫 renderer.setSize(window.innerWidth, window.innerHeight) 在 `examples/webgpu-lights-custom/index.html`
-- [ ] T038 [US3] 綁定 window resize 事件到 onWindowResize 在 `examples/webgpu-lights-custom/index.html`
+- [X] T035 [US3] 實作 onWindowResize() 函式在 `examples/webgpu-lights-custom/index.html`
+- [X] T036 [US3] 在 onWindowResize 中更新 camera.aspect 和呼叫 updateProjectionMatrix() 在 `examples/webgpu-lights-custom/index.html`
+- [X] T037 [US3] 在 onWindowResize 中呼叫 renderer.setSize(window.innerWidth, window.innerHeight) 在 `examples/webgpu-lights-custom/index.html`
+- [X] T038 [US3] 綁定 window resize 事件到 onWindowResize 在 `examples/webgpu-lights-custom/index.html`
 
 **Checkpoint**: 所有使用者故事現在應皆可獨立運作
 
@@ -120,8 +120,8 @@
 
 **Purpose**: 影響多個使用者故事的改進
 
-- [ ] T039 [P] 在場景就緒時隱藏 loading 動畫在 `examples/webgpu-lights-custom/index.html`
-- [ ] T040 [P] 完善 CSS 樣式（info 區域、loading 動畫、fallback 區域）在 `examples/webgpu-lights-custom/index.html`
+- [X] T039 [P] 在場景就緒時隱藏 loading 動畫在 `examples/webgpu-lights-custom/index.html`
+- [X] T040 [P] 完善 CSS 樣式（info 區域、loading 動畫、fallback 區域）在 `examples/webgpu-lights-custom/index.html`
 - [ ] T041 驗證 SC-001：頁面載入後 3 秒內呈現完整的動態光照效果
 - [ ] T042 驗證 SC-002：點雲包含 50 萬粒子且動畫流暢（目標 60 FPS）
 - [ ] T043 驗證 SC-003：三個光源同時可見且各自以不同軌跡移動
