@@ -2,7 +2,7 @@
 
 **Feature Branch**: `13-webgpu-lights-custom`  
 **Created**: 2025-12-01  
-**Status**: Draft  
+**Status**: Planning Complete  
 **Input**: User description: "Implement WebGPU custom lighting model example with Three.js, featuring selective lights and custom lighting model for point cloud visualization"
 
 ## Overview
