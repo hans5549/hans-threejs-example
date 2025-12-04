@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Three.js WebGL - Geometry Text Stroke</title>
+	<style>
+		body {
+			margin: 0;
+			background-color: #000;
+			color: #fff;
+			font-family: Monospace;
+			overflow: hidden;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+			"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+		}
+	}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+		import { Font } from 'three/addons/loaders/FontLoader.js';
+		import { unzipSync, strFromU8 } from 'three/addons/libs/fflate.module.js';
+
+		// Global variables
+		let camera, scene, renderer, controls;
+
+		// Material configuration
+		const color = new THREE.Color( 0x006699 );
+		const matDark = new THREE.MeshBasicMaterial( {
+			color: color,
+			side: THREE.DoubleSide
+		} );
+		const matLite = new THREE.MeshBasicMaterial( {
+			color: color,
+			transparent: true,
+			opacity: 0.4,
+			side: THREE.DoubleSide
+		} );
+		const material = { dark: matDark, lite: matLite, color: color };
+
+		init();
+
+		function init() {
+
+			// Camera
+			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.set( 0, -400, 600 );
+
+			// Scene
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0x000000 );
+
+			// Load font
+			loadFont();
+
+			// Renderer
+			renderer = new THREE.WebGLRenderer( { antialias: true } );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			// Controls
+			controls = new OrbitControls( camera, renderer.domElement );
+			controls.target.set( 0, 0, 0 );
+			controls.update();
+
+			controls.addEventListener( 'change', render );
+
+			// Event listeners
+			window.addEventListener( 'resize', onWindowResize );
+
+		}
+
+		function loadFont() {
+
+			const loader = new THREE.FileLoader();
+			loader.setResponseType( 'arraybuffer' );
+			loader.load(
+				'../../fonts/MPLUSRounded1c/MPLUSRounded1c-Regular.typeface.json.zip',
+				function ( data ) {
+
+					// Decompress and parse font
+					const unzipped = unzipSync( new Uint8Array( data ) );
+					const json = strFromU8( unzipped[ 'MPLUSRounded1c-Regular.typeface.json' ] );
+					const font = new Font( JSON.parse( json ) );
+
+					// Create text with different directions
+					createTexts( font );
+
+					render();
+
+				},
+				undefined,
+				function ( error ) {
+
+					console.error( 'Error loading font:', error );
+
+				}
+			);
+
+		}
+
+		function createTexts( font ) {
+
+			// English text (LTR)
+			const message1 = 'Three.js\nStroke text.';
+			const text1 = generateStrokeText( font, material, message1, 80, 'ltr' );
+			text1.position.set( -150, 0, 0 );
+			scene.add( text1 );
+
+			// Hebrew text (RTL)
+			const message2 = 'טקסט קו';
+			const text2 = generateStrokeText( font, material, message2, 80, 'rtl' );
+			text2.position.set( -150, -200, 0 );
+			scene.add( text2 );
+
+			// Chinese text (TB - Top to Bottom)
+			const message3 = '文字描邊';
+			const text3 = generateStrokeText( font, material, message3, 80, 'tb' );
+			text3.position.set( 350, 0, 0 );
+			scene.add( text3 );
+
+		}
+
+		function generateStrokeText( font, material, message, size, direction = 'ltr' ) {
+
+			const strokeText = new THREE.Group();
+
+			// Generate shapes from font
+			const shapes = font.generateShapes( message, size, direction );
+
+			// Create fill geometry
+			const geometry = new THREE.ShapeGeometry( shapes );
+			geometry.computeBoundingBox();
+
+			const xMid = -0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+			geometry.translate( xMid, 0, 0 );
+
+			// Create fill mesh (semi-transparent)
+			const fillMesh = new THREE.Mesh( geometry, material.lite );
+			fillMesh.position.z = -150;
+			strokeText.add( fillMesh );
+
+			// Extract holes from shapes
+			const holeShapes = [];
+			for ( let i = 0; i < shapes.length; i ++ ) {
+
+				const shape = shapes[ i ];
+
+				if ( shape.holes && shape.holes.length > 0 ) {
+
+					for ( let j = 0; j < shape.holes.length; j ++ ) {
+
+						holeShapes.push( shape.holes[ j ] );
+
+					}
+
+				}
+
+			}
+
+			// Combine shapes and holes for stroke generation
+			shapes.push( ...holeShapes );
+
+			// Create stroke style
+			const style = SVGLoader.getStrokeStyle( 5, material.color.getStyle() );
+
+			// Create stroke meshes for each shape
+			for ( let i = 0; i < shapes.length; i ++ ) {
+
+				const shape = shapes[ i ];
+				const points = shape.getPoints();
+				const strokeGeometry = SVGLoader.pointsToStroke( points, style );
+
+				if ( strokeGeometry ) {
+
+					strokeGeometry.translate( xMid, 0, 0 );
+					const strokeMesh = new THREE.Mesh( strokeGeometry, material.dark );
+					strokeText.add( strokeMesh );
+
+				}
+
+			}
+
+			return strokeText;
+
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+			render();
+
+		}
+
+		function render() {
+
+			renderer.render( scene, camera );
+
+		}
+
+	</script>
+</body>
+</html>
