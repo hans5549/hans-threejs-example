@@ -1,34 +1,34 @@
 # Implementation Plan: WebGL Effects ASCII
 
-**Branch**: `017-effects-ascii` | **Date**: 2025-12-04 | **Spec**: [spec.md](./spec.md)  
+**Branch**: `017-effects-ascii` | **Date**: 2025-01-27 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/017-effects-ascii/spec.md`
 
 ## Summary
 
-實作 Three.js WebGL Effects ASCII 範例，將 3D 場景（包含動態彈跳球體和平面）以 ASCII 字元藝術風格渲染。使用 AsciiEffect 後處理效果將 WebGL 渲染結果轉換為字元藝術，並提供 TrackballControls 讓使用者互動控制相機視角。
+實作 Three.js WebGL Effects ASCII 範例，將 3D 場景（含彈跳球體和平面）透過 AsciiEffect 轉換為 ASCII 字元藝術渲染。使用 TrackballControls 提供相機互動控制，並支援視窗大小自適應。
 
 ## Technical Context
 
-**Language/Version**: JavaScript ES6+ (ES Modules)  
+**Language/Version**: JavaScript ES6+  
 **Primary Dependencies**: Three.js r170.0 (via CDN), AsciiEffect, TrackballControls  
-**Storage**: N/A（純前端展示）  
-**Testing**: 瀏覽器手動測試 + 視覺驗證  
-**Target Platform**: 現代瀏覽器（支援 WebGL 1.0+）  
-**Project Type**: Single HTML 範例頁面  
-**Performance Goals**: ≥30 FPS 流暢動畫、<3 秒載入時間  
-**Constraints**: 無外部資源依賴、全螢幕佈局  
-**Scale/Scope**: 單一展示頁面
+**Storage**: N/A  
+**Testing**: Manual browser testing  
+**Target Platform**: Modern web browsers with WebGL support  
+**Project Type**: Single HTML file example  
+**Performance Goals**: 30+ fps 流暢渲染  
+**Constraints**: 單一 HTML 檔案，使用 CDN 載入 Three.js  
+**Scale/Scope**: 單一展示範例
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-| 原則 | 狀態 | 說明 |
-|------|------|------|
-| 獨立性 | ✅ PASS | 功能為獨立 HTML 頁面，無跨功能依賴 |
-| 可測試性 | ✅ PASS | 可透過瀏覽器直接驗證視覺效果和互動 |
-| 簡單性 | ✅ PASS | 遵循 Three.js 官方範例模式，無過度設計 |
-| 文件化 | ✅ PASS | 程式碼內含清晰註解說明 |
+| Principle | Status | Notes |
+|-----------|--------|-------|
+| 專案結構 | ✅ PASS | 遵循現有 examples/ 目錄結構 |
+| 程式碼品質 | ✅ PASS | 使用 ES6 模組語法，程式碼清晰易讀 |
+| 相依性管理 | ✅ PASS | 使用 CDN 載入 Three.js，無額外相依性 |
+| 文件完整性 | ✅ PASS | 包含完整規格文件和實作計畫 |
 
 ## Project Structure
 
@@ -36,12 +36,12 @@
 
 ```text
 specs/017-effects-ascii/
-├── plan.md              # 本文件
-├── research.md          # Phase 0: 技術研究
-├── data-model.md        # Phase 1: 資料模型
-├── quickstart.md        # Phase 1: 快速開始指南
-├── contracts/           # Phase 1: API 契約
-└── tasks.md             # Phase 2: 任務清單（由 /speckit.tasks 建立）
+├── plan.md              # This file
+├── research.md          # Phase 0 output - AsciiEffect API 研究
+├── data-model.md        # Phase 1 output - 資料模型
+├── quickstart.md        # Phase 1 output - 快速入門指南
+├── contracts/           # Phase 1 output - API 契約
+└── tasks.md             # Phase 2 output - 任務清單
 ```
 
 ### Source Code (repository root)
@@ -49,11 +49,34 @@ specs/017-effects-ascii/
 ```text
 examples/
 └── webgl-effects-ascii/
-    └── index.html       # 主要範例頁面（包含所有 HTML/CSS/JS）
+    └── index.html       # 實作目標檔案
 ```
 
-**Structure Decision**: 採用單一 HTML 檔案結構，與專案中其他範例（如 `unreal-bloom-postprocessing`、`webgl-spotlight` 等）保持一致。所有樣式和腳本內嵌於 HTML 中，透過 CDN 載入 Three.js 依賴。
+**Structure Decision**: 採用單一 HTML 檔案結構，與現有 examples/ 目錄中的其他範例保持一致。所有程式碼（HTML、CSS、JavaScript）都包含在單一 index.html 檔案中。
 
 ## Complexity Tracking
 
-> 無違規事項，無需填寫
+> 無違規需要說明 - 本功能遵循簡單的單檔案架構。
+
+## File Organization
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `examples/webgl-effects-ascii/index.html` | 主要實作檔案 | Pending |
+
+## Implementation Notes
+
+### AsciiEffect 設定
+- 字元集：` .:-+*=%@#`
+- 選項：`{ invert: true }` 實現白字黑底效果
+- DOM 樣式：`color: white`, `backgroundColor: black`
+
+### 場景配置
+- 相機：PerspectiveCamera(FOV 70, y=150, z=500)
+- 球體：SphereGeometry(200, 20, 10)
+- 平面：PlaneGeometry(400, 400), y=-200
+- 光源：兩個 PointLight
+
+### 動畫設計
+- 球體垂直位移：使用 Math.abs(Math.sin(start * 2)) * 150
+- 球體旋轉：x 軸和 z 軸持續旋轉
