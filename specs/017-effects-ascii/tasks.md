@@ -113,8 +113,8 @@
 **Purpose**: 最終驗證和程式碼品質確認
 
 - [x] T030 Verify HTML structure matches project conventions at `examples/webgl-effects-ascii/index.html`
-- [ ] T031 Run quickstart.md validation - test all acceptance scenarios
-- [ ] T032 Verify 30+ fps performance in browser DevTools
+- [x] T031 Run quickstart.md validation - test all acceptance scenarios
+- [x] T032 Verify 30+ fps performance in browser DevTools
 
 ---
 
