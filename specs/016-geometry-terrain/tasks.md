@@ -24,12 +24,12 @@
 
 **Purpose**: 建立專案基礎結構和 HTML 骨架
 
-- [ ] T001 Create directory structure at examples/webgl-geometry-terrain/
-- [ ] T002 Create HTML scaffold with DOCTYPE, head, meta tags in examples/webgl-geometry-terrain/index.html
-- [ ] T003 Setup ES Module import map for Three.js CDN in examples/webgl-geometry-terrain/index.html
-- [ ] T004 Add base CSS styles (body margin, overflow hidden, canvas display) in examples/webgl-geometry-terrain/index.html
+- [x] T001 Create directory structure at examples/webgl-geometry-terrain/
+- [x] T002 Create HTML scaffold with DOCTYPE, head, meta tags in examples/webgl-geometry-terrain/index.html
+- [x] T003 Setup ES Module import map for Three.js CDN in examples/webgl-geometry-terrain/index.html
+- [x] T004 Add base CSS styles (body margin, overflow hidden, canvas display) in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: HTML 骨架完成，可在瀏覽器開啟顯示空白頁面
+**Checkpoint**: ✅ HTML 骨架完成，可在瀏覽器開啟顯示空白頁面
 
 ---
 
@@ -39,15 +39,15 @@
 
 **⚠️ CRITICAL**: 所有 User Story 都需要 Scene, Camera, Renderer 才能運作
 
-- [ ] T005 Create container element and fallback container in examples/webgl-geometry-terrain/index.html
-- [ ] T006 Import Three.js core modules (THREE, Stats) in script section of examples/webgl-geometry-terrain/index.html
-- [ ] T007 [P] Import ImprovedNoise from three/addons/math/ImprovedNoise.js in examples/webgl-geometry-terrain/index.html
-- [ ] T008 [P] Import FirstPersonControls from three/addons/controls/FirstPersonControls.js in examples/webgl-geometry-terrain/index.html
-- [ ] T009 Declare global variables (container, camera, scene, renderer, controls, clock, stats) in examples/webgl-geometry-terrain/index.html
-- [ ] T010 Implement WebGL detection with try-catch in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T011 [P] Implement showFallback() function for WebGL degradation in examples/webgl-geometry-terrain/index.html
+- [x] T005 Create container element and fallback container in examples/webgl-geometry-terrain/index.html
+- [x] T006 Import Three.js core modules (THREE, Stats) in script section of examples/webgl-geometry-terrain/index.html
+- [x] T007 [P] Import ImprovedNoise from three/addons/math/ImprovedNoise.js in examples/webgl-geometry-terrain/index.html
+- [x] T008 [P] Import FirstPersonControls from three/addons/controls/FirstPersonControls.js in examples/webgl-geometry-terrain/index.html
+- [x] T009 Declare global variables (container, camera, scene, renderer, controls, clock, stats) in examples/webgl-geometry-terrain/index.html
+- [x] T010 Implement WebGL detection with try-catch in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T011 [P] Implement showFallback() function for WebGL degradation in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: 基礎設施就緒，可建立空白 Three.js 場景
+**Checkpoint**: ✅ 基礎設施就緒，可建立空白 Three.js 場景
 
 ---
 
@@ -59,24 +59,24 @@
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement generateHeight(width, height) function using ImprovedNoise with 4 octaves in examples/webgl-geometry-terrain/index.html
-- [ ] T013 [US1] Implement generateTexture(data, width, height) function with normal-based shading in examples/webgl-geometry-terrain/index.html
-- [ ] T014 [US1] Create Scene instance in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T015 [US1] Create PerspectiveCamera with fov=60, near=1, far=10000 in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T016 [US1] Set camera initial position (100, 800, -800) and lookAt (-100, 810, -800) in examples/webgl-geometry-terrain/index.html
-- [ ] T017 [US1] Call generateHeight(256, 256) to create height map data in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T018 [US1] Create PlaneGeometry(7500, 7500, 255, 255) for terrain in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T019 [US1] Rotate PlaneGeometry -PI/2 on X-axis to make it horizontal in examples/webgl-geometry-terrain/index.html
-- [ ] T020 [US1] Apply height map data to geometry vertices (y = data[i] * 10) in examples/webgl-geometry-terrain/index.html
-- [ ] T021 [US1] Call generateTexture() and create CanvasTexture with SRGBColorSpace in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T022 [US1] Create MeshBasicMaterial with terrain texture in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T023 [US1] Create terrain Mesh and add to scene in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T024 [US1] Create WebGLRenderer with antialias and set pixel ratio in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T025 [US1] Append renderer domElement to container in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T026 [US1] Implement basic animate() function with renderer.render() in examples/webgl-geometry-terrain/index.html
-- [ ] T027 [US1] Call renderer.setAnimationLoop(animate) in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T012 [US1] Implement generateHeight(width, height) function using ImprovedNoise with 4 octaves in examples/webgl-geometry-terrain/index.html
+- [x] T013 [US1] Implement generateTexture(data, width, height) function with normal-based shading in examples/webgl-geometry-terrain/index.html
+- [x] T014 [US1] Create Scene instance in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T015 [US1] Create PerspectiveCamera with fov=60, near=1, far=10000 in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T016 [US1] Set camera initial position (100, 800, -800) and lookAt (-100, 810, -800) in examples/webgl-geometry-terrain/index.html
+- [x] T017 [US1] Call generateHeight(256, 256) to create height map data in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T018 [US1] Create PlaneGeometry(7500, 7500, 255, 255) for terrain in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T019 [US1] Rotate PlaneGeometry -PI/2 on X-axis to make it horizontal in examples/webgl-geometry-terrain/index.html
+- [x] T020 [US1] Apply height map data to geometry vertices (y = data[i] * 10) in examples/webgl-geometry-terrain/index.html
+- [x] T021 [US1] Call generateTexture() and create CanvasTexture with SRGBColorSpace in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T022 [US1] Create MeshBasicMaterial with terrain texture in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T023 [US1] Create terrain Mesh and add to scene in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T024 [US1] Create WebGLRenderer with antialias and set pixel ratio in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T025 [US1] Append renderer domElement to container in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T026 [US1] Implement basic animate() function with renderer.render() in examples/webgl-geometry-terrain/index.html
+- [x] T027 [US1] Call renderer.setAnimationLoop(animate) in init() function in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: 地形完整顯示，可看到程序化生成的高低起伏網格與明暗紋理
+**Checkpoint**: ✅ 地形完整顯示，可看到程序化生成的高低起伏網格與明暗紋理
 
 ---
 
@@ -88,13 +88,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Create Clock instance for delta time calculation in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T029 [US2] Create FirstPersonControls with camera and renderer.domElement in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T030 [US2] Configure controls.movementSpeed = 150 in examples/webgl-geometry-terrain/index.html
-- [ ] T031 [US2] Configure controls.lookSpeed = 0.1 in examples/webgl-geometry-terrain/index.html
-- [ ] T032 [US2] Update animate() to call controls.update(clock.getDelta()) in examples/webgl-geometry-terrain/index.html
+- [x] T028 [US2] Create Clock instance for delta time calculation in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T029 [US2] Create FirstPersonControls with camera and renderer.domElement in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T030 [US2] Configure controls.movementSpeed = 150 in examples/webgl-geometry-terrain/index.html
+- [x] T031 [US2] Configure controls.lookSpeed = 0.1 in examples/webgl-geometry-terrain/index.html
+- [x] T032 [US2] Update animate() to call controls.update(clock.getDelta()) in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: 可使用滑鼠和鍵盤自由探索地形場景
+**Checkpoint**: ✅ 可使用滑鼠和鍵盤自由探索地形場景
 
 ---
 
@@ -106,12 +106,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Set scene.background = new THREE.Color(0xefd1b5) in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T034 [US3] Add scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025) in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T035 [US3] Enhance generateTexture() with random noise (±5) for natural feel in examples/webgl-geometry-terrain/index.html
-- [ ] T036 [US3] Scale texture canvas to 2x size for improved quality in generateTexture() in examples/webgl-geometry-terrain/index.html
+- [x] T033 [US3] Set scene.background = new THREE.Color(0xefd1b5) in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T034 [US3] Add scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025) in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T035 [US3] Enhance generateTexture() with random noise (±5) for natural feel in examples/webgl-geometry-terrain/index.html
+- [x] T036 [US3] Scale texture canvas to 2x size for improved quality in generateTexture() in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: 霧效果使遠處地形融入背景，紋理具有自然的明暗和噪點變化
+**Checkpoint**: ✅ 霧效果使遠處地形融入背景，紋理具有自然的明暗和噪點變化
 
 ---
 
@@ -123,14 +123,14 @@
 
 ### Implementation for User Story 4
 
-- [ ] T037 [US4] Implement onWindowResize() function in examples/webgl-geometry-terrain/index.html
-- [ ] T038 [US4] Add minimum window size check (200x200) in onWindowResize() in examples/webgl-geometry-terrain/index.html
-- [ ] T039 [US4] Update camera.aspect and call camera.updateProjectionMatrix() in onWindowResize() in examples/webgl-geometry-terrain/index.html
-- [ ] T040 [US4] Call renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in examples/webgl-geometry-terrain/index.html
-- [ ] T041 [US4] Call controls.handleResize() in onWindowResize() in examples/webgl-geometry-terrain/index.html
-- [ ] T042 [US4] Add window.addEventListener('resize', onWindowResize) in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T037 [US4] Implement onWindowResize() function in examples/webgl-geometry-terrain/index.html
+- [x] T038 [US4] Add minimum window size check (200x200) in onWindowResize() in examples/webgl-geometry-terrain/index.html
+- [x] T039 [US4] Update camera.aspect and call camera.updateProjectionMatrix() in onWindowResize() in examples/webgl-geometry-terrain/index.html
+- [x] T040 [US4] Call renderer.setSize(window.innerWidth, window.innerHeight) in onWindowResize() in examples/webgl-geometry-terrain/index.html
+- [x] T041 [US4] Call controls.handleResize() in onWindowResize() in examples/webgl-geometry-terrain/index.html
+- [x] T042 [US4] Add window.addEventListener('resize', onWindowResize) in init() function in examples/webgl-geometry-terrain/index.html
 
-**Checkpoint**: 視窗調整時場景自動適應，比例保持正確
+**Checkpoint**: ✅ 視窗調整時場景自動適應，比例保持正確
 
 ---
 
@@ -138,12 +138,12 @@
 
 **Purpose**: 效能監控、最終驗證和文件更新
 
-- [ ] T043 [P] Create Stats instance and append to document.body in init() function in examples/webgl-geometry-terrain/index.html
-- [ ] T044 [P] Update animate() to call stats.update() in examples/webgl-geometry-terrain/index.html
-- [ ] T045 [P] Add init() call at script end to start application in examples/webgl-geometry-terrain/index.html
-- [ ] T046 Run quickstart.md validation - verify all controls and behaviors work as documented
-- [ ] T047 Test WebGL fallback by simulating WebGL unavailable scenario
-- [ ] T048 Verify 60 FPS performance using Stats panel
+- [x] T043 [P] Create Stats instance and append to document.body in init() function in examples/webgl-geometry-terrain/index.html
+- [x] T044 [P] Update animate() to call stats.update() in examples/webgl-geometry-terrain/index.html
+- [x] T045 [P] Add init() call at script end to start application in examples/webgl-geometry-terrain/index.html
+- [x] T046 Run quickstart.md validation - verify all controls and behaviors work as documented
+- [x] T047 Test WebGL fallback by simulating WebGL unavailable scenario
+- [x] T048 Verify 60 FPS performance using Stats panel
 
 ---
 

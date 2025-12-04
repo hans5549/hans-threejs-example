@@ -2,7 +2,7 @@
 
 **Feature Branch**: `016-geometry-terrain`  
 **Created**: 2025-12-04  
-**Status**: Planned  
+**Status**: Implemented  
 **Input**: User description: "WebGL geometry terrain with procedural height map, fog effect, first-person controls, and dynamic texture generation based on Three.js official example"
 
 **Reference**: [Three.js webgl_geometry_terrain](https://threejs.org/examples/#webgl_geometry_terrain)
