@@ -26,13 +26,13 @@
 
 **Purpose**: 建立專案基本結構和 Three.js 場景
 
-- [ ] T001 建立範例目錄結構 `examples/webgl-geometry-text-stroke/`
-- [ ] T002 建立 HTML 檔案基本結構，包含 `<!DOCTYPE html>`、`<head>`、`<body>` 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T003 設定 importmap 引用 Three.js 0.170.0 及相關模組（Font, SVGLoader, OrbitControls, fflate）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T004 [P] 新增基本 CSS 樣式（body margin:0, canvas display:block）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T005 [P] 下載字體檔案 `MPLUSRounded1c-Regular.typeface.json.zip` 至 `fonts/MPLUSRounded1c/` 目錄
+- [x] T001 建立範例目錄結構 `examples/webgl-geometry-text-stroke/`
+- [x] T002 建立 HTML 檔案基本結構，包含 `<!DOCTYPE html>`、`<head>`、`<body>` 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T003 設定 importmap 引用 Three.js 0.170.0 及相關模組（Font, SVGLoader, OrbitControls, fflate）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T004 [P] 新增基本 CSS 樣式（body margin:0, canvas display:block）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T005 [P] 下載字體檔案 `MPLUSRounded1c-Regular.typeface.json.zip` 至 `fonts/MPLUSRounded1c/` 目錄
 
-**Checkpoint**: 基本 HTML 結構完成，可在瀏覽器開啟但尚無任何渲染
+**Checkpoint**: ✅ 基本 HTML 結構完成，可在瀏覽器開啟但尚無任何渲染
 
 ---
 
@@ -42,14 +42,14 @@
 
 **⚠️ CRITICAL**: 必須完成此階段才能開始任何 User Story 實作
 
-- [ ] T006 建立 `init()` 函式骨架在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T007 建立 PerspectiveCamera（fov: 45, near: 1, far: 10000）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T008 [P] 建立 Scene 並設定深色背景（0x000000）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T009 建立 WebGLRenderer（antialias: true）並加入 DOM 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T010 設定相機初始位置（z: 350）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T011 建立 `render()` 函式和 animation loop 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T006 建立 `init()` 函式骨架在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T007 建立 PerspectiveCamera（fov: 45, near: 1, far: 10000）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T008 [P] 建立 Scene 並設定深色背景（0x000000）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T009 建立 WebGLRenderer（antialias: true）並加入 DOM 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T010 設定相機初始位置（z: 350）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T011 建立 `render()` 函式和 animation loop 在 `examples/webgl-geometry-text-stroke/index.html`
 
-**Checkpoint**: 可看到黑色背景的空白 WebGL 畫布
+**Checkpoint**: ✅ 可看到黑色背景的空白 WebGL 畫布
 
 ---
 
@@ -63,35 +63,35 @@
 
 ### 字體載入實作
 
-- [ ] T012 [US1] 建立 loadFont() 函式使用 FileLoader 載入 zip 檔案在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T013 [US1] 實作 fflate 解壓縮邏輯（unzipSync, strFromU8）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T014 [US1] 解析 JSON 並建立 Font 物件在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T012 [US1] 建立 loadFont() 函式使用 FileLoader 載入 zip 檔案在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T013 [US1] 實作 fflate 解壓縮邏輯（unzipSync, strFromU8）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T014 [US1] 解析 JSON 並建立 Font 物件在 `examples/webgl-geometry-text-stroke/index.html`
 
 ### 材質建立
 
-- [ ] T015 [P] [US1] 建立 color 變數（THREE.Color, 0x006699）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T016 [P] [US1] 建立 matDark（MeshBasicMaterial, 實心）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T017 [P] [US1] 建立 matLite（MeshBasicMaterial, 半透明 opacity: 0.4）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T015 [P] [US1] 建立 color 變數（THREE.Color, 0x006699）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T016 [P] [US1] 建立 matDark（MeshBasicMaterial, 實心）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T017 [P] [US1] 建立 matLite（MeshBasicMaterial, 半透明 opacity: 0.4）在 `examples/webgl-geometry-text-stroke/index.html`
 
 ### 核心描邊生成函式
 
-- [ ] T018 [US1] 建立 generateStrokeText(text, font, size, direction, material) 函式簽名在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T019 [US1] 實作 font.generateShapes(text, size, direction) 取得形狀陣列在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T020 [US1] 建立 ShapeGeometry 作為填充幾何體在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T021 [US1] 計算 bounding box 並置中對齊填充幾何體在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T022 [US1] 建立填充 Mesh 並加入 Group 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T023 [US1] 遍歷 shapes 提取所有 holes 加入形狀陣列在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T024 [US1] 使用 SVGLoader.getStrokeStyle 建立描邊樣式在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T025 [US1] 為每個形狀呼叫 SVGLoader.pointsToStroke 建立描邊幾何體在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T026 [US1] 建立描邊 Mesh 並置中對齊、加入 Group 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T027 [US1] 回傳完整的 Group 物件在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T018 [US1] 建立 generateStrokeText(text, font, size, direction, material) 函式簽名在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T019 [US1] 實作 font.generateShapes(text, size, direction) 取得形狀陣列在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T020 [US1] 建立 ShapeGeometry 作為填充幾何體在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T021 [US1] 計算 bounding box 並置中對齊填充幾何體在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T022 [US1] 建立填充 Mesh 並加入 Group 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T023 [US1] 遍歷 shapes 提取所有 holes 加入形狀陣列在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T024 [US1] 使用 SVGLoader.getStrokeStyle 建立描邊樣式在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T025 [US1] 為每個形狀呼叫 SVGLoader.pointsToStroke 建立描邊幾何體在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T026 [US1] 建立描邊 Mesh 並置中對齊、加入 Group 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T027 [US1] 回傳完整的 Group 物件在 `examples/webgl-geometry-text-stroke/index.html`
 
 ### 初始文字渲染
 
-- [ ] T028 [US1] 在 loadFont 回呼中呼叫 generateStrokeText 建立第一組文字在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T029 [US1] 將文字 Group 加入 Scene 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T028 [US1] 在 loadFont 回呼中呼叫 generateStrokeText 建立第一組文字在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T029 [US1] 將文字 Group 加入 Scene 在 `examples/webgl-geometry-text-stroke/index.html`
 
-**Checkpoint**: 頁面顯示一組具有半透明填充和實心描邊的文字，User Story 1 可獨立測試驗證
+**Checkpoint**: ✅ 頁面顯示一組具有半透明填充和實心描邊的文字，User Story 1 可獨立測試驗證
 
 ---
 
@@ -105,15 +105,15 @@
 
 ### 多方向文字實作
 
-- [ ] T030 [US2] 建立英文文字 "Three.js"（direction: 'ltr'）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T031 [US2] 定位英文文字位置（y: 100）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T032 [US2] 建立希伯來文文字 "שָׁלוֹם"（direction: 'rtl'）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T033 [US2] 定位希伯來文文字位置（y: 0）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T034 [US2] 建立中文文字 "中文"（direction: 'tb'）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T035 [US2] 定位中文文字位置（y: -100 或合適位置）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T036 [US2] 將三組文字 Group 全部加入 Scene 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T030 [US2] 建立英文文字 "Three.js"（direction: 'ltr'）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T031 [US2] 定位英文文字位置（y: 100）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T032 [US2] 建立希伯來文文字 "שָׁלוֹם"（direction: 'rtl'）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T033 [US2] 定位希伯來文文字位置（y: 0）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T034 [US2] 建立中文文字 "中文"（direction: 'tb'）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T035 [US2] 定位中文文字位置（y: -100 或合適位置）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T036 [US2] 將三組文字 Group 全部加入 Scene 在 `examples/webgl-geometry-text-stroke/index.html`
 
-**Checkpoint**: 頁面同時顯示三組不同方向的描邊文字，User Story 2 可獨立測試驗證
+**Checkpoint**: ✅ 頁面同時顯示三組不同方向的描邊文字，User Story 2 可獨立測試驗證
 
 ---
 
@@ -127,14 +127,14 @@
 
 ### OrbitControls 實作
 
-- [ ] T037 [US3] 引入 OrbitControls（已在 importmap 設定）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T038 [US3] 建立 OrbitControls 實例並綁定 camera 和 renderer.domElement 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T039 [US3] 在 render 函式中呼叫 controls.update() 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T040 [US3] 測試旋轉功能（左鍵拖曳）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T041 [US3] 測試縮放功能（滾輪）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T042 [US3] 測試平移功能（右鍵拖曳）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T037 [US3] 引入 OrbitControls（已在 importmap 設定）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T038 [US3] 建立 OrbitControls 實例並綁定 camera 和 renderer.domElement 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T039 [US3] 在 render 函式中呼叫 controls.update() 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T040 [US3] 測試旋轉功能（左鍵拖曳）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T041 [US3] 測試縮放功能（滾輪）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T042 [US3] 測試平移功能（右鍵拖曳）在 `examples/webgl-geometry-text-stroke/index.html`
 
-**Checkpoint**: 可透過滑鼠互動從任意角度觀察 3D 文字，User Story 3 可獨立測試驗證
+**Checkpoint**: ✅ 可透過滑鼠互動從任意角度觀察 3D 文字，User Story 3 可獨立測試驗證
 
 ---
 
@@ -148,13 +148,13 @@
 
 ### 響應式實作
 
-- [ ] T043 [US4] 建立 onWindowResize() 函式在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T044 [US4] 更新 camera.aspect 為新的視窗比例在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T045 [US4] 呼叫 camera.updateProjectionMatrix() 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T046 [US4] 呼叫 renderer.setSize(window.innerWidth, window.innerHeight) 在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T047 [US4] 註冊 window 'resize' 事件監聽器在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T043 [US4] 建立 onWindowResize() 函式在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T044 [US4] 更新 camera.aspect 為新的視窗比例在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T045 [US4] 呼叫 camera.updateProjectionMatrix() 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T046 [US4] 呼叫 renderer.setSize(window.innerWidth, window.innerHeight) 在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T047 [US4] 註冊 window 'resize' 事件監聽器在 `examples/webgl-geometry-text-stroke/index.html`
 
-**Checkpoint**: 視窗調整後場景正確重新渲染，User Story 4 可獨立測試驗證
+**Checkpoint**: ✅ 視窗調整後場景正確重新渲染，User Story 4 可獨立測試驗證
 
 ---
 
@@ -162,11 +162,11 @@
 
 **Purpose**: 最終調整和品質確認
 
-- [ ] T048 [P] 驗證所有功能需求（FR-001 至 FR-010）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T049 [P] 驗證所有成功標準（SC-001 至 SC-005）在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T050 檢查 Edge Cases：字體載入失敗時的錯誤處理在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T051 [P] 程式碼清理和註解完善在 `examples/webgl-geometry-text-stroke/index.html`
-- [ ] T052 執行 quickstart.md 驗證流程
+- [x] T048 [P] 驗證所有功能需求（FR-001 至 FR-010）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T049 [P] 驗證所有成功標準（SC-001 至 SC-005）在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T050 檢查 Edge Cases：字體載入失敗時的錯誤處理在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T051 [P] 程式碼清理和註解完善在 `examples/webgl-geometry-text-stroke/index.html`
+- [x] T052 執行 quickstart.md 驗證流程
 
 ---
 
