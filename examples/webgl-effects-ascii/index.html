@@ -28,8 +28,8 @@
 		import { AsciiEffect } from 'three/addons/effects/AsciiEffect.js';
 		import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 
-		let camera, scene, renderer, effect, controls;
-		let sphere;
+		let camera, controls, scene, renderer, effect;
+		let sphere, plane;
 		const start = Date.now();
 
 		init();
@@ -43,16 +43,16 @@
 
 			// Scene
 			scene = new THREE.Scene();
-			scene.background = new THREE.Color( 0x000000 );
+			scene.background = new THREE.Color( 0, 0, 0 );
 
-			// Lights
-			const light1 = new THREE.PointLight( 0xffffff, 1.5, 0 );
-			light1.position.set( 500, 500, 500 );
-			scene.add( light1 );
+			// Lights - 使用官方最新的光源強度參數 (intensity, distance, decay)
+			const pointLight1 = new THREE.PointLight( 0xffffff, 3, 0, 0 );
+			pointLight1.position.set( 500, 500, 500 );
+			scene.add( pointLight1 );
 
-			const light2 = new THREE.PointLight( 0xffffff, 0.25, 0 );
-			light2.position.set( -500, -500, -500 );
-			scene.add( light2 );
+			const pointLight2 = new THREE.PointLight( 0xffffff, 1, 0, 0 );
+			pointLight2.position.set( -500, -500, -500 );
+			scene.add( pointLight2 );
 
 			// Sphere
 			sphere = new THREE.Mesh(
@@ -61,10 +61,10 @@
 			);
 			scene.add( sphere );
 
-			// Plane
-			const plane = new THREE.Mesh(
+			// Plane - 使用 MeshBasicMaterial 以獲得更好的效能
+			plane = new THREE.Mesh(
 				new THREE.PlaneGeometry( 400, 400 ),
-				new THREE.MeshPhongMaterial( { flatShading: true } )
+				new THREE.MeshBasicMaterial( { color: 0xe0e0e0 } )
 			);
 			plane.position.y = -200;
 			plane.rotation.x = -Math.PI / 2;
@@ -73,12 +73,16 @@
 			// Renderer
 			renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setAnimationLoop( animate );
 
 			// ASCII Effect
 			effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
 			effect.setSize( window.innerWidth, window.innerHeight );
 			effect.domElement.style.color = 'white';
 			effect.domElement.style.backgroundColor = 'black';
+
+			// Special case: append effect.domElement, instead of renderer.domElement.
+			// AsciiEffect creates a custom domElement (a div container) where the ASCII elements are placed.
 			document.body.appendChild( effect.domElement );
 
 			// Controls
@@ -87,14 +91,9 @@
 			// Event Listeners
 			window.addEventListener( 'resize', onWindowResize );
 
-			// Start animation
-			animate();
-
 		}
 
 		function animate() {
-
-			requestAnimationFrame( animate );
 
 			const timer = Date.now() - start;
 
