@@ -24,12 +24,12 @@
 
 **Purpose**: 建立專案目錄和基礎 HTML 結構
 
-- [ ] T001 Create directory structure at `examples/webgl-effects-ascii/`
-- [ ] T002 Create base HTML file with DOCTYPE, head, meta tags in `examples/webgl-effects-ascii/index.html`
-- [ ] T003 Add CSS reset styles (margin: 0, overflow: hidden, background: black) in `examples/webgl-effects-ascii/index.html`
-- [ ] T004 [P] Configure importmap for Three.js r170.0 CDN in `examples/webgl-effects-ascii/index.html`
+- [x] T001 Create directory structure at `examples/webgl-effects-ascii/`
+- [x] T002 Create base HTML file with DOCTYPE, head, meta tags in `examples/webgl-effects-ascii/index.html`
+- [x] T003 Add CSS reset styles (margin: 0, overflow: hidden, background: black) in `examples/webgl-effects-ascii/index.html`
+- [x] T004 [P] Configure importmap for Three.js r170.0 CDN in `examples/webgl-effects-ascii/index.html`
 
-**Checkpoint**: 基礎 HTML 結構就緒，可開始實作功能
+**Checkpoint**: ✅ 基礎 HTML 結構就緒，可開始實作功能
 
 ---
 
@@ -39,13 +39,13 @@
 
 **⚠️ CRITICAL**: 必須完成此階段才能開始任何 User Story
 
-- [ ] T005 Import Three.js modules (THREE, AsciiEffect, TrackballControls) in `examples/webgl-effects-ascii/index.html`
-- [ ] T006 Declare global variables (camera, scene, renderer, effect, controls, sphere, start) in `examples/webgl-effects-ascii/index.html`
-- [ ] T007 Create init() function skeleton in `examples/webgl-effects-ascii/index.html`
-- [ ] T008 Create animate() function skeleton with requestAnimationFrame in `examples/webgl-effects-ascii/index.html`
-- [ ] T009 Add init() call at module load in `examples/webgl-effects-ascii/index.html`
+- [x] T005 Import Three.js modules (THREE, AsciiEffect, TrackballControls) in `examples/webgl-effects-ascii/index.html`
+- [x] T006 Declare global variables (camera, scene, renderer, effect, controls, sphere, start) in `examples/webgl-effects-ascii/index.html`
+- [x] T007 Create init() function skeleton in `examples/webgl-effects-ascii/index.html`
+- [x] T008 Create animate() function skeleton with requestAnimationFrame in `examples/webgl-effects-ascii/index.html`
+- [x] T009 Add init() call at module load in `examples/webgl-effects-ascii/index.html`
 
-**Checkpoint**: 基礎架構就緒 - 可開始 User Story 實作
+**Checkpoint**: ✅ 基礎架構就緒 - 可開始 User Story 實作
 
 ---
 
@@ -57,21 +57,21 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Create PerspectiveCamera (FOV 70, position y=150 z=500) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T011 [US1] Create Scene with black background (0x000000) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T012 [P] [US1] Create PointLight 1 (color 0xffffff, intensity 1.5, position 500,500,500) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T013 [P] [US1] Create PointLight 2 (color 0xffffff, intensity 0.25, position -500,-500,-500) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T014 [US1] Create Sphere mesh (SphereGeometry 200,20,10 + MeshPhongMaterial flatShading) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T015 [US1] Create Plane mesh (PlaneGeometry 400,400 + MeshPhongMaterial, position y=-200, rotation x=-PI/2) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T016 [US1] Create WebGLRenderer with window size in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T017 [US1] Create AsciiEffect with charset ' .:-+*=%@#' and options {invert: true} in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T018 [US1] Configure AsciiEffect domElement styles (color: white, backgroundColor: black) in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T019 [US1] Append effect.domElement to document.body in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T020 [US1] Implement sphere bounce animation (y = abs(sin(timer * 0.002)) * 150) in animate() at `examples/webgl-effects-ascii/index.html`
-- [ ] T021 [US1] Implement sphere rotation animation (x += timer * 0.0003, z += timer * 0.0002) in animate() at `examples/webgl-effects-ascii/index.html`
-- [ ] T022 [US1] Add effect.render(scene, camera) call in animate() at `examples/webgl-effects-ascii/index.html`
+- [x] T010 [US1] Create PerspectiveCamera (FOV 70, position y=150 z=500) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T011 [US1] Create Scene with black background (0x000000) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T012 [P] [US1] Create PointLight 1 (color 0xffffff, intensity 1.5, position 500,500,500) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T013 [P] [US1] Create PointLight 2 (color 0xffffff, intensity 0.25, position -500,-500,-500) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T014 [US1] Create Sphere mesh (SphereGeometry 200,20,10 + MeshPhongMaterial flatShading) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T015 [US1] Create Plane mesh (PlaneGeometry 400,400 + MeshPhongMaterial, position y=-200, rotation x=-PI/2) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T016 [US1] Create WebGLRenderer with window size in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T017 [US1] Create AsciiEffect with charset ' .:-+*=%@#' and options {invert: true} in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T018 [US1] Configure AsciiEffect domElement styles (color: white, backgroundColor: black) in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T019 [US1] Append effect.domElement to document.body in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T020 [US1] Implement sphere bounce animation (y = abs(sin(timer * 0.002)) * 150) in animate() at `examples/webgl-effects-ascii/index.html`
+- [x] T021 [US1] Implement sphere rotation animation (x += timer * 0.0003, z += timer * 0.0002) in animate() at `examples/webgl-effects-ascii/index.html`
+- [x] T022 [US1] Add effect.render(scene, camera) call in animate() at `examples/webgl-effects-ascii/index.html`
 
-**Checkpoint**: User Story 1 完成 - ASCII 渲染場景應顯示彈跳旋轉的球體
+**Checkpoint**: ✅ User Story 1 完成 - ASCII 渲染場景應顯示彈跳旋轉的球體
 
 ---
 
@@ -83,10 +83,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Create TrackballControls bound to camera and effect.domElement in init() at `examples/webgl-effects-ascii/index.html`
-- [ ] T024 [US2] Add controls.update() call in animate() at `examples/webgl-effects-ascii/index.html`
+- [x] T023 [US2] Create TrackballControls bound to camera and effect.domElement in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T024 [US2] Add controls.update() call in animate() at `examples/webgl-effects-ascii/index.html`
 
-**Checkpoint**: User Story 2 完成 - 滑鼠可控制相機視角
+**Checkpoint**: ✅ User Story 2 完成 - 滑鼠可控制相機視角
 
 ---
 
@@ -98,13 +98,13 @@
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Create onWindowResize() function in `examples/webgl-effects-ascii/index.html`
-- [ ] T026 [US3] Update camera.aspect and camera.updateProjectionMatrix() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
-- [ ] T027 [US3] Update renderer.setSize() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
-- [ ] T028 [US3] Update effect.setSize() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
-- [ ] T029 [US3] Add window resize event listener in init() at `examples/webgl-effects-ascii/index.html`
+- [x] T025 [US3] Create onWindowResize() function in `examples/webgl-effects-ascii/index.html`
+- [x] T026 [US3] Update camera.aspect and camera.updateProjectionMatrix() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
+- [x] T027 [US3] Update renderer.setSize() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
+- [x] T028 [US3] Update effect.setSize() in onWindowResize() at `examples/webgl-effects-ascii/index.html`
+- [x] T029 [US3] Add window resize event listener in init() at `examples/webgl-effects-ascii/index.html`
 
-**Checkpoint**: User Story 3 完成 - 所有 User Story 功能就緒
+**Checkpoint**: ✅ User Story 3 完成 - 所有 User Story 功能就緒
 
 ---
 
@@ -112,7 +112,7 @@
 
 **Purpose**: 最終驗證和程式碼品質確認
 
-- [ ] T030 Verify HTML structure matches project conventions at `examples/webgl-effects-ascii/index.html`
+- [x] T030 Verify HTML structure matches project conventions at `examples/webgl-effects-ascii/index.html`
 - [ ] T031 Run quickstart.md validation - test all acceptance scenarios
 - [ ] T032 Verify 30+ fps performance in browser DevTools
 

@@ -62,7 +62,7 @@ examples/
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `examples/webgl-effects-ascii/index.html` | 主要實作檔案 | Pending |
+| `examples/webgl-effects-ascii/index.html` | 主要實作檔案 | ✅ Complete |
 
 ## Implementation Notes
 
