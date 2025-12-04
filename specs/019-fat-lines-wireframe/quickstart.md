@@ -1,7 +1,7 @@
 # Quickstart: Fat Lines Wireframe
 
-**Feature**: 019-fat-lines-wireframe  
-**Date**: 2025-12-04  
+**Feature**: 019-fat-lines-wireframe
+**Date**: 2025-12-04
 **Purpose**: 快速開始指南，說明如何執行和測試此功能
 
 ## 先決條件
