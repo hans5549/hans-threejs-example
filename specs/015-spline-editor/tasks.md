@@ -20,8 +20,8 @@
 
 **Purpose**: 建立專案結構和檔案基礎
 
-- [ ] T001 建立目錄結構 `examples/webgl-spline-editor/`
-- [ ] T002 建立 `examples/webgl-spline-editor/index.html` 骨架，包含 HTML 結構、Import Map 和空白 script module
+- [x] T001 建立目錄結構 `examples/webgl-spline-editor/`
+- [x] T002 建立 `examples/webgl-spline-editor/index.html` 骨架，包含 HTML 結構、Import Map 和空白 script module
 
 ---
 
@@ -31,11 +31,11 @@
 
 **⚠️ CRITICAL**: 在此階段完成之前，無法開始任何 User Story 工作
 
-- [ ] T003 實作 Scene、Camera、Renderer 初始化程式碼區塊
-- [ ] T004 [P] 實作全域變數宣告區塊（splineHelperObjects, positions, splines, ARC_SEGMENTS 等）
-- [ ] T005 [P] 實作 CSS 樣式區塊（body margin:0, overflow:hidden, 全螢幕 canvas）
-- [ ] T006 實作 render() 函式，根據 params 設定曲線可見性並呼叫 renderer.render()
-- [ ] T007 實作 onWindowResize() 函式，更新 camera aspect 和 renderer size
+- [x] T003 實作 Scene、Camera、Renderer 初始化程式碼區塊
+- [x] T004 [P] 實作全域變數宣告區塊（splineHelperObjects, positions, splines, ARC_SEGMENTS 等）
+- [x] T005 [P] 實作 CSS 樣式區塊（body margin:0, overflow:hidden, 全螢幕 canvas）
+- [x] T006 實作 render() 函式，根據 params 設定曲線可見性並呼叫 renderer.render()
+- [x] T007 實作 onWindowResize() 函式，更新 camera aspect 和 renderer size
 
 **Checkpoint**: 基礎架構完成 - 可開始 User Story 實作
 
@@ -49,14 +49,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] 實作光源設置：AmbientLight 和 SpotLight（含陰影設定）
-- [ ] T009 [US1] 實作地面 Mesh：PlaneGeometry + ShadowMaterial，y=-200
-- [ ] T010 [US1] 實作網格輔助線：GridHelper 2000×100，y=-199，半透明
-- [ ] T011 [US1] 實作 addSplineObject(position) 函式：建立控制點立方體 Mesh
-- [ ] T012 [US1] 實作預設控制點載入：load() 函式載入 4 個預設座標
-- [ ] T013 [US1] 實作 CatmullRomCurve3 曲線建立：三種類型（uniform/centripetal/chordal）
-- [ ] T014 [US1] 實作曲線 Line Mesh 建立：BufferGeometry + LineBasicMaterial，三種顏色
-- [ ] T015 [US1] 實作 updateSplineOutline() 函式：更新曲線幾何頂點
+- [x] T008 [US1] 實作光源設置：AmbientLight 和 SpotLight（含陰影設定）
+- [x] T009 [US1] 實作地面 Mesh：PlaneGeometry + ShadowMaterial，y=-200
+- [x] T010 [US1] 實作網格輔助線：GridHelper 2000×100，y=-199，半透明
+- [x] T011 [US1] 實作 addSplineObject(position) 函式：建立控制點立方體 Mesh
+- [x] T012 [US1] 實作預設控制點載入：load() 函式載入 4 個預設座標
+- [x] T013 [US1] 實作 CatmullRomCurve3 曲線建立：三種類型（uniform/centripetal/chordal）
+- [x] T014 [US1] 實作曲線 Line Mesh 建立：BufferGeometry + LineBasicMaterial，三種顏色
+- [x] T015 [US1] 實作 updateSplineOutline() 函式：更新曲線幾何頂點
 
 **Checkpoint**: User Story 1 完成 - 頁面顯示完整 3D 場景、控制點和曲線
 
@@ -70,8 +70,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] 實作 OrbitControls 初始化，綁定 camera 和 renderer.domElement
-- [ ] T017 [US2] 設定 OrbitControls damping 和 change 事件監聽
+- [x] T016 [US2] 實作 OrbitControls 初始化，綁定 camera 和 renderer.domElement
+- [x] T017 [US2] 設定 OrbitControls damping 和 change 事件監聽
 
 **Checkpoint**: User Story 2 完成 - 相機可旋轉、縮放、平移
 
@@ -85,12 +85,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] 實作 TransformControls 初始化，綁定 camera 和 renderer.domElement
-- [ ] T019 [US3] 實作 TransformControls dragging-changed 事件：拖曳時停用 OrbitControls
-- [ ] T020 [US3] 實作 TransformControls objectChange 事件：呼叫 updateSplineOutline()
-- [ ] T021 [US3] 實作 Raycaster 和 pointer 向量初始化
-- [ ] T022 [US3] 實作 onPointerDown/onPointerUp 事件處理：記錄滑鼠位置
-- [ ] T023 [US3] 實作點擊選取邏輯：Raycaster 偵測 intersects，attach/detach TransformControls
+- [x] T018 [US3] 實作 TransformControls 初始化，綁定 camera 和 renderer.domElement
+- [x] T019 [US3] 實作 TransformControls dragging-changed 事件：拖曳時停用 OrbitControls
+- [x] T020 [US3] 實作 TransformControls objectChange 事件：呼叫 updateSplineOutline()
+- [x] T021 [US3] 實作 Raycaster 和 pointer 向量初始化
+- [x] T022 [US3] 實作 onPointerDown/onPointerUp 事件處理：記錄滑鼠位置
+- [x] T023 [US3] 實作點擊選取邏輯：Raycaster 偵測 intersects，attach/detach TransformControls
 
 **Checkpoint**: User Story 3 完成 - 控制點可點擊選取和拖曳，曲線即時更新
 
@@ -104,8 +104,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] 實作 addPoint() 函式：遞增計數、呼叫 addSplineObject、更新曲線
-- [ ] T025 [US4] 在 GUI 中加入「addPoint」按鈕，綁定 addPoint 函式
+- [x] T024 [US4] 實作 addPoint() 函式：遞增計數、呼叫 addSplineObject、更新曲線
+- [x] T025 [US4] 在 GUI 中加入「addPoint」按鈕，綁定 addPoint 函式
 
 **Checkpoint**: User Story 4 完成 - 可透過 GUI 新增控制點
 
@@ -119,8 +119,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T026 [US5] 實作 removePoint() 函式：檢查最少 4 點、移除物件、detach TransformControls、更新曲線
-- [ ] T027 [US5] 在 GUI 中加入「removePoint」按鈕，綁定 removePoint 函式
+- [x] T026 [US5] 實作 removePoint() 函式：檢查最少 4 點、移除物件、detach TransformControls、更新曲線
+- [x] T027 [US5] 在 GUI 中加入「removePoint」按鈕，綁定 removePoint 函式
 
 **Checkpoint**: User Story 5 完成 - 可透過 GUI 移除控制點，最少保持 4 點
 
@@ -134,11 +134,11 @@
 
 ### Implementation for User Story 6
 
-- [ ] T028 [US6] 實作 params 物件：uniform, tension, centripetal, chordal 屬性
-- [ ] T029 [US6] 在 GUI 中加入 uniform checkbox，onChange 呼叫 render()
-- [ ] T030 [US6] 在 GUI 中加入 tension slider (0-1, step 0.01)，onChange 更新曲線張力並重繪
-- [ ] T031 [US6] 在 GUI 中加入 centripetal checkbox，onChange 呼叫 render()
-- [ ] T032 [US6] 在 GUI 中加入 chordal checkbox，onChange 呼叫 render()
+- [x] T028 [US6] 實作 params 物件：uniform, tension, centripetal, chordal 屬性
+- [x] T029 [US6] 在 GUI 中加入 uniform checkbox，onChange 呼叫 render()
+- [x] T030 [US6] 在 GUI 中加入 tension slider (0-1, step 0.01)，onChange 更新曲線張力並重繪
+- [x] T031 [US6] 在 GUI 中加入 centripetal checkbox，onChange 呼叫 render()
+- [x] T032 [US6] 在 GUI 中加入 chordal checkbox，onChange 呼叫 render()
 
 **Checkpoint**: User Story 6 完成 - 可切換曲線顯示和調整張力
 
@@ -152,8 +152,8 @@
 
 ### Implementation for User Story 7
 
-- [ ] T033 [US7] 實作 exportSpline() 函式：遍歷控制點、格式化為 Vector3 字串、console.log 輸出
-- [ ] T034 [US7] 在 GUI 中加入「exportSpline」按鈕，綁定 exportSpline 函式
+- [x] T033 [US7] 實作 exportSpline() 函式：遍歷控制點、格式化為 Vector3 字串、console.log 輸出
+- [x] T034 [US7] 在 GUI 中加入「exportSpline」按鈕，綁定 exportSpline 函式
 
 **Checkpoint**: User Story 7 完成 - 可匯出控制點座標到主控台
 
@@ -163,11 +163,11 @@
 
 **Purpose**: 最終整合和優化
 
-- [ ] T035 [P] 加入 HTML title 和 meta viewport 標籤
-- [ ] T036 整合所有事件監聽器：pointerdown, pointerup, resize
-- [ ] T037 實作 init() 函式呼叫順序整合和 window.onload 初始化
-- [ ] T038 執行 quickstart.md 驗證：測試所有 7 個 User Story 功能
-- [ ] T039 [P] 程式碼整理：確保變數宣告順序、函式順序符合相依性
+- [x] T035 [P] 加入 HTML title 和 meta viewport 標籤
+- [x] T036 整合所有事件監聽器：pointerdown, pointerup, resize
+- [x] T037 實作 init() 函式呼叫順序整合和 window.onload 初始化
+- [x] T038 執行 quickstart.md 驗證：測試所有 7 個 User Story 功能
+- [x] T039 [P] 程式碼整理：確保變數宣告順序、函式順序符合相依性
 
 ---
 
