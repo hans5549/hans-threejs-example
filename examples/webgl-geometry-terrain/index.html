@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>WebGL Geometry Terrain - Three.js 範例</title>
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+			background-color: #efd1b5;
+		}
+
+		#container {
+			width: 100%;
+			height: 100vh;
+		}
+
+		#fallback {
+			display: none;
+			width: 100%;
+			height: 100vh;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #efd1b5;
+		}
+
+		#fallback canvas {
+			max-width: 90%;
+			max-height: 70%;
+			border: 2px solid #8b7355;
+			border-radius: 8px;
+		}
+
+		#fallback p {
+			margin-top: 20px;
+			font-family: Arial, sans-serif;
+			color: #5d4e37;
+			font-size: 18px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<div id="fallback">
+		<canvas id="fallback-canvas"></canvas>
+		<p>您的瀏覽器不支援 WebGL，顯示靜態地形圖。<br>建議使用 Chrome、Firefox 或 Edge 瀏覽器。</p>
+	</div>
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+			}
+		}
+	</script>
+
+	<script type="module">
+		import * as THREE from 'three';
+		import Stats from 'three/addons/libs/stats.module.js';
+		import { ImprovedNoise } from 'three/addons/math/ImprovedNoise.js';
+		import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
+
+		// Global variables
+		let container, camera, scene, renderer, controls, clock, stats;
+		let worldWidth = 256, worldDepth = 256;
+		const worldHalfWidth = worldWidth / 2;
+		const worldHalfDepth = worldDepth / 2;
+
+		/**
+		 * Generate procedural height map using ImprovedNoise algorithm
+		 * @param {number} width - Grid width
+		 * @param {number} height - Grid depth
+		 * @returns {Uint8Array} - Height values array (0-255)
+		 */
+		function generateHeight(width, height) {
+			const size = width * height;
+			const data = new Uint8Array(size);
+			const perlin = new ImprovedNoise();
+			const z = Math.random() * 100;
+
+			let quality = 1;
+
+			for (let j = 0; j < 4; j++) {
+				for (let i = 0; i < size; i++) {
+					const x = i % width;
+					const y = ~~(i / width);
+					data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * 1.75);
+				}
+				quality *= 5;
+			}
+
+			return data;
+		}
+
+		/**
+		 * Generate terrain texture based on height data with normal-based shading
+		 * @param {Uint8Array} data - Height map data
+		 * @param {number} width - Texture width
+		 * @param {number} height - Texture height
+		 * @returns {HTMLCanvasElement} - Scaled canvas (2x size)
+		 */
+		function generateTexture(data, width, height) {
+			// Create vector for calculations
+			let context, image, imageData, shade;
+
+			const vector3 = new THREE.Vector3(0, 0, 0);
+			const sun = new THREE.Vector3(1, 1, 1);
+			sun.normalize();
+
+			// Create canvas with original size
+			const canvas = document.createElement('canvas');
+			canvas.width = width;
+			canvas.height = height;
+
+			context = canvas.getContext('2d');
+			context.fillStyle = '#000';
+			context.fillRect(0, 0, width, height);
+
+			image = context.getImageData(0, 0, canvas.width, canvas.height);
+			imageData = image.data;
+
+			// Calculate shading based on normal vectors and light direction
+			for (let i = 0, j = 0, l = imageData.length; i < l; i += 4, j++) {
+				// Calculate normal from height differences
+				vector3.x = data[j - 2] - data[j + 2];
+				vector3.y = 2;
+				vector3.z = data[j - width * 2] - data[j + width * 2];
+				vector3.normalize();
+
+				shade = vector3.dot(sun);
+
+				// Apply shade with random noise (±5) for natural feel
+				const noise = Math.random() * 10 - 5;
+				imageData[i] = (96 + shade * 128 + noise) * (0.5 + data[j] * 0.007);
+				imageData[i + 1] = (32 + shade * 96 + noise) * (0.5 + data[j] * 0.007);
+				imageData[i + 2] = (noise) * (0.5 + data[j] * 0.007);
+			}
+
+			context.putImageData(image, 0, 0);
+
+			// Scale to 2x size for improved quality
+			const canvasScaled = document.createElement('canvas');
+			canvasScaled.width = width * 2;
+			canvasScaled.height = height * 2;
+
+			context = canvasScaled.getContext('2d');
+			context.scale(2, 2);
+			context.drawImage(canvas, 0, 0);
+
+			image = context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
+			imageData = image.data;
+
+			// Add additional noise to scaled texture
+			for (let i = 0, l = imageData.length; i < l; i += 4) {
+				const v = ~~(Math.random() * 5);
+				imageData[i] += v;
+				imageData[i + 1] += v;
+				imageData[i + 2] += v;
+			}
+
+			context.putImageData(image, 0, 0);
+
+			return canvasScaled;
+		}
+
+		/**
+		 * Show fallback content when WebGL is not available
+		 */
+		function showFallback() {
+			// Hide 3D container
+			document.getElementById('container').style.display = 'none';
+			
+			// Show fallback
+			const fallbackDiv = document.getElementById('fallback');
+			fallbackDiv.style.display = 'flex';
+
+			// Generate and display static terrain image
+			const data = generateHeight(worldWidth, worldDepth);
+			const canvas = generateTexture(data, worldWidth, worldDepth);
+			
+			const fallbackCanvas = document.getElementById('fallback-canvas');
+			fallbackCanvas.width = canvas.width;
+			fallbackCanvas.height = canvas.height;
+			
+			const ctx = fallbackCanvas.getContext('2d');
+			ctx.drawImage(canvas, 0, 0);
+		}
+
+		/**
+		 * Handle window resize events
+		 */
+		function onWindowResize() {
+			// Check minimum window size threshold (200x200)
+			if (window.innerWidth < 200 || window.innerHeight < 200) {
+				return; // Stop render updates for extremely small windows
+			}
+
+			// Update camera aspect ratio
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			// Update renderer size
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			// Update controls
+			controls.handleResize();
+		}
+
+		/**
+		 * Animation loop
+		 */
+		function animate() {
+			// Update controls with delta time for consistent movement
+			controls.update(clock.getDelta());
+
+			// Render scene
+			renderer.render(scene, camera);
+
+			// Update stats
+			stats.update();
+		}
+
+		/**
+		 * Initialize the scene
+		 */
+		function init() {
+			container = document.getElementById('container');
+
+			// Create scene with background and fog
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0xefd1b5);
+			scene.fog = new THREE.FogExp2(0xefd1b5, 0.0025);
+
+			// Create camera
+			camera = new THREE.PerspectiveCamera(
+				60, // fov
+				window.innerWidth / window.innerHeight, // aspect
+				1, // near
+				10000 // far
+			);
+			camera.position.set(100, 800, -800);
+			camera.lookAt(-100, 810, -800);
+
+			// Generate height map
+			const data = generateHeight(worldWidth, worldDepth);
+
+			// Create terrain geometry
+			const geometry = new THREE.PlaneGeometry(7500, 7500, worldWidth - 1, worldDepth - 1);
+			geometry.rotateX(-Math.PI / 2);
+
+			// Apply height map to vertices
+			const vertices = geometry.attributes.position.array;
+			for (let i = 0, j = 0, l = vertices.length; i < l; i++, j += 3) {
+				vertices[j + 1] = data[i] * 10;
+			}
+
+			// Generate texture
+			const texture = new THREE.CanvasTexture(generateTexture(data, worldWidth, worldDepth));
+			texture.wrapS = THREE.ClampToEdgeWrapping;
+			texture.wrapT = THREE.ClampToEdgeWrapping;
+			texture.colorSpace = THREE.SRGBColorSpace;
+
+			// Create material and mesh
+			const material = new THREE.MeshBasicMaterial({ map: texture });
+			const mesh = new THREE.Mesh(geometry, material);
+			scene.add(mesh);
+
+			// Create renderer with WebGL detection
+			try {
+				renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				container.appendChild(renderer.domElement);
+			} catch (e) {
+				showFallback();
+				return;
+			}
+
+			// Check if WebGL context was created successfully
+			if (!renderer.getContext()) {
+				showFallback();
+				return;
+			}
+
+			// Create clock for delta time
+			clock = new THREE.Clock();
+
+			// Create FirstPersonControls
+			controls = new FirstPersonControls(camera, renderer.domElement);
+			controls.movementSpeed = 150;
+			controls.lookSpeed = 0.1;
+
+			// Create Stats
+			stats = new Stats();
+			document.body.appendChild(stats.dom);
+
+			// Add resize event listener
+			window.addEventListener('resize', onWindowResize);
+
+			// Start animation loop
+			renderer.setAnimationLoop(animate);
+		}
+
+		// Start application
+		init();
+	</script>
+</body>
+</html>
