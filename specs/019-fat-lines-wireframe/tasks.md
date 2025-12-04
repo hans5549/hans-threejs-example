@@ -24,12 +24,12 @@
 
 **Purpose**: 建立專案目錄結構和基礎 HTML 框架
 
-- [ ] T001 建立目錄結構 `examples/webgl-lines-fat-wireframe/`
-- [ ] T002 建立 HTML 基礎結構，包含 DOCTYPE、meta 標籤、標題「three.js webgl - lines - fat - wireframe」於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T003 [P] 設定 import map，配置 three.js r174 及 addons 的 CDN 路徑於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T004 [P] 加入內嵌 CSS 樣式（全螢幕黑色背景、無邊距）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T001 建立目錄結構 `examples/webgl-lines-fat-wireframe/`
+- [x] T002 建立 HTML 基礎結構，包含 DOCTYPE、meta 標籤、標題「three.js webgl - lines - fat - wireframe」於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T003 [P] 設定 import map，配置 three.js r174 及 addons 的 CDN 路徑於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T004 [P] 加入內嵌 CSS 樣式（全螢幕黑色背景、無邊距）於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: HTML 框架完成，可在瀏覽器中開啟但尚無 3D 內容
+**Checkpoint**: ✅ HTML 框架完成，可在瀏覽器中開啟但尚無 3D 內容
 
 ---
 
@@ -39,19 +39,19 @@
 
 **⚠️ CRITICAL**: 此階段必須完成後才能開始任何使用者故事
 
-- [ ] T005 實作 ES module script 區塊，匯入所需的 Three.js 模組於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T005 實作 ES module script 區塊，匯入所需的 Three.js 模組於 `examples/webgl-lines-fat-wireframe/index.html`
   - THREE 核心模組
   - LineMaterial, Wireframe, WireframeGeometry2 from 'three/addons/lines/'
   - GUI from 'three/addons/libs/lil-gui.module.min.js'
   - Stats from 'three/addons/libs/stats.module.js'
   - OrbitControls from 'three/addons/controls/OrbitControls.js'
-- [ ] T006 建立全域變數宣告區塊（camera, camera2, scene, renderer, controls, matLine, stats 等）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T007 實作 `init()` 函式骨架，初始化 WebGLRenderer（antialias: true, alpha: true, clearColor alpha 0）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T008 實作 `animate()` 函式，包含 requestAnimationFrame 迴圈和 render 呼叫於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T009 建立 THREE.Scene 實例於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T010 實作主攝影機 (PerspectiveCamera)，FOV 40、位置 (-50, 0, 50) 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T006 建立全域變數宣告區塊（camera, camera2, scene, renderer, controls, matLine, stats 等）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T007 實作 `init()` 函式骨架，初始化 WebGLRenderer（antialias: true, alpha: true, clearColor alpha 0）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T008 實作 `animate()` 函式，包含 requestAnimationFrame 迴圈和 render 呼叫於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T009 建立 THREE.Scene 實例於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T010 實作主攝影機 (PerspectiveCamera)，FOV 40、位置 (-50, 0, 50) 於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 基礎場景完成，黑色背景的空白 3D 畫布可正常渲染
+**Checkpoint**: ✅ 基礎場景完成，黑色背景的空白 3D 畫布可正常渲染
 
 ---
 
@@ -63,13 +63,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] 建立 IcosahedronGeometry（radius: 20, detail: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T012 [US1] 建立 WireframeGeometry2 從 IcosahedronGeometry 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T013 [US1] 建立 LineMaterial（color: 0x4080ff, linewidth: 5）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T014 [US1] 建立 Wireframe 物件並加入場景，呼叫 computeLineDistances() 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T015 [US1] 在 render 函式中更新 LineMaterial.resolution 為目前視窗大小於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T011 [US1] 建立 IcosahedronGeometry（radius: 20, detail: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T012 [US1] 建立 WireframeGeometry2 從 IcosahedronGeometry 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T013 [US1] 建立 LineMaterial（color: 0x4080ff, linewidth: 5）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T014 [US1] 建立 Wireframe 物件並加入場景，呼叫 computeLineDistances() 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T015 [US1] 在 render 函式中更新 LineMaterial.resolution 為目前視窗大小於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: Fat Lines 線框模型可見，線寬為 5 像素，顏色為藍色
+**Checkpoint**: ✅ Fat Lines 線框模型可見，線寬為 5 像素，顏色為藍色
 
 ---
 
@@ -81,11 +81,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] 建立 OrbitControls 並綁定主攝影機和 renderer.domElement 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T017 [US2] 設定 OrbitControls 縮放限制（minDistance: 10, maxDistance: 500）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T018 [US2] 在 animate 迴圈中呼叫 controls.update() 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T016 [US2] 建立 OrbitControls 並綁定主攝影機和 renderer.domElement 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T017 [US2] 設定 OrbitControls 縮放限制（minDistance: 10, maxDistance: 500）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T018 [US2] 在 animate 迴圈中呼叫 controls.update() 於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 軌道控制完整運作，使用者可自由旋轉和縮放視圖
+**Checkpoint**: ✅ 軌道控制完整運作，使用者可自由旋轉和縮放視圖
 
 ---
 
@@ -97,17 +97,17 @@
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] 建立 GUI 實例於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T020 [US3] 定義 GUI 參數物件（params），包含初始值於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T019 [US3] 建立 GUI 實例於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T020 [US3] 定義 GUI 參數物件（params），包含初始值於 `examples/webgl-lines-fat-wireframe/index.html`
   - 'line type': 0
   - 'width (px)': 5
   - 'dashed': false
   - 'dash scale': 1
   - 'dash / gap': 'equal'
-- [ ] T021 [US3] 加入 'width (px)' 滑桿控制項（min: 1, max: 10, step: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T022 [US3] 實作 width 變更回呼函式，更新 matLine.linewidth 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T021 [US3] 加入 'width (px)' 滑桿控制項（min: 1, max: 10, step: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T022 [US3] 實作 width 變更回呼函式，更新 matLine.linewidth 於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 線寬控制運作，拖曳滑桿可看到即時變化
+**Checkpoint**: ✅ 線寬控制運作，拖曳滑桿可看到即時變化
 
 ---
 
@@ -119,14 +119,14 @@
 
 ### Implementation for User Story 4
 
-- [ ] T023 [US4] 加入 'dashed' checkbox 控制項於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T024 [US4] 實作 dashed 變更回呼函式，更新 matLine.dashed、defines.USE_DASH、needsUpdate 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T025 [US4] 加入 'dash scale' 滑桿控制項（min: 0.5, max: 1, step: 0.1）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T026 [US4] 實作 dashScale 變更回呼函式，更新 matLine.dashScale 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T027 [US4] 加入 'dash / gap' 選擇器（2:1、equal、1:2）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T028 [US4] 實作 dashGap 變更回呼函式，根據選擇更新 matLine.dashSize 和 matLine.gapSize 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T023 [US4] 加入 'dashed' checkbox 控制項於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T024 [US4] 實作 dashed 變更回呼函式，更新 matLine.dashed、defines.USE_DASH、needsUpdate 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T025 [US4] 加入 'dash scale' 滑桿控制項（min: 0.5, max: 1, step: 0.1）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T026 [US4] 實作 dashScale 變更回呼函式，更新 matLine.dashScale 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T027 [US4] 加入 'dash / gap' 選擇器（2:1、equal、1:2）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T028 [US4] 實作 dashGap 變更回呼函式，根據選擇更新 matLine.dashSize 和 matLine.gapSize 於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 虛線控制完整運作，可切換虛線並調整參數
+**Checkpoint**: ✅ 虛線控制完整運作，可切換虛線並調整參數
 
 ---
 
@@ -138,15 +138,15 @@
 
 ### Implementation for User Story 5
 
-- [ ] T029 [US5] 建立 WireframeGeometry 從 IcosahedronGeometry（標準版本）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T030 [US5] 建立 LineBasicMaterial（color: 0x4080ff）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T031 [US5] 建立 LineDashedMaterial（color: 0x4080ff, dashSize: 1, gapSize: 1, scale: 2）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T032 [US5] 建立 LineSegments 物件並加入場景，預設 visible: false，呼叫 computeLineDistances() 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T033 [US5] 加入 'line type' 選擇器（0: LineGeometry, 1: gl.LINE）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T034 [US5] 實作 lineType 變更回呼函式，切換 wireframe.visible 和 wireframe1.visible 於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T035 [US5] 確保切換類型時同步虛線狀態（更新 LineSegments 材質）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T029 [US5] 建立 WireframeGeometry 從 IcosahedronGeometry（標準版本）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T030 [US5] 建立 LineBasicMaterial（color: 0x4080ff）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T031 [US5] 建立 LineDashedMaterial（color: 0x4080ff, dashSize: 1, gapSize: 1, scale: 2）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T032 [US5] 建立 LineSegments 物件並加入場景，預設 visible: false，呼叫 computeLineDistances() 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T033 [US5] 加入 'line type' 選擇器（0: LineGeometry, 1: gl.LINE）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T034 [US5] 實作 lineType 變更回呼函式，切換 wireframe.visible 和 wireframe1.visible 於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T035 [US5] 確保切換類型時同步虛線狀態（更新 LineSegments 材質）於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 可在兩種渲染模式之間切換，視覺差異明顯
+**Checkpoint**: ✅ 可在兩種渲染模式之間切換，視覺差異明顯
 
 ---
 
@@ -158,15 +158,15 @@
 
 ### Implementation for User Story 6
 
-- [ ] T036 [US6] 建立第二攝影機 camera2（FOV: 40, aspect: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T037 [US6] 在 render 函式中實作雙視口渲染邏輯於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T036 [US6] 建立第二攝影機 camera2（FOV: 40, aspect: 1）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T037 [US6] 在 render 函式中實作雙視口渲染邏輯於 `examples/webgl-lines-fat-wireframe/index.html`
   - 主視口：setViewport(0, 0, width, height)
   - 插入視口：setViewport(width - insetWidth - 16, 16, insetWidth, insetHeight)
-- [ ] T038 [US6] 計算插入視口尺寸（高度的 1/4）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T039 [US6] 同步 camera2 位置與旋轉至 camera（或保持獨立視角）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T040 [US6] 啟用 scissorTest 以正確裁切插入視口區域於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T038 [US6] 計算插入視口尺寸（高度的 1/4）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T039 [US6] 同步 camera2 位置與旋轉至 camera（或保持獨立視角）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T040 [US6] 啟用 scissorTest 以正確裁切插入視口區域於 `examples/webgl-lines-fat-wireframe/index.html`
 
-**Checkpoint**: 雙視口正確顯示，插入視口位於右下角
+**Checkpoint**: ✅ 雙視口正確顯示，插入視口位於右下角
 
 ---
 
@@ -174,13 +174,15 @@
 
 **Purpose**: 完善響應式設計、效能監控和最終驗證
 
-- [ ] T041 [P] 實作 Stats.js 效能監控（FPS 顯示）於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T042 [P] 實作 window resize 事件處理函式於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T041 [P] 實作 Stats.js 效能監控（FPS 顯示）於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T042 [P] 實作 window resize 事件處理函式於 `examples/webgl-lines-fat-wireframe/index.html`
   - 更新 renderer.setSize
   - 更新 camera.aspect 和 camera.updateProjectionMatrix
   - 更新插入視口尺寸
-- [ ] T043 程式碼清理和格式化於 `examples/webgl-lines-fat-wireframe/index.html`
-- [ ] T044 執行 quickstart.md 驗證所有功能於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T043 程式碼清理和格式化於 `examples/webgl-lines-fat-wireframe/index.html`
+- [x] T044 執行 quickstart.md 驗證所有功能於 `examples/webgl-lines-fat-wireframe/index.html`
+
+**Checkpoint**: ✅ 所有功能完成，效能監控和響應式設計正常運作
 
 ---
 

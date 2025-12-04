@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - lines - fat - wireframe</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				margin: 0;
+				background-color: #000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@0.174.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.174.0/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import Stats from 'three/addons/libs/stats.module.js';
+			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+			import { Wireframe } from 'three/addons/lines/Wireframe.js';
+			import { WireframeGeometry2 } from 'three/addons/lines/WireframeGeometry2.js';
+
+			// Global variables
+			let camera, camera2, scene, renderer;
+			let wireframe, wireframe1;
+			let matLine, matLineBasic, matLineDashed;
+			let stats, controls;
+			let insetWidth, insetHeight;
+
+			// GUI parameters
+			const params = {
+				'line type': 0,
+				'width (px)': 5,
+				'dashed': false,
+				'dash scale': 1,
+				'dash / gap': 'equal'
+			};
+
+			init();
+
+			function init() {
+
+				// Renderer
+				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setClearColor( 0x000000, 0 );
+				renderer.setAnimationLoop( animate );
+				document.body.appendChild( renderer.domElement );
+
+				// Scene
+				scene = new THREE.Scene();
+
+				// Main Camera
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.set( -50, 0, 50 );
+
+				// Second Camera (inset viewport)
+				camera2 = new THREE.PerspectiveCamera( 40, 1, 1, 1000 );
+				camera2.position.copy( camera.position );
+
+				// OrbitControls
+				controls = new OrbitControls( camera, renderer.domElement );
+				controls.minDistance = 10;
+				controls.maxDistance = 500;
+
+				// Geometry - Icosahedron
+				const geo = new THREE.IcosahedronGeometry( 20, 1 );
+
+				// Fat Lines - WireframeGeometry2 + LineMaterial
+				const geometry = new WireframeGeometry2( geo );
+
+				matLine = new LineMaterial( {
+					color: 0x4080ff,
+					linewidth: 5 // in pixels
+				} );
+
+				wireframe = new Wireframe( geometry, matLine );
+				wireframe.computeLineDistances();
+				wireframe.scale.set( 1, 1, 1 );
+				scene.add( wireframe );
+
+				// Standard WebGL Lines - WireframeGeometry + LineBasicMaterial/LineDashedMaterial
+				const geo1 = new THREE.WireframeGeometry( geo );
+
+				matLineBasic = new THREE.LineBasicMaterial( { color: 0x4080ff } );
+				matLineDashed = new THREE.LineDashedMaterial( { 
+					color: 0x4080ff,
+					scale: 2,
+					dashSize: 1,
+					gapSize: 1
+				} );
+
+				wireframe1 = new THREE.LineSegments( geo1, matLineBasic );
+				wireframe1.computeLineDistances();
+				wireframe1.visible = false;
+				scene.add( wireframe1 );
+
+				// Stats
+				stats = new Stats();
+				document.body.appendChild( stats.dom );
+
+				// GUI
+				initGui();
+
+				// Resize handler
+				window.addEventListener( 'resize', onWindowResize );
+				onWindowResize();
+
+			}
+
+			function initGui() {
+
+				const gui = new GUI();
+
+				gui.add( params, 'line type', { 'LineGeometry': 0, 'gl.LINE': 1 } ).onChange( function ( val ) {
+
+					switch ( val ) {
+
+						case 0:
+							wireframe.visible = true;
+							wireframe1.visible = false;
+							break;
+
+						case 1:
+							wireframe.visible = false;
+							wireframe1.visible = true;
+							break;
+
+					}
+
+				} );
+
+				gui.add( params, 'width (px)', 1, 10, 1 ).onChange( function ( val ) {
+
+					matLine.linewidth = val;
+
+				} );
+
+				gui.add( params, 'dashed' ).onChange( function ( val ) {
+
+					matLine.dashed = val;
+
+					// Fat Lines need special handling for dashed mode
+					if ( val ) {
+
+						matLine.defines.USE_DASH = '';
+
+					} else {
+
+						delete matLine.defines.USE_DASH;
+
+					}
+
+					matLine.needsUpdate = true;
+
+					// Update standard lines material
+					wireframe1.material = val ? matLineDashed : matLineBasic;
+
+				} );
+
+				gui.add( params, 'dash scale', 0.5, 1, 0.1 ).onChange( function ( val ) {
+
+					matLine.dashScale = val;
+					matLineDashed.scale = val * 2;
+
+				} );
+
+				gui.add( params, 'dash / gap', { '2:1': 0, 'equal': 1, '1:2': 2 } ).onChange( function ( val ) {
+
+					switch ( val ) {
+
+						case 0:
+							matLine.dashSize = 2;
+							matLine.gapSize = 1;
+							matLineDashed.dashSize = 2;
+							matLineDashed.gapSize = 1;
+							break;
+
+						case 1:
+							matLine.dashSize = 1;
+							matLine.gapSize = 1;
+							matLineDashed.dashSize = 1;
+							matLineDashed.gapSize = 1;
+							break;
+
+						case 2:
+							matLine.dashSize = 1;
+							matLine.gapSize = 2;
+							matLineDashed.dashSize = 1;
+							matLineDashed.gapSize = 2;
+							break;
+
+					}
+
+				} );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				// Calculate inset viewport size
+				insetWidth = window.innerHeight / 4;
+				insetHeight = window.innerHeight / 4;
+
+				camera2.aspect = insetWidth / insetHeight;
+				camera2.updateProjectionMatrix();
+
+			}
+
+			function animate() {
+
+				// Update controls
+				controls.update();
+
+				// Update camera2 position to match camera
+				camera2.position.copy( camera.position );
+				camera2.quaternion.copy( camera.quaternion );
+
+				// Render main viewport
+				renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+				renderer.setScissorTest( false );
+
+				// Update LineMaterial resolution
+				matLine.resolution.set( window.innerWidth, window.innerHeight );
+
+				renderer.render( scene, camera );
+
+				// Render inset viewport
+				renderer.setScissorTest( true );
+				renderer.setScissor( 
+					window.innerWidth - insetWidth - 16, 
+					16, 
+					insetWidth, 
+					insetHeight 
+				);
+				renderer.setViewport( 
+					window.innerWidth - insetWidth - 16, 
+					16, 
+					insetWidth, 
+					insetHeight 
+				);
+
+				renderer.render( scene, camera2 );
+				renderer.setScissorTest( false );
+
+				// Update stats
+				stats.update();
+
+			}
+
+		</script>
+	</body>
+</html>
